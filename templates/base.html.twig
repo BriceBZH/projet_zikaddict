@@ -18,26 +18,23 @@
         {% block header %}
             <header class="header" id="container">
                 <div class="libelleLogo">
-                    <a href="index.php"><img alt="logo" class="logo" src="assets/images/logo.png" /></a>
+                    <a href="{{ path('index') }}"><img alt="logo" class="logo" src="assets/images/logo.png" /></a>
                     <h1>Zik Addict</h1>
                 </div>
                 <nav>
                     <menu>
-                        <li><a href="index.php">Accueil</a></li>
-                        <li><a href="index.php?route=users">Utilisateurs</a></li>
-                        <li><a href="index.php?route=artists">Artists</a></li>
-                        <li><a href="index.php?route=songs">Songs</a></li>
-                        <li><a href="index.php?route=albums">Albums</a></li>
-                        <li><a href="index.php?route=register">Inscription</a></li>
+                        <li><a href="{{ path('index') }}">Accueil</a></li>
+                        <li><a href="{{ path('artist', {idArtist: artist.id}) }}">Artists</a></li>
+                        <li><a href="{{ path('albums') }}">Albums</a></li>
                         <li><a href="index.php?route=login">Login</a></li>
-                        <li><a href="index.php?route=logout">Logout</a></li>
-                        <?php
+                        {# <li><a href="index.php?route=logout">Logout</a></li> #}
+                        {# <?php
                             if(isset($_SESSION['role']) && $_SESSION['role'] === "ADMIN") {
                                 ?>
                                 <li><a href="index.php?route=admin">Admin</a></li>
                                 <?php
                             }
-                        ?>
+                        ?> #}
                     </menu>
                 </nav>
             </header>

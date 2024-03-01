@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Artist;
 use App\Entity\Album;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,19 +22,13 @@ class AlbumRepository extends ServiceEntityRepository
         parent::__construct($registry, Album::class);
     }
 
-
-    public function findByArtist(int $idArtist) : array {
-        $entityManager = $this->getEntityManager();
-        $query = $entityManager->createQuery(
-            'SELECT al
-            FROM App\Entity\Album al
-            JOIN album_song ON albums.id = album_song.idAlbum 
-            JOIN songs ON album_song.idSong = songs.id 
-            JOIN artist_song ON songs.id = artist_song.idSong 
-            JOIN artists ON artist_song.idArtist = artists.id 
-            WHERE artists.id = :idArtist GROUP BY albums.id'
-        )->setParameter('idArtist', $idArtist);
-        return $query->getResult();
+    public function findByArtist(Artist $artist) : array {
+            return $this->createQueryBuilder('al')
+               ->andWhere(':artists MEMBER OF al.artists')
+               ->setParameter('artists', $artist)
+               ->getQuery()
+               ->getResult()
+           ;
     }
     //    /**
     //     * @return Album[] Returns an array of Album objects

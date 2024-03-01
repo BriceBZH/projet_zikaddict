@@ -12,21 +12,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/artist')]
+#[Route('/artists')]
 class ArtistController extends AbstractController
 {
-    #[Route('/', name: 'app_artist_index', methods: ['GET'])]
+    #[Route('/', name: 'artists', methods: ['GET'])]
     public function displayAll(ArtistRepository $artistRepository): Response {
         return $this->render("artists/artists-list.html.twig", [
             'artists' => $artistRepository->findAll(),
         ]);
     }
 
-    #[Route('/{idArtist}', name: 'app_artist_indexd', methods: ['GET'])]
+    #[Route('/{idArtist}', name: 'artist', methods: ['GET'])]
     public function displayOne(ArtistRepository $artistRepository, AlbumRepository $albumRepository, int $idArtist): Response {
+        $artist = $artistRepository->find($idArtist);
         return $this->render("artists/artist-show.html.twig", [
-            'artist' => $artistRepository->findById($idArtist), 
-            'albums' => $albumRepository->findByArtist($idArtist)
+            'artist' => $artist, 
+            'albums' => $albumRepository->findByArtist($artist)
         ]);
     }
     // #[Route('/', name: 'app_artist_index', methods: ['GET'])]

@@ -40,12 +40,16 @@ class Artist
     #[ORM\JoinColumn(nullable: false)]
     private ?Media $idMedia = null;
 
-    #[ORM\ManyToMany(targetEntity: Song::class)]
-    private Collection $idSong;
+    #[ORM\ManyToMany(targetEntity: Album::class, inversedBy: 'artists')]
+    private Collection $albums;
+
+    #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'artists')]
+    private Collection $songs;
 
     public function __construct()
     {
-        $this->idSong = new ArrayCollection();
+        $this->albums = new ArrayCollection();
+        $this->songs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,25 +149,49 @@ class Artist
     }
 
     /**
-     * @return Collection<int, Song>
+     * @return Collection<int, Album>
      */
-    public function getIdSong(): Collection
+    public function getAlbums(): Collection
     {
-        return $this->idSong;
+        return $this->albums;
     }
 
-    public function addIdSong(Song $idSong): static
+    public function addAlbum(Album $album): static
     {
-        if (!$this->idSong->contains($idSong)) {
-            $this->idSong->add($idSong);
+        if (!$this->albums->contains($album)) {
+            $this->albums->add($album);
         }
 
         return $this;
     }
 
-    public function removeIdSong(Song $idSong): static
+    public function removeAlbum(Album $album): static
     {
-        $this->idSong->removeElement($idSong);
+        $this->albums->removeElement($album);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Song>
+     */
+    public function getSongs(): Collection
+    {
+        return $this->songs;
+    }
+
+    public function addSong(Song $song): static
+    {
+        if (!$this->songs->contains($song)) {
+            $this->songs->add($song);
+        }
+
+        return $this;
+    }
+
+    public function removeSong(Song $song): static
+    {
+        $this->songs->removeElement($song);
 
         return $this;
     }

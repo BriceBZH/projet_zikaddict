@@ -22,30 +22,31 @@ class ArtistRepository extends ServiceEntityRepository
         parent::__construct($registry, Artist::class);
     }
 
-    public function findAll() : array {
-        $entityManager = $this->getEntityManager();
-        $query = $entityManager->createQuery(
-            'SELECT a
-            FROM App\Entity\Artist a'
-        );
-        return $query->getResult();
-    }
+    // public function findAll() : array {
+    //     $entityManager = $this->getEntityManager();
+    //     $query = $entityManager->createQuery(
+    //         'SELECT a
+    //         FROM App\Entity\Artist a'
+    //     );
+    //     return $query->getResult();
+    // }
 
-    public function findById(int $idArtist) : ?Artist {
-        $entityManager = $this->getEntityManager();
-        $query = $entityManager->createQuery(
-            'SELECT a
-            FROM App\Entity\Artist a
-            WHERE a.id = :idArtist'
-        )->setParameter('idArtist', $idArtist);
-        // $result = $query->getResult();
-        // print_r($result->id);
-        if($query->getResult()) { 
-            $artist = new Artist(1, "Bob Marley", "test", "1956-65-54", "1976-56-45", "1", "5", "1");
-            return $artist;
-        }
-        return null;
-    }
+    // public function findById(int $idArtist) : ?Artist {
+    //     $entityManager = $this->getEntityManager();
+    //     $query = $entityManager->createQuery(
+    //         'SELECT a
+    //         FROM App\Entity\Artist a
+    //         WHERE a.id = :idArtist'
+    //     )->setParameter('idArtist', $idArtist);
+    //     $result = $query->getResult();
+    //     if($result) {
+    //         $item = $result[0];
+    //         $artist = new Artist($item->getId(), $item->getName(), $item->getDescription(), $item->getBirthDate(), $item->getDeathDate(), $item->getIdCountry(), $item->getIdMedia(), $item->isDead());
+    //         // print_r($artist);
+    //         return $artist;
+    //     }
+    //     return null;
+    // }
     //    /**
     //     * @return Artist[] Returns an array of Artist objects
     //     */
