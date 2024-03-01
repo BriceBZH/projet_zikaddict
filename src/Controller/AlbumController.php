@@ -20,6 +20,27 @@ class AlbumController extends AbstractController
             'albums' => $albumRepository->findAll(),
         ]);
     }
+
+    #[Route('/{idAlbum}', name: 'album', methods: ['GET'])]
+    public function displayOne(SongRepository $songRepository, AlbumRepository $albumRepository, int $idAlbum): Response {
+        $album = $albumRepository->find($idAlbum);
+        return $this->render("albums/album-show.html.twig", [
+            'album' => $album, 
+            'songs' => $songRepository->findByAlbum($album)
+        ]);
+    }
+
+    // #[Route('/{idArtist}', name: 'artist', methods: ['GET'])]
+    // public function displayOne(ArtistRepository $artistRepository, AlbumRepository $albumRepository, int $idArtist): Response {
+    //     $artist = $artistRepository->find($idArtist);
+    //     return $this->render("artists/artist-show.html.twig", [
+    //         'artist' => $artist, 
+    //         'albums' => $albumRepository->findByArtist($artist)
+    //     ]);
+    // }
+
+
+
     // #[Route('/', name: 'app_album_index', methods: ['GET'])]
     // public function index(AlbumRepository $albumRepository): Response
     // {

@@ -21,6 +21,15 @@ class SongRepository extends ServiceEntityRepository
         parent::__construct($registry, Song::class);
     }
 
+
+    public function findByAlbum(Album $album) : array {
+        return $this->createQueryBuilder('s')
+            ->andWhere(':artists MEMBER OF al.artists')
+            ->setParameter('artists', $artist)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     //    /**
     //     * @return Song[] Returns an array of Song objects
     //     */

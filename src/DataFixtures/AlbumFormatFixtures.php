@@ -17,7 +17,7 @@ class AlbumFormatFixtures extends Fixture implements DependentFixtureInterface
         foreach ($albums as $album) {
             $albumFormats = $this->getRandomFormats($formats);
             foreach ($albumFormats as $format) {
-                $album->addIdFormat($format);
+                $album->addFormat($format);
             }
         }
         $manager->flush();

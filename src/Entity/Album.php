@@ -32,20 +32,20 @@ class Album
     #[ORM\JoinColumn(nullable: false)]
     private ?Media $mediaId = null;
 
-    #[ORM\ManyToMany(targetEntity: Format::class)]
-    private Collection $idFormat;
-
-    #[ORM\ManyToMany(targetEntity: Song::class)]
-    private Collection $idSong;
-
     #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'albums')]
     private Collection $artists;
 
+    #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'albums')]
+    private Collection $songs;
+
+    #[ORM\ManyToMany(targetEntity: Format::class, inversedBy: 'albums')]
+    private Collection $formats;
+
     public function __construct()
     {
-        $this->idFormat = new ArrayCollection();
-        $this->idSong = new ArrayCollection();
         $this->artists = new ArrayCollection();
+        $this->songs = new ArrayCollection();
+        $this->formats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,53 +120,6 @@ class Album
         return $this;
     }
 
-    /**
-     * @return Collection<int, Format>
-     */
-    public function getIdFormat(): Collection
-    {
-        return $this->idFormat;
-    }
-
-    public function addIdFormat(Format $idFormat): static
-    {
-        if (!$this->idFormat->contains($idFormat)) {
-            $this->idFormat->add($idFormat);
-        }
-
-        return $this;
-    }
-
-    public function removeIdFormat(Format $idFormat): static
-    {
-        $this->idFormat->removeElement($idFormat);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Song>
-     */
-    public function getIdSong(): Collection
-    {
-        return $this->idSong;
-    }
-
-    public function addIdSong(Song $idSong): static
-    {
-        if (!$this->idSong->contains($idSong)) {
-            $this->idSong->add($idSong);
-        }
-
-        return $this;
-    }
-
-    public function removeIdSong(Song $idSong): static
-    {
-        $this->idSong->removeElement($idSong);
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Artist>
@@ -191,6 +144,54 @@ class Album
         if ($this->artists->removeElement($artist)) {
             $artist->removeAlbum($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Song>
+     */
+    public function getSongs(): Collection
+    {
+        return $this->songs;
+    }
+
+    public function addSong(Song $song): static
+    {
+        if (!$this->songs->contains($song)) {
+            $this->songs->add($song);
+        }
+
+        return $this;
+    }
+
+    public function removeSong(Song $song): static
+    {
+        $this->songs->removeElement($song);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Format>
+     */
+    public function getFormats(): Collection
+    {
+        return $this->formats;
+    }
+
+    public function addFormat(Format $format): static
+    {
+        if (!$this->formats->contains($format)) {
+            $this->formats->add($format);
+        }
+
+        return $this;
+    }
+
+    public function removeFormat(Format $format): static
+    {
+        $this->formats->removeElement($format);
 
         return $this;
     }

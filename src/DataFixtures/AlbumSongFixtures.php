@@ -17,7 +17,7 @@ class AlbumSongFixtures extends Fixture implements DependentFixtureInterface
         foreach ($albums as $album) {
             $albumSongs = $this->getRandomSongs($songs);
             foreach ($albumSongs as $song) {
-                $album->addIdSong($song);
+                $album->addSong($song);
             }
         }
         $manager->flush();
