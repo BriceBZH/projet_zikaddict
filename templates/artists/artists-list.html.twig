@@ -15,7 +15,7 @@
                     <h3>{{artist.getName()}}</h3>
                     <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
                     <p>{{artist.getDeathDate().format("d/m/Y")}}</p>
-                    <a href="{{ path('artists') }}{{artist.getId()}}">Plus</a>
+                    <a href="{{ path('artist', {idArtist: artist.id}) }}">Plus</a>
                 </article>
             </li>
         {% endfor %}
