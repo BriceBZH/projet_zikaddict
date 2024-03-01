@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block main %}
+    <main id="container" class="list_artists">
+        <h2>
+            Liste des artistes
+        </h2>
+        <ul>
+        {% for artist in artists %}
+            {# if($artist->getDead() === 1) {
+                $class = "dead";
+            } #}
+            <li>
+                <article class=$class>
+                    <h3>{{artist.getName()}}</h3>
+                    <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
+                    <p>{{artist.getDeathDate().format("d/m/Y")}}</p>
+                    <a href="../artist/{{artist.getId()}}">Plus</a>
+                </article>
+            </li>
+        {% endfor %}
+        </ul>
+    </main>
+{% endblock %}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> {% block title %}{% endblock %}| ZikAddict</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Sirin+Stencil&display=swap" rel="stylesheet">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block header %}
+            <header class="header" id="container">
+                <div class="libelleLogo">
+                    <a href="index.php"><img alt="logo" class="logo" src="assets/images/logo.png" /></a>
+                    <h1>Zik Addict</h1>
+                </div>
+                <nav>
+                    <menu>
+                        <li><a href="index.php">Accueil</a></li>
+                        <li><a href="index.php?route=users">Utilisateurs</a></li>
+                        <li><a href="index.php?route=artists">Artists</a></li>
+                        <li><a href="index.php?route=songs">Songs</a></li>
+                        <li><a href="index.php?route=albums">Albums</a></li>
+                        <li><a href="index.php?route=register">Inscription</a></li>
+                        <li><a href="index.php?route=login">Login</a></li>
+                        <li><a href="index.php?route=logout">Logout</a></li>
+                        <?php
+                            if(isset($_SESSION['role']) && $_SESSION['role'] === "ADMIN") {
+                                ?>
+                                <li><a href="index.php?route=admin">Admin</a></li>
+                                <?php
+                            }
+                        ?>
+                    </menu>
+                </nav>
+            </header>
+        {% endblock %}
+        {% block main %} 
+        {% endblock %}
+        {% block footer %}
+        {% endblock %}
+    </body>
+    <script type="application/javascript" src="assets/scripts/script.js"></script>
+</html>

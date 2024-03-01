@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block main %}
+    <section class="song">
+        <h1>
+            Liste des artistes de la chanson {{song.getTitle()}}
+        </h1>
+        {% for song in songs %}
+            <article class=$class>
+                <h2>{{artist.getName()}}</h2>
+                <p><a href="index.php?route=artist&idArtist={{artist.getId()}}">Plus</a>
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}
