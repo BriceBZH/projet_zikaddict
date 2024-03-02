@@ -1,15 +1,19 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
-    <section class="list_songss">
-        <h1>
+    <main id="container" class="list_songs">
+        <h2>
             Liste des chansons
-        </h1>
-        {% for song in songs %}
-            <article class=$class>
-                    <h2>{{song.getTitle()}}</h2>
-                    <p><a href="index.php?route=song&idSong={{song.getId()}}">Plus</a>
-                </article>
-        {% endfor %}
-    </section>
+        </h2>
+        <ul>
+            {% for song in songs %}
+                <li>
+                    <article class=$class>
+                        <h3>{{song.getTitle()}}</h3>
+                        <p><a href="index.php?route=song&idSong={{song.getId()}}">Plus</a>
+                    </article>
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
 {% endblock %}

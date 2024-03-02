@@ -1,15 +1,19 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
-    <section class="artist">
-        <h1>
+    <main id="container" class="list_albums">
+        <h2>
             Liste des albums de {{artist.getName()}}
-        </h1>
-        {% for album in albums %}
-            <article class=$class>
-                <h2>{{album.getTitle()}}</h2>
-                <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>
-            </article>
-        {% endfor %}
-    </section>
+        </h2>
+        <ul>
+            {% for album in albums %}
+                <li>
+                    <article class=$class>
+                        <h3>{{album.getTitle()}}</h3>
+                        <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>
+                    </article>
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
 {% endblock %}

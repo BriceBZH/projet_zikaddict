@@ -1,0 +1,31 @@
+.list_artists {
+    background-color: green;
+    h2 {
+        color: red;
+        text-align: center;
+    }
+    h3 {
+        color: yellow;
+    }
+    .dead {
+        background-color: grey;
+    }
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content : space-evenly;
+        width: 100%;     
+        li {
+            border: 1px solid black;
+            width: 30%;
+            padding : 1em;
+            background-color: blue;
+            margin: 1em;
+            article {
+                a {
+                    color: red;
+                }
+            }
+        }
+    }
+}

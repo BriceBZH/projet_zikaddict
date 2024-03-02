@@ -1,0 +1,28 @@
+/* VARS */
+@import "vars/colors";
+@import "vars/fonts";
+
+/* LIBS */
+@import "libs/reset";
+
+/* PARTIALS */
+@import "partials/header";
+
+/* LAYOUTS */
+@import "layouts/layout";
+@import "layouts/artists";
+@import "layouts/albums";
+@import "layouts/songs";
+
+
+html {
+  font-size: 62.5%;
+}
+body {
+  font-size: 1.8rem;
+  line-height: 1.5;
+  background-color: purple;
+  a {
+    text-decoration: none;
+  }
+}
