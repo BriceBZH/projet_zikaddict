@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Song;
+use App\Entity\Album;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,8 +25,8 @@ class SongRepository extends ServiceEntityRepository
 
     public function findByAlbum(Album $album) : array {
         return $this->createQueryBuilder('s')
-            ->andWhere(':artists MEMBER OF al.artists')
-            ->setParameter('artists', $artist)
+            ->andWhere(':albums MEMBER OF s.albums')
+            ->setParameter('albums', $album)
             ->getQuery()
             ->getResult()
         ;

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Album;
 use App\Form\AlbumType;
 use App\Repository\AlbumRepository;
+use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,9 @@ class AlbumController extends AbstractController
     #[Route('/{idAlbum}', name: 'album', methods: ['GET'])]
     public function displayOne(SongRepository $songRepository, AlbumRepository $albumRepository, int $idAlbum): Response {
         $album = $albumRepository->find($idAlbum);
+        if (!$album) {
+            throw $this->createNotFoundException('Album not found');
+        }
         return $this->render("albums/album-show.html.twig", [
             'album' => $album, 
             'songs' => $songRepository->findByAlbum($album)

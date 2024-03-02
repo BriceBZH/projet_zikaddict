@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Artist;
+use App\Entity\Song;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\CountryRepository;
@@ -22,6 +23,14 @@ class ArtistRepository extends ServiceEntityRepository
         parent::__construct($registry, Artist::class);
     }
 
+    public function findBySong(Song $song) : array {
+        return $this->createQueryBuilder('a')
+           ->andWhere(':songs MEMBER OF a.songs')
+           ->setParameter('songs', $song)
+           ->getQuery()
+           ->getResult()
+       ;
+    }
     // public function findAll() : array {
     //     $entityManager = $this->getEntityManager();
     //     $query = $entityManager->createQuery(
