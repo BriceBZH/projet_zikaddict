@@ -22,8 +22,6 @@ class ArtistController extends AbstractController
             "numbers" => array(1, 2, 3, 4, 5, 6),
             "holes"   => array("first", 5 => "second", "third")
         );
-        // dump($fruits);
-        // print_r($fruits);
         return $this->render("artists/artists-list.html.twig", [
             'artists' => $artistRepository->findAll(),
         ]);

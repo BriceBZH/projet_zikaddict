@@ -7,11 +7,9 @@
         </h2>
         <ul>
         {% for artist in artists %}
-            {# if($artist->getDead() === 1) {
-                $class = "dead";
-            } #}
-            <li>
-                <article class=$class>
+            {% set class = artist.dead == 1 ? 'dead' : '' %}
+            <li class="{{ class }}">
+                <article onclick="window.location='{{ path('artist', {idArtist: artist.id}) }}';">
                     <h3>{{artist.getName()}}</h3>
                     <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
                     <p>{{artist.getDeathDate().format("d/m/Y")}}</p>

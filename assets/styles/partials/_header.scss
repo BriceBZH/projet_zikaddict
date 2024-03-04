@@ -1,7 +1,8 @@
 body {
     .header {     
         font-family: "Sirin Stencil";
-        background-color: #ad1328;
+        background-color: $blueElectrik;
+        color: $white;
         .libelleLogo {
             display: flex;
             justify-content: space-between;
@@ -19,7 +20,7 @@ body {
             }
         }
         nav {
-            background-color: black;
+            background-color: $black;
             menu {
                 width: 100%;
                 display: flex;
@@ -27,7 +28,7 @@ body {
                 justify-content: space-evenly;
                 li {
                     a {
-                        color: yellow;
+                        color: $white;
                     }
                 }
             }

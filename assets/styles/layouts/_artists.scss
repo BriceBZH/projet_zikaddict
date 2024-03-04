@@ -1,11 +1,11 @@
 .list_artists {
-    background-color: green;
+    background-color: $lightGrey;
     h2 {
-        color: red;
+        color: $red;
         text-align: center;
     }
     h3 {
-        color: yellow;
+        color: $emeraldGreen;
     }
     .dead {
         background-color: grey;
@@ -16,14 +16,18 @@
         justify-content : space-evenly;
         width: 100%;     
         li {
-            border: 1px solid black;
+            border: 1px solid $darkBlue;
             width: 30%;
             padding : 1em;
-            background-color: blue;
+            background-color: $lightGrey;
             margin: 1em;
+            transition: background-color 0.3s ease; // Transition fluide de la couleur de fond
+            &:hover {
+                background-color: #ddd; // Couleur de fond au survol
+            }
             article {
                 a {
-                    color: red;
+                    color: $orange;
                 }
             }
         }
