@@ -32,21 +32,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $role = "USER";
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\ManyToMany(targetEntity: Album::class)]
-    private Collection $idAlbum;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\ManyToMany(targetEntity: Album::class)]
+    private Collection $albums;
+
     public function __construct()
     {
-        $this->idAlbum = new ArrayCollection();
+        $this->albums = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,18 +98,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -163,29 +148,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection<int, Album>
-     */
-    public function getIdAlbum(): Collection
-    {
-        return $this->idAlbum;
-    }
-
-    public function addIdAlbum(Album $idAlbum): static
-    {
-        if (!$this->idAlbum->contains($idAlbum)) {
-            $this->idAlbum->add($idAlbum);
-        }
-
-        return $this;
-    }
-
-    public function removeIdAlbum(Album $idAlbum): static
-    {
-        $this->idAlbum->removeElement($idAlbum);
-
-        return $this;
-    }
 
     public function isVerified(): bool
     {
@@ -195,6 +157,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Album>
+     */
+    public function getAlbums(): Collection
+    {
+        return $this->albums;
+    }
+
+    public function addAlbum(Album $album): static
+    {
+        if (!$this->albums->contains($album)) {
+            $this->albums->add($album);
+        }
+
+        return $this;
+    }
+
+    public function removeAlbum(Album $album): static
+    {
+        $this->albums->removeElement($album);
 
         return $this;
     }

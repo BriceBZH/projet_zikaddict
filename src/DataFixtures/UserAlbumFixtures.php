@@ -17,7 +17,7 @@ class UserAlbumFixtures extends Fixture implements DependentFixtureInterface
         foreach ($users as $user) {
             $userAlbums = $this->getRandomAlbums($albums);
             foreach ($userAlbums as $album) {
-                $user->addIdAlbum($album);
+                $user->addAlbum($album);
             }
         }
         $manager->flush();

@@ -14,7 +14,6 @@ class UserFixtures extends Fixture
         $user->setUsername('admin');
         $user->setEmail("test.test@test.test");
         $user->setPassword("test");
-        $user->setRole("ADMIN");
         $user->setCreatedAt(new \DateTimeImmutable());
         $manager->persist($user);
         $manager->flush();
