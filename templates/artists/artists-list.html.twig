@@ -5,14 +5,16 @@
         <h2>
             Liste des artistes
         </h2>
-        <ul>
+        <ul class="artist-cards">
         {% for artist in artists %}
+        {{dump(artist)}}
             {% set class = artist.dead == 1 ? 'dead' : '' %}
-            <li class="{{ class }}">
+            <li class="{{ class }}" >
                 <article onclick="window.location='{{ path('artist', {idArtist: artist.id}) }}';">
                     <h3>{{artist.getName()}}</h3>
                     <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
                     <p>{{artist.getDeathDate().format("d/m/Y")}}</p>
+                    
                     <a href="{{ path('artist', {idArtist: artist.id}) }}">Plus</a>
                 </article>
             </li>

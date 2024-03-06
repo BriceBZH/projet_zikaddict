@@ -18,7 +18,7 @@ class SongFixtures extends Fixture implements DependentFixtureInterface
             $song->setDescription("description " . $count);
             $song->setDuration($count);
             $randomGenre = $genres[array_rand($genres)];
-            $song->setGenreId($randomGenre);
+            $song->setGenre($randomGenre);
             $manager->persist($song);
         }
         $manager->flush();

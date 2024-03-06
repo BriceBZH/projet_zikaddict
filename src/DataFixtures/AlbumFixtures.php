@@ -19,7 +19,7 @@ class AlbumFixtures extends Fixture implements DependentFixtureInterface
             $album->setCreatedAt(new \DateTimeImmutable());
             $album->setUpdateAt(new \DateTimeImmutable());
             $randomMedia = $medias[array_rand($medias)];
-            $album->setMediaId($randomMedia);
+            $album->setMedia($randomMedia);
             $manager->persist($album);
         }
         $manager->flush();

@@ -25,16 +25,15 @@ class Song
     #[ORM\Column]
     private ?int $duration = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Genre $genreId = null;
-
     #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'songs')]
     private Collection $artists;
 
     #[ORM\ManyToMany(targetEntity: Album::class, mappedBy: 'songs')]
     private Collection $albums;
-
+    
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Genre $genre = null;
     public function __construct()
     {
         $this->artists = new ArrayCollection();
@@ -88,19 +87,17 @@ class Song
 
         return $this;
     }
-
-    public function getGenreId(): ?Genre
+    public function getGenre(): ?Genre
     {
-        return $this->genreId;
+        return $this->genre;
     }
 
-    public function setGenreId(?Genre $genreId): static
+    public function setGenre(?Genre $genre): static
     {
-        $this->genreId = $genreId;
+        $this->genre = $genre;
 
         return $this;
     }
-
     /**
      * @return Collection<int, Artist>
      */

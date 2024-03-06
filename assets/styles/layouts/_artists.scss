@@ -13,10 +13,13 @@
     ul {
         display: flex;
         flex-wrap: wrap;
-        justify-content : space-evenly;
+        justify-content: space-evenly;
         width: 100%;     
         li {
             border: 1px solid $darkBlue;
+            border-radius: 8px;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 30%;
             padding : 1em;
             background-color: $lightGrey;

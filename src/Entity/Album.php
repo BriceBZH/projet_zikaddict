@@ -28,10 +28,6 @@ class Album
     #[ORM\Column]
     private ?\DateTimeImmutable $updateAt = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Media $mediaId = null;
-
     #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'albums')]
     private Collection $artists;
 
@@ -40,6 +36,10 @@ class Album
 
     #[ORM\ManyToMany(targetEntity: Format::class, inversedBy: 'albums')]
     private Collection $formats;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Media $media = null;
 
     public function __construct()
     {
@@ -108,18 +108,17 @@ class Album
         return $this;
     }
 
-    public function getMediaId(): ?Media
+    public function getMedia(): ?Media
     {
-        return $this->mediaId;
+        return $this->media;
     }
 
-    public function setMediaId(?Media $mediaId): static
+    public function setMedia(?Media $media): static
     {
-        $this->mediaId = $mediaId;
+        $this->media = $media;
 
         return $this;
     }
-
 
     /**
      * @return Collection<int, Artist>
@@ -195,4 +194,5 @@ class Album
 
         return $this;
     }
+
 }

@@ -23,8 +23,8 @@ class ArtistFixtures extends Fixture implements DependentFixtureInterface
             $artist->setDead(1);
             $randomMedia = $medias[array_rand($medias)];
             $randomCountry = $countries[array_rand($countries)];
-            $artist->setIdMedia($randomMedia);
-            $artist->setIdCountry($randomCountry);
+            $artist->setMedia($randomMedia);
+            $artist->setCountry($randomCountry);
             $manager->persist($artist);
         }
         $manager->flush();

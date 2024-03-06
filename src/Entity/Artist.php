@@ -32,19 +32,19 @@ class Artist
     #[ORM\Column]
     private ?bool $dead = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Country $idCountry = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Media $idMedia = null;
-
     #[ORM\ManyToMany(targetEntity: Album::class, inversedBy: 'artists')]
     private Collection $albums;
 
     #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'artists')]
     private Collection $songs;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Media $media = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Country $country = null;
 
     public function __construct()
     {
@@ -124,26 +124,26 @@ class Artist
         return $this;
     }
 
-    public function getIdCountry(): ?Country
+    public function getMedia(): ?Media
     {
-        return $this->idCountry;
+        return $this->media;
     }
 
-    public function setIdCountry(?Country $idCountry): static
+    public function setMedia(?Media $media): static
     {
-        $this->idCountry = $idCountry;
+        $this->media = $media;
 
         return $this;
     }
 
-    public function getIdMedia(): ?Media
+    public function getCountry(): ?Country
     {
-        return $this->idMedia;
+        return $this->country;
     }
 
-    public function setIdMedia(?Media $idMedia): static
+    public function setCountry(?Country $country): static
     {
-        $this->idMedia = $idMedia;
+        $this->country = $country;
 
         return $this;
     }
@@ -195,4 +195,5 @@ class Artist
 
         return $this;
     }
+
 }
