@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const cards = document.querySelectorAll("ul li");
+    const cards = document.querySelectorAll("main > ul li");
     cards.forEach(function(card) {
+        const art = card.firstChild.nextSibling;
         const imageUrl = card.dataset.imageUrl;
+        card.style.backgroundColor = "rgba(0,0,0,0.5)";
         card.style.backgroundImage = `url('${imageUrl}')`;
-        // card.style.opacity = 0.6;
+        art.style.marginTop = "-60%";
     });
 });

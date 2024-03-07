@@ -1,5 +1,11 @@
 {% extends "base.html.twig" %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
+    {# <script src="{{ asset('/scripts/artist.js') }}"></script> #}
+{% endblock %}
+
 {% block main %}
     <main id="container" class="list_albums">
         <h2>
@@ -7,8 +13,8 @@
         </h2>
         <ul>
             {% for album in albums %}
-                <li>
-                    <article class=$class>
+                <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
+                <article onclick="window.location='{{ path('album', {idAlbum: album.id}) }}';">
                         <h3>{{album.getTitle()}}</h3>
                         <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>
                     </article>

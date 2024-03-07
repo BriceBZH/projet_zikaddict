@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <html lang="fr">
         <meta charset="UTF-8">
         <title> {% block title %}{% endblock %}| ZikAddict</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +25,10 @@
                 <div class="libelleLogo">
                     <a href="{{ path('index') }}"><img alt="logo" class="logo" src="{{ asset('imgs/logo.png') }}" /></a>
                     <h1>Zik Addict</h1>
+                    <form class="search-form" action="" method="GET">
+                        <input class="search-input" type="text" name="query" placeholder="Rechercher...">
+                        <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
                 </div>
                 <nav>
                     <menu>

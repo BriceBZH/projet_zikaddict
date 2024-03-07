@@ -31,15 +31,15 @@ body {
   h2::before {
     font-size: 0.4em;
     font-family: 'FontAwesome';
-    color: #950000;
-    content:"\f005";
+    color: $red;
+    content:"\f025";
     padding:1em;
   }
   h2::after {
       font-size: 0.4em;
       font-family: 'FontAwesome';
-      color: #950000;
-      content:"\f005";
+      color: $red;
+      content:"\f025";
       padding:1em;
   }
   h3 {
