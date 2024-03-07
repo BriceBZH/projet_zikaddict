@@ -14,16 +14,18 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-evenly;
-        width: 100%;     
+        width: 100%;
+        // opacity: 0.33;
         li {
             border: 1px solid $darkBlue;
+            opacity: 10;
             border-radius: 8px;
             box-sizing: border-box;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 30%;
             padding : 1em;
             background-color: $lightGrey;
-            margin: 1em;
+            margin: 0.5em;
             transition: background-color 0.3s ease; // Transition fluide de la couleur de fond
             &:hover {
                 background-color: #ddd; // Couleur de fond au survol

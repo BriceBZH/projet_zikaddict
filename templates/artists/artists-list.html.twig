@@ -11,14 +11,6 @@
         <h2>
             Liste des artistes
         </h2>
-        <div class="test">
-        test<br />
-        test<br />
-        test<br />
-        test<br />
-        test<br />
-        test<br />
-        </div>
         <ul>
         {% for artist in artists %}
             {% set class = artist.dead == 1 ? 'dead' : '' %}
@@ -26,8 +18,7 @@
                 <article onclick="window.location='{{ path('artist', {idArtist: artist.id}) }}';">
                     <h3>{{artist.getName()}}</h3>
                     <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
-                    <p>{{artist.getDeathDate().format("d/m/Y")}}</p>
-                    
+                    <p>{{artist.getDeathDate().format("d/m/Y")}}</p>     
                     <a href="{{ path('artist', {idArtist: artist.id}) }}">Plus</a>
                 </article>
             </li>

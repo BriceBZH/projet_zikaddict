@@ -1,12 +1,13 @@
 body {
     .header {     
-        font-family: "Sirin Stencil";
+        
         background-color: $blueElectrik;
         color: $white;
         .libelleLogo {
             display: flex;
             justify-content: space-between;
             h1 {
+                font-family: "Sirin Stencil";
                 text-transform: uppercase;
                 font-size: 4em;
                 width :70%;
@@ -27,8 +28,13 @@ body {
                 list-style: none;
                 justify-content: space-evenly;
                 li {
+                    font-weight: bold;
                     a {
                         color: $white;
+                    }
+                    &:hover {
+                        background-color: #950000;
+                        color: white;
                     }
                 }
             }
