@@ -15,4 +15,36 @@ class DefaultController extends AbstractController
             'controller_name' => 'DefaultController',
         ]);
     }
+
+    #[Route('/credits', name: 'credits')]
+    public function credits(): Response
+    {
+        return $this->render('default/credits.html.twig', [
+
+        ]);
+    }
+
+    #[Route('/presentation', name: 'presentation')]
+    public function presentation(): Response
+    {
+        return $this->render('default/presentation.html.twig', [
+
+        ]);
+    }
+
+    #[Route('/site-map', name: 'site-map')]
+    public function siteMap(): Response
+    {
+        return $this->render('default/site-map.html.twig', [
+
+        ]);
+    }
+
+    #[Route('/contact', name: 'contact')]
+    public function contact(): Response
+    {
+        return $this->render('default/contact.html.twig', [
+
+        ]);
+    }
 }

@@ -2,8 +2,8 @@
 
 {% block title %}Log in!{% endblock %}
 
-{% block main %}
-
+{% block body %}
+<main id="container" class="list_albums">
     <form method="post">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -41,4 +41,5 @@
         </button>
     </form>
     <a href="{{ path('register') }}">Register</a>
+    </main>
 {% endblock %}

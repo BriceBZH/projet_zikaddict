@@ -39,28 +39,28 @@
                             <li><a href="{{ path('login') }}">Login</a></li>
                         {% endif %}
                         {% if app.user is not null %}
+                            {% if 'ROLE_USER' in app.user.roles %}
+                                <li><a href="{{ path('profile') }}">Profile</a></li>
+                            {% endif %}
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                                <li><a href="{{ path('admin') }}">Admin</a></li>
+                            {% endif %}
                             {% if app.user.userIdentifier is defined %} 
                                 <li><a href="{{ path('logout') }}">Logout</a></li>
                             {% endif %}
                         {% endif %}
-                        {# <?php
-                            if(isset($_SESSION['role']) && $_SESSION['role'] === "ADMIN") {
-                                ?>
-                                <li><a href="index.php?route=admin">Admin</a></li>
-                                <?php
-                            }
-                        ?>#}
                     </menu>
                 </nav>
             </header>
         {% endblock %}
-        {% block main %} 
+        {% block body %} 
         {% endblock %}
         {% block footer %}
             <ul>
-                <li><a href="">Présentation du site</a></li>
-                <li><a href="">Contact</a></li>
-                <li><a href="">Plan du site</a></li>
+                <li><a href="{{ path('presentation') }}">Présentation du site</a></li>
+                <li><a href="{{ path('credits') }}">Crédits</a></li>
+                <li><a href="{{ path('contact') }}">Contact</a></li>
+                <li><a href="{{ path('site-map') }}">Plan du site</a></li>
             </ul>      
             <hr />
             <p>Ce site à pour vocation d'être un projet de formation, il n'est pas à but lucratif et n'est pas destiné à être utilisé en dehors de l'examen de fin de formation</p>

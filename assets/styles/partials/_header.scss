@@ -6,12 +6,15 @@ body {
         .libelleLogo {
             display: flex;
             justify-content: space-between;
+            justify-content: center; /* Alignement horizontal */
+            align-items: center;
             h1 {
                 font-family: "Sirin Stencil";
                 text-transform: uppercase;
                 font-size: 4em;
-                width :70%;
-                justify-content: center;
+                width :50%;
+                align-items: center;
+                text-align: center
             }
             img {
                 width :100%;
@@ -21,7 +24,8 @@ body {
             }
             .search-form {
                 display: inline-block;
-                margin-left: 20px; /* Ajustez la marge selon vos préférences */        
+                width: 25%;
+                // margin-left: 20px; /* Ajustez la marge selon vos préférences */        
                 .search-input {
                     padding: 8px;
                     border-radius: 4px;
@@ -30,7 +34,7 @@ body {
                 .search-button {
                     padding: 8px 15px;
                     background-color: $black;
-                    color: white;
+                    color: $white;
                     border: none;
                     border-radius: 4px;
                     cursor: pointer;

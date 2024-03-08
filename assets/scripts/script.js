@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const art = card.firstChild.nextSibling;
         const imageUrl = card.dataset.imageUrl;
         card.style.backgroundColor = "rgba(0,0,0,0.5)";
-        card.style.backgroundImage = `url('${imageUrl}')`;
+        card.style.background = `url('${imageUrl}') no-repeat`;
+        card.style.backgroundSize = "cover";
         art.style.marginTop = "-60%";
     });
 });
