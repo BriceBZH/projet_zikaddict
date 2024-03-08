@@ -7,12 +7,14 @@
 
 /* PARTIALS */
 @import "partials/header";
+@import "partials/footer";
 
 /* LAYOUTS */
 @import "layouts/layout";
 @import "layouts/artists";
 @import "layouts/albums";
 @import "layouts/songs";
+@import "layouts/others";
 
 
 html {

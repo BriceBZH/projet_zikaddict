@@ -1,0 +1,18 @@
+.footer {
+    background-color: $purple; 
+    ul {
+        width : 100%;
+        display: flex;
+        justify-content: space-evenly;
+        li {
+            border: 1px solid $darkGrey;
+            padding: 0.5em;
+            a {
+                color: $black;
+            }
+            &:hover {
+                background-color: #48e7e4;
+            }
+        }
+    }
+}
