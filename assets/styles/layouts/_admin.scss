@@ -1,0 +1,19 @@
+.admin {
+    ul {
+        .menu-li {
+            border: 1px solid black;
+            text-align: center;
+            &:hover {
+                background-color: red;
+                cursor: pointer;
+            }
+        }
+        
+    }
+    .hidden {
+        display: none;
+        .action {
+            display:flex;
+        }
+    }
+}

@@ -20,13 +20,13 @@ class ArtistType extends AbstractType
             ->add('birthDate')
             ->add('deathDate')
             ->add('dead')
-            ->add('idCountry', EntityType::class, [
+            ->add('country', EntityType::class, [
                 'class' => Country::class,
-'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
-            ->add('idMedia', EntityType::class, [
+            ->add('media', EntityType::class, [
                 'class' => Media::class,
-'choice_label' => 'id',
+                'choice_label' => 'alt',
             ])
         ;
     }

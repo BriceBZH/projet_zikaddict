@@ -18,9 +18,9 @@ class AlbumType extends AbstractType
             ->add('year')
             ->add('createdAt')
             ->add('updateAt')
-            ->add('mediaId', EntityType::class, [
+            ->add('media', EntityType::class, [
                 'class' => Media::class,
-'choice_label' => 'id',
+                'choice_label' => 'alt',
             ])
         ;
     }

@@ -30,13 +30,6 @@ class ArtistController extends AbstractController
             'albums' => $albumRepository->findByArtist($artist)
         ]);
     }
-    // #[Route('/', name: 'app_artist_index', methods: ['GET'])]
-    // public function index(ArtistRepository $artistRepository): Response
-    // {
-    //     return $this->render('artist/index.html.twig', [
-    //         'artists' => $artistRepository->findAll(),
-    //     ]);
-    // }
 
     // #[Route('/new', name: 'app_artist_new', methods: ['GET', 'POST'])]
     // public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -58,40 +51,32 @@ class ArtistController extends AbstractController
     //     ]);
     // }
 
-    // #[Route('/{id}', name: 'app_artist_show', methods: ['GET'])]
-    // public function show(Artist $artist): Response
-    // {
-    //     return $this->render('artist/show.html.twig', [
-    //         'artist' => $artist,
-    //     ]);
-    // }
+    #[Route('/{id}/edit', name: 'artist_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Artist $artist, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(ArtistType::class, $artist);
+        $form->handleRequest($request);
 
-    // #[Route('/{id}/edit', name: 'app_artist_edit', methods: ['GET', 'POST'])]
-    // public function edit(Request $request, Artist $artist, EntityManagerInterface $entityManager): Response
-    // {
-    //     $form = $this->createForm(ArtistType::class, $artist);
-    //     $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->flush();
+            return $this->redirectToRoute('app_artist_index', [], Response::HTTP_SEE_OTHER);
+        }
 
-    //         return $this->redirectToRoute('app_artist_index', [], Response::HTTP_SEE_OTHER);
-    //     }
+        return $this->render('artists/edit.html.twig', [
+            'artist' => $artist,
+            'form' => $form,
+        ]);
+    }
 
-    //     return $this->render('artist/edit.html.twig', [
-    //         'artist' => $artist,
-    //         'form' => $form,
-    //     ]);
-    // }
+    #[Route('/{id}', name: 'artist_delete', methods: ['POST'])]
+    public function delete(Request $request, Artist $artist, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$artist->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($artist);
+            $entityManager->flush();
+        }
 
-    // #[Route('/{id}', name: 'app_artist_delete', methods: ['POST'])]
-    // public function delete(Request $request, Artist $artist, EntityManagerInterface $entityManager): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete'.$artist->getId(), $request->request->get('_token'))) {
-    //         $entityManager->remove($artist);
-    //         $entityManager->flush();
-    //     }
-
-    //     return $this->redirectToRoute('app_artist_index', [], Response::HTTP_SEE_OTHER);
-    // }
+        return $this->redirectToRoute('app_artist_index', [], Response::HTTP_SEE_OTHER);
+    }
 }

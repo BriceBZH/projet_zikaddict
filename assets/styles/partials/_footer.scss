@@ -5,13 +5,14 @@
         display: flex;
         justify-content: space-evenly;
         li {
-            border: 1px solid $darkGrey;
+            border: 1px solid $black;
+            background-color: white;
             padding: 0.5em;
             a {
                 color: $black;
             }
             &:hover {
-                background-color: #48e7e4;
+                background-color: $yellow;
             }
         }
     }

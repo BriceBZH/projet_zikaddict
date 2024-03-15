@@ -17,9 +17,9 @@ class SongType extends AbstractType
             ->add('title')
             ->add('description')
             ->add('duration')
-            ->add('genreId', EntityType::class, [
+            ->add('genre', EntityType::class, [
                 'class' => Genre::class,
-'choice_label' => 'id',
+                'choice_label' => 'libelle',
             ])
         ;
     }

@@ -29,9 +29,6 @@ class Artist
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $deathDate = null;
 
-    #[ORM\Column]
-    private ?bool $dead = null;
-
     #[ORM\ManyToMany(targetEntity: Album::class, inversedBy: 'artists')]
     private Collection $albums;
 
@@ -108,18 +105,6 @@ class Artist
     public function setDeathDate(\DateTimeInterface $deathDate): static
     {
         $this->deathDate = $deathDate;
-
-        return $this;
-    }
-
-    public function isDead(): ?bool
-    {
-        return $this->dead;
-    }
-
-    public function setDead(bool $dead): static
-    {
-        $this->dead = $dead;
 
         return $this;
     }
