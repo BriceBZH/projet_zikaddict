@@ -1,11 +1,5 @@
 {% extends "base.html.twig" %}
 
-{% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('app') }}
-    {# <script src="{{ asset('/scripts/artist.js') }}"></script> #}
-{% endblock %}
-
 {% block body %}
     <main id="container" class="list_artists">
         <h2>
@@ -13,16 +7,21 @@
         </h2>
         <ul>
         {% for artist in artists %}
-            {% set class = artist.dead == 1 ? 'dead' : '' %}
+            {% set class = 'dead' %}
             <li class="{{ class }}" data-image-url="{{ asset('imgs/' ~ artist.media.url) }}" data-image-alt="{{ artist.media.alt }}">
                 <article onclick="window.location='{{ path('artist', {idArtist: artist.id}) }}';">
                     <h3>{{artist.getName()}}</h3>
                     <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
-                    <p>{{artist.getDeathDate().format("d/m/Y")}}</p>     
+                    {% if artist.getDeathDate() is not null %}
+                    <p>{{artist.getDeathDate().format("d/m/Y")}}</p>
+                    {% endif %}   
                     <a href="{{ path('artist', {idArtist: artist.id}) }}">Plus</a>
                 </article>
             </li>
         {% endfor %}
         </ul>
     </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}

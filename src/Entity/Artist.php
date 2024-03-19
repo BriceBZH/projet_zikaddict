@@ -102,7 +102,7 @@ class Artist
         return $this->deathDate;
     }
 
-    public function setDeathDate(\DateTimeInterface $deathDate): static
+    public function setDeathDate(?\DateTimeInterface $deathDate): static
     {
         $this->deathDate = $deathDate;
 

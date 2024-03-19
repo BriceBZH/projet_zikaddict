@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "base.back.html.twig" %}
 
 {% block body %}
     <main id="container" class="admin">
@@ -23,7 +23,7 @@
                             <td>{{artist.name}}</td>
                             <td>{{artist.description}}</td>
                             <td>{{artist.birthDate.format('Y-m-d H:i:s')}}</td>
-                            <td>{{artist.deathDate.format('Y-m-d H:i:s')}}</td>
+                            {# <td>{{artist.deathDate.format('Y-m-d H:i:s')}}</td> #}
                             <td>{{artist.country.name}}</td>
                             <td>{{artist.media.id}}</td>
                             <td>{{artist.media.id}}</td>
@@ -256,6 +256,27 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <li class="menu-li" data-target="import-table">Import de fichier</li>
+            <table id="import-table" class="menu-table hidden">
+                <tbody>
+                    <tr>
+                        <td >
+                         Télécharger le modèle : <a href="{{ path('download_model', {'filename': 'modele_csv.csv'}) }}">ICI</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <form method="post" action="{{ path('upload_csv') }}" enctype="multipart/form-data" accept-charset="UTF-8">
+                                <input type="file" name="csv_file" accept=".csv" />
+                                <button type="submit">Envoyer</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </ul>
     </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}
