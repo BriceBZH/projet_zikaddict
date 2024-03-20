@@ -23,12 +23,12 @@ class AlbumRepository extends ServiceEntityRepository
     }
 
     public function findByArtist(Artist $artist) : array {
-            return $this->createQueryBuilder('al')
-               ->andWhere(':artists MEMBER OF al.artists')
-               ->setParameter('artists', $artist)
-               ->getQuery()
-               ->getResult()
-           ;
+        return $this->createQueryBuilder('al')
+            ->andWhere(':artists MEMBER OF al.artists')
+            ->setParameter('artists', $artist)
+            ->getQuery()
+            ->getResult()
+        ;
     }
     //    /**
     //     * @return Album[] Returns an array of Album objects

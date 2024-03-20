@@ -27,8 +27,14 @@
             }
             article {
                 padding: 1em;
-                // margin-top: -60%;
                 color: white;
+                display: flex;
+                .collec {
+                    width: 50%;
+                    img {
+                        width: 100%;
+                    }
+                }
                 a {
                     color: orange;
                 }

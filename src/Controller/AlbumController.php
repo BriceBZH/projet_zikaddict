@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Album;
 use App\Form\AlbumType;
 use App\Repository\AlbumRepository;
+use App\Repository\UserRepository;
 use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -81,5 +82,24 @@ class AlbumController extends AbstractController
         }
 
         return $this->redirectToRoute('app_album_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/add_collection/{idAlbum}/{idUser}', name: 'add_collection', methods: ['GET'])]
+    public function addCollection(int $idAlbum, int $idUser, AlbumRepository $albumRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $returnUrl = $request->query->get('returnUrl');
+        $parametre = $request->query->get('parametre');
+        $param = [];
+        if($parametre) { //s'il y a un paramètre comme un id (pour la page de l'artiste)
+            $param = ['idArtist' => $parametre];
+        }
+        $album = $albumRepository->find($idAlbum);
+        $user = $userRepository->find($idUser);
+        if ($album && $user) {  //on remplit la table intermédiaire user_album
+            $user->addAlbum($album);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }    
+        return $this->redirectToRoute($returnUrl, $param);
     }
 }

@@ -43,14 +43,6 @@ class RegistrationController extends AbstractController
             $user->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($user);
             $entityManager->flush();
-
-            // $to = "skull-2@hotmail.fr";
-            // $subject = "My subject";
-            // $txt = "Hello world!";
-            // $headers = "From: sender@mail.com";
-
-            // mail($to,$subject,$txt,$headers); 
-
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('verify_email', $user,
                 (new TemplatedEmail())

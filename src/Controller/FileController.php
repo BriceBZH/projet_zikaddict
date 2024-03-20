@@ -9,9 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Artist;
 use App\Entity\Country;
+use App\Entity\Album;
+use App\Entity\Genre;
+use App\Entity\Song;
 use App\Repository\ArtistRepository;
 use App\Repository\MediaRepository;
 use App\Repository\CountryRepository;
+use App\Repository\AlbumRepository;
+use App\Repository\SongRepository;
+use App\Repository\GenreRepository;
 use DateTime;
 
 #[Route('/file')]
@@ -30,7 +36,7 @@ class FileController extends AbstractController
     }
 
     #[Route('/upload_csv', name: 'upload_csv', methods: ['GET', 'POST'])]
-    public function upload(Request $request, ArtistRepository $artistRepository, MediaRepository $mediaRepository, CountryRepository $countryRepository, EntityManagerInterface $entityManager): Response
+    public function upload(Request $request, ArtistRepository $artistRepository, MediaRepository $mediaRepository, GenreRepository $genreRepository, SongRepository $songRepository, CountryRepository $countryRepository, AlbumRepository $albumRepository, EntityManagerInterface $entityManager): Response
     {
         // Récupérer le fichier uploadé
         $csvFile = $request->files->get('csv_file');
@@ -48,48 +54,124 @@ class FileController extends AbstractController
         // Parcourir les lignes du fichier CSV
         $csv = [];
         if (($handle = fopen($csvFile->getPathname(), "r")) !== FALSE) {
-            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            fgetcsv($handle, 1000, ";");
+            while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
                 $data = array_map('utf8_encode', $data);
-                $country = $data[1];
-                $name = $data[3];
-                $description = $data[4];
-                $birthDate = $data[5];
-                $deathDate = $data[6];
-                $media = 11;
-                $csv[] = ["country" => $country, "name" => $name, "description" => $description, "birthDate" => $birthDate, "deathDate" => $deathDate, "media" => $media];
+                $artistName = $data[0];
+                $artistCountry = $data[1];
+                $artistDescription = $data[2];
+                $artistBirthDate = $data[3];
+                $artistDeathDate = $data[4];
+                $artistMedia = 11;
+                $albumTitle = $data[5];
+                $albumYear = (int) $data[6];
+                $albumMedia = 11;
+                $albumFormat = $data[7];
+                $songGenre = $data[8];
+                $songTitle = $data[9];
+                if(isset($data[10])) {
+                    $songDescription = $data[10];
+                } else {
+                    $songDescription = "";
+                }
+                if(isset($data[11])) {
+                    $songDuration = (int) $data[11];
+                } else {
+                    $songDuration = 0;
+                }    
+                $csv[] = [
+                    "artistName" => $artistName,
+                    "artistCountry" => $artistCountry,
+                    "artistDescription" => $artistDescription,
+                    "artistBirthDate" => $artistBirthDate,
+                    "artistDeathDate" => $artistDeathDate,
+                    "artistMedia" => $artistMedia,
+                    "albumTitle" => $albumTitle,
+                    "albumYear" => $albumYear,
+                    "albumMedia" => $albumMedia,
+                    "albumFormat" => $albumFormat,
+                    "songGenre" => $songGenre,
+                    "songTitle" => $songTitle,
+                    "songDescription" => $songDescription,
+                    "songDuration" => $songDuration,
+                ];
             }
             fclose($handle);
         }
-
+        // dd($csv);
         foreach($csv as $item) {
-            $artist = $artistRepository->findOneBy(['name' => $item['name']]);
+            $artist = $artistRepository->findOneBy(['name' => $item['artistName']]);
+            $country = $countryRepository->findOneBy(['name' => $item['artistCountry']]);
+            $album = $albumRepository->findOneBy(['title' => $item['albumTitle']]);
+            $song = $songRepository->findOneBy(['title' => $item['songTitle']]);
+            $genre = $genreRepository->findOneBy(['libelle' => $item['songGenre']]);
+            if(!$country) { //le pays n'existe pas donc on l'ajoute
+                $country = new Country();
+                $country->setName($item['artistCountry']);
+                $entityManager->persist($country);
+                $entityManager->flush();
+            }
+            if(!$album) { //l'album n'existe pas donc on l'ajoute
+                $album = new Album();
+                $album->setTitle($item['albumTitle']);
+                $album->setYear($item['albumYear']);
+                $album->setCreatedAt(new \DateTimeImmutable());
+                $album->setUpdateAt(new \DateTimeImmutable());
+                $albumMedia = $mediaRepository->find($item['albumMedia']);
+                $album->setMedia($albumMedia);
+                $entityManager->persist($album);
+                $entityManager->flush();
+            }
+            if(!$genre) { //le genre n'existe pas donc on l'ajoute
+                $genre = new Genre();
+                $genre->setLibelle($item['songGenre']);
+                $entityManager->persist($genre);
+                $entityManager->flush();
+            }
+            if(!$song) { //la chanson n'existe pas donc on l'ajoute
+                $song = new Song();
+                $song->setTitle($item['songTitle']);
+                $song->setDescription($item['songDescription']);
+                $song->setDuration($item['songDuration']);
+                $song->setGenre($genre);
+                $entityManager->persist($song);
+                $entityManager->flush();
+            }
             if(!$artist) { //si l'artiste n'existe pas on le créer
                 $artist = new Artist();
-                $artist->setName($item['name']);
-                $artist->setDescription($item['description']);
-                $artist->setBirthDate(DateTime::createFromFormat('Y-m-d', $item['birthDate']));
-                if($item['deathDate'] === "0000-00-00") {
+                $artist->setName($item['artistName']);
+                $artist->setDescription($item['artistDescription']);
+                $artist->setBirthDate(DateTime::createFromFormat('Y-m-d', $item['artistBirthDate']));
+                if($item['artistDeathDate'] === "0000-00-00" || $item['artistDeathDate'] === "") {
                     $deathDate = null;
                 } else {
-                    $deathDate = DateTime::createFromFormat('Y-m-d', $item['deathDate']);
+                    $deathDate = DateTime::createFromFormat('Y-m-d', $item['artistDeathDate']);
                 }
                 $artist->setDeathDate($deathDate);
-                $media = $mediaRepository->find($item['media']);
-                $artist->setMedia($media);
-                //on vérifie si le pays existe
-                $country = $countryRepository->findOneBy(['name' => $item['country']]);
-                if(!$country) { //le pays n'existe pas donc on l'ajoute
-                    $country = new Country();
-                    $country->setName($item['country']);
-                    $entityManager->persist($country);
-                    $entityManager->flush();
-                }
+                $artistMedia = $mediaRepository->find($item['artistMedia']);
+                $artist->setMedia($artistMedia);
                 $artist->setCountry($country);
                 $entityManager->persist($artist);
                 $entityManager->flush();
             }
+            if ($artist && $album) { //on remplit la table intermédiaire artist_album
+                $artist->addAlbum($album);
+                $entityManager->persist($artist);
+                $entityManager->flush();
+            }
+            if ($artist && $song) { //on remplit la table intermédiaire artist_song
+                $artist->addSong($song);
+                $entityManager->persist($artist);
+                $entityManager->flush();
+            }
+            if ($album && $song) {  //on remplit la table intermédiaire album_song
+                $album->addSong($song);
+                $entityManager->persist($album);
+                $entityManager->flush();
+            }
         }
-        return new Response('Fichier CSV téléchargé et traité avec succès.');
+        $this->addFlash('Fichier CSV téléchargé et traité avec succès.');
+        return $this->redirectToRoute('index');
     }
 
 }

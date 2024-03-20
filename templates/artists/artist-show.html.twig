@@ -1,11 +1,5 @@
 {% extends "base.html.twig" %}
 
-{% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('app') }}
-    {# <script src="{{ asset('/scripts/artist.js') }}"></script> #}
-{% endblock %}
-
 {% block body %}
     <main id="container" class="list_albums">
         <h2>
@@ -16,10 +10,16 @@
                 <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
                 <article onclick="window.location='{{ path('album', {idAlbum: album.id}) }}';">
                         <h3>{{album.getTitle()}}</h3>
+                        {% set currentRoute = app.request.attributes.get('_route') %}
+                        {% set param = app.request.attributes.get('idArtist') %}
+                        <a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, parametre: param}) }}" class="collec"><img src="{{ asset('imgs/collec.png')}}" alt="collection" /></a>
                         <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>
                     </article>
                 </li>
             {% endfor %}
         </ul>
     </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}
