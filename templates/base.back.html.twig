@@ -41,7 +41,7 @@
                         {% endif %}
                         {% if app.user is not null %}
                             {% if 'ROLE_USER' in app.user.roles %}
-                                <li><a href="{{ path('profile') }}">Profile</a></li>
+                                <li><a href="{{ path('profile', {idUser: app.user.id}) }}">Profile</a></li>
                             {% endif %}
                             {% if 'ROLE_ADMIN' in app.user.roles %}
                                 <li><a href="{{ path('admin') }}">Admin</a></li>

@@ -95,11 +95,24 @@ class AlbumController extends AbstractController
         }
         $album = $albumRepository->find($idAlbum);
         $user = $userRepository->find($idUser);
-        if ($album && $user) {  //on remplit la table intermédiaire user_album
-            $user->addAlbum($album);
-            $entityManager->persist($user);
-            $entityManager->flush();
-        }    
+        $userAlbum = $userRepository->findByAlbum($album);
+
+        if($userAlbum) { //l'utilisateur à référencé cet album, on va donc l'enlever de sa collection
+            if ($album && $user) {  //on remplit la table intermédiaire user_album
+                $user->removeAlbum($album);
+                $entityManager->persist($user);
+                $entityManager->flush();
+            }
+        } else {
+            if ($album && $user) {  //on remplit la table intermédiaire user_album
+                $user->addAlbum($album);
+                $entityManager->persist($user);
+                $entityManager->flush();
+            }
+        }
+        // dd($albumC);
+
+          
         return $this->redirectToRoute($returnUrl, $param);
     }
 }

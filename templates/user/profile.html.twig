@@ -1,7 +1,40 @@
-{% extends "base.html.twig" %}
+{% extends "base.back.html.twig" %}
 
 {% block body %}
-    <main id="container" class="list_albums">
+    <main id="container" class="admin">
         PROFILE
+        
+        <ul>
+            <li class="menu-li" data-target="collection-table">Collection</li>
+            <table id="collection-table" class="menu-table my-5 table table-striped">
+                <thead>
+                    <tr>
+                        <th>Artist</th>
+                        <th>Album</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for album in albums %}
+                        <tr>
+                            <td>
+                                {% for artist in album.artists %}
+                                    {{ artist.name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>{{album.title}}</td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><a href="{{ path('download_csv', {filename: 'collection.csv', idUser: app.user.id}) }}">Excel</a></td>
+                        <td><a href="{{ path('download_pdf', {filename: 'collection.pdf', idUser: app.user.id}) }}">Pdf</a></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </ul>
     </main>
 {% endblock %}

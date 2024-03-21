@@ -5,6 +5,8 @@ namespace App\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Artist;
@@ -15,15 +17,16 @@ use App\Entity\Song;
 use App\Repository\ArtistRepository;
 use App\Repository\MediaRepository;
 use App\Repository\CountryRepository;
+use App\Repository\UserRepository;
 use App\Repository\AlbumRepository;
 use App\Repository\SongRepository;
 use App\Repository\GenreRepository;
-use DateTime;
+use Dompdf\Dompdf;
 
 #[Route('/file')]
 class FileController extends AbstractController
 {
-    #[Route('/download_model/{filename}', name: 'download_model', methods: ['GET', 'POST'])]
+    #[Route('/download_model/{filename}', name: 'download_model', methods: ['GET'])]
     public function download(string $filename): Response
     {
         $directory = $this->getParameter('kernel.project_dir') . '/assets/csv/';
@@ -33,6 +36,65 @@ class FileController extends AbstractController
         }
 
         return $this->file($directory . '/' . $filename);
+    }
+
+    #[Route('/download_csv/{filename}/{idUser}', name: 'download_csv', methods: ['GET'])]
+    public function downloadCSV(string $filename, int $idUser, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->find($idUser);
+        $albums = $user->getAlbums();
+
+        $callback = function () use ($albums) {
+            $handle = fopen('php://output', 'w+');
+            fputcsv($handle, ['Artists', 'Title', 'Year']);
+            $lines = [];
+            foreach ($albums as $album) {
+                $artists = "";
+                $artistsAlbum = $album->getArtists();
+                foreach($artistsAlbum as $artist) {
+                    $artists = $artists.", ".$artist->getName();
+                }
+                $line = $artists . ';' . $album->getTitle() . ';' . $album->getYear();
+                $lines[] = explode(';', $line);
+            }
+            foreach ($lines as $line) {
+                fputcsv($handle, $line, ';');
+            }
+            fclose($handle);
+        };
+
+        $response = new StreamedResponse($callback);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $filename
+        ));
+
+        return $response;
+    }
+
+    #[Route('/download_pdf/{filename}/{idUser}', name: 'download_pdf', methods: ['GET'])]
+    public function downloadPDF(string $filename, int $idUser, UserRepository $userRepository): Response
+    {
+        $user = $userRepository->find($idUser);
+        $albums = $user->getAlbums();
+        $dompdf = new Dompdf();
+        $html = '<table><tr><th>Artistes</th><th>Album</th><th>Année</th></tr>';
+        foreach ($albums as $album) {
+            $artists = "";
+            $artistsAlbum = $album->getArtists();
+            foreach($artistsAlbum as $artist) {
+                $artists = $artists.", ".$artist->getName();
+            }
+            $html .= '<tr><td>' . $artists . '</td><td>' . $album->getTitle() . '</td><td>' . $album->getYear() . '</td></tr>';
+        }
+        $html .= '</table></body></html>';
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+        return new Response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+        ]);
     }
 
     #[Route('/upload_csv', name: 'upload_csv', methods: ['GET', 'POST'])]
@@ -98,7 +160,7 @@ class FileController extends AbstractController
             }
             fclose($handle);
         }
-        // dd($csv);
+
         foreach($csv as $item) {
             $artist = $artistRepository->findOneBy(['name' => $item['artistName']]);
             $country = $countryRepository->findOneBy(['name' => $item['artistCountry']]);
