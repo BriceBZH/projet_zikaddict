@@ -11,18 +11,20 @@
                     <tr>
                         <th>Artist</th>
                         <th>Album</th>
+                        <th>Format</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for album in albums %}
+                    {% for userAlbumFormat in userAlbumFormats %}
                         <tr>
                             <td>
-                                {% for artist in album.artists %}
+                                {% for artist in userAlbumFormat.album.artists %}
                                     {{ artist.name }}{% if not loop.last %}, {% endif %}
                                 {% endfor %}
                             </td>
-                            <td>{{album.title}}</td>
+                            <td>{{userAlbumFormat.album.title}}</td>
+                            <td>{{userAlbumFormat.format.libelle}}</td>
                             <td></td>
                         </tr>
                     {% endfor %}

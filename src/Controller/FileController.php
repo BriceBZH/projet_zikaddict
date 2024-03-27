@@ -14,15 +14,17 @@ use App\Entity\Country;
 use App\Entity\Album;
 use App\Entity\Genre;
 use App\Entity\Song;
+use App\Entity\Format;
 use App\Repository\ArtistRepository;
 use App\Repository\MediaRepository;
 use App\Repository\CountryRepository;
+use App\Repository\FormatRepository;
 use App\Repository\UserRepository;
 use App\Repository\AlbumRepository;
 use App\Repository\SongRepository;
 use App\Repository\GenreRepository;
 use Dompdf\Dompdf;
-
+use DateTime;
 #[Route('/file')]
 class FileController extends AbstractController
 {
@@ -98,7 +100,7 @@ class FileController extends AbstractController
     }
 
     #[Route('/upload_csv', name: 'upload_csv', methods: ['GET', 'POST'])]
-    public function upload(Request $request, ArtistRepository $artistRepository, MediaRepository $mediaRepository, GenreRepository $genreRepository, SongRepository $songRepository, CountryRepository $countryRepository, AlbumRepository $albumRepository, EntityManagerInterface $entityManager): Response
+    public function upload(Request $request, ArtistRepository $artistRepository, MediaRepository $mediaRepository, GenreRepository $genreRepository, SongRepository $songRepository, CountryRepository $countryRepository, AlbumRepository $albumRepository, FormatRepository $formatRepository, EntityManagerInterface $entityManager): Response
     {
         // Récupérer le fichier uploadé
         $csvFile = $request->files->get('csv_file');
@@ -167,6 +169,8 @@ class FileController extends AbstractController
             $album = $albumRepository->findOneBy(['title' => $item['albumTitle']]);
             $song = $songRepository->findOneBy(['title' => $item['songTitle']]);
             $genre = $genreRepository->findOneBy(['libelle' => $item['songGenre']]);
+            $formatExp = explode(",", $item['albumFormat']);
+            
             if(!$country) { //le pays n'existe pas donc on l'ajoute
                 $country = new Country();
                 $country->setName($item['artistCountry']);
@@ -216,6 +220,20 @@ class FileController extends AbstractController
                 $entityManager->persist($artist);
                 $entityManager->flush();
             }
+            foreach($formatExp as $formatItem) { //on parcours la liste des formats
+                $format = $formatRepository->findOneBy(['libelle' => $formatItem]);
+                if(!$format) { //le format n'existe pas donc on l'ajoute
+                    $format = new Format();
+                    $format->setLibelle($formatItem);
+                    $entityManager->persist($format);
+                    $entityManager->flush();
+                }
+                if ($album && $format) { //on remplit la table intermédiaire album_format
+                    $album->addFormat($format);
+                    $entityManager->persist($album);
+                    $entityManager->flush();
+                }
+            }
             if ($artist && $album) { //on remplit la table intermédiaire artist_album
                 $artist->addAlbum($album);
                 $entityManager->persist($artist);
@@ -232,7 +250,7 @@ class FileController extends AbstractController
                 $entityManager->flush();
             }
         }
-        $this->addFlash('Fichier CSV téléchargé et traité avec succès.');
+        // $this->addFlash('Fichier CSV téléchargé et traité avec succès.');
         return $this->redirectToRoute('index');
     }
 

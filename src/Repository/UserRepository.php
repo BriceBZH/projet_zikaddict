@@ -22,14 +22,14 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findByAlbum(Album $album) : array {
-        return $this->createQueryBuilder('u')
-           ->andWhere(':albums MEMBER OF u.albums')
-           ->setParameter('albums', $album)
-           ->getQuery()
-           ->getResult()
-       ;
-    }
+    // public function findByAlbum(Album $album) : array {
+    //     return $this->createQueryBuilder('u')
+    //        ->andWhere(':albums MEMBER OF u.albums')
+    //        ->setParameter('albums', $album)
+    //        ->getQuery()
+    //        ->getResult()
+    //    ;
+    // }
 
     //    /**
     //     * @return User[] Returns an array of User objects

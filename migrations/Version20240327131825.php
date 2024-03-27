@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240315155716 extends AbstractMigration
+final class Version20240327131825 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,14 @@ final class Version20240315155716 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE artists DROP dead');
+        $this->addSql('CREATE TABLE medias (id INT AUTO_INCREMENT NOT NULL, url VARCHAR(255) NOT NULL, alt VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE artists ADD dead TINYINT(1) NOT NULL');
+        $this->addSql('ALTER TABLE albums DROP FOREIGN KEY FK_F4E2474FEA9FDD75');
+        $this->addSql('ALTER TABLE artists DROP FOREIGN KEY FK_68D3801EEA9FDD75');
+        $this->addSql('DROP TABLE medias');
     }
 }

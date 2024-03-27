@@ -9,12 +9,12 @@ document.addEventListener("DOMContentLoaded", function() {
     //     art.style.marginTop = "-60%";
     // });
     // page admin
-    var menuLi = document.querySelectorAll('.menu-li');
-    var tables = document.querySelectorAll('.menu-table');
+    let menuLi = document.querySelectorAll('.menu-li');
+    let tables = document.querySelectorAll('.menu-table');
 
     menuLi.forEach(function(li) {
         li.addEventListener('click', function() {
-            var target = this.getAttribute('data-target');
+            let target = this.getAttribute('data-target');
             tables.forEach(function(table) {
                 if (table.id === target) {
                     if (table.style.display === 'block') {

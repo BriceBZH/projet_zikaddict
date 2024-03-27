@@ -40,11 +40,10 @@ class UserController extends AbstractController
     public function profile(UserRepository $userRepository, int $idUser): Response
     {
         $user = $userRepository->find($idUser);
-        $albums = $user->getAlbums();
-        // var_dump($user->getAlbums());
+        $userAlbumFormats = $user->getUserAlbumFormats();
         return $this->render("user/profile.html.twig", [
             'user' => $user,
-            'albums' => $albums,
+            'userAlbumFormats' => $userAlbumFormats,
         ]);
     }
 

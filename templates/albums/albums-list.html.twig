@@ -13,11 +13,17 @@
         <ul>
             {% for album in albums %}
                 <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
-                    <article onclick="window.location='{{ path('album', {idAlbum: album.id}) }}';">
+                    <article >
+                    {# onclick="window.location='{{ path('album', {idAlbum: album.id}) }}'; #}
                         <h3>{{album.getTitle()}}</h3>
                         {% set currentRoute = app.request.attributes.get('_route') %}
-                        <a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute}) }}" class="collec"><img src="{{ asset('imgs/collec.png')}}" alt="collection" /></a>
-                        <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>
+                        <img src="{{ asset('imgs/collec.png')}}" alt="collection" data-target="album{{loop.index}}" />
+                        <p class="formats album{{loop.index}}">
+                            {% for format in album.formats %}
+                                <a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id}) }}" class="collec">{{format.libelle}}</a>
+                            {% endfor %}
+                        </p>
+                        <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>            
                     </article>
                 </li>
             {% endfor %}

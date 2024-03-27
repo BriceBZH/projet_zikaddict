@@ -38,13 +38,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\ManyToMany(targetEntity: Album::class)]
-    private Collection $albums;
+    #[ORM\OneToMany(targetEntity: UserAlbumFormat::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $userAlbumFormats;
 
     public function __construct()
     {
-        $this->albums = new ArrayCollection();
         $this->roles = array('ROLE_USER');
+        $this->userAlbumFormats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,25 +163,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Album>
+     * @return Collection<int, UserAlbumFormat>
      */
-    public function getAlbums(): Collection
+    public function getUserAlbumFormats(): Collection
     {
-        return $this->albums;
+        return $this->userAlbumFormats;
     }
 
-    public function addAlbum(Album $album): static
+    public function addUserAlbumFormat(UserAlbumFormat $userAlbumFormat): static
     {
-        if (!$this->albums->contains($album)) {
-            $this->albums->add($album);
+        if (!$this->userAlbumFormats->contains($userAlbumFormat)) {
+            $this->userAlbumFormats->add($userAlbumFormat);
+            $userAlbumFormat->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeAlbum(Album $album): static
+    public function removeUserAlbumFormat(UserAlbumFormat $userAlbumFormat): static
     {
-        $this->albums->removeElement($album);
+        if ($this->userAlbumFormats->removeElement($userAlbumFormat)) {
+            // set the owning side to null (unless already changed)
+            if ($userAlbumFormat->getUser() === $this) {
+                $userAlbumFormat->setUser(null);
+            }
+        }
 
         return $this;
     }

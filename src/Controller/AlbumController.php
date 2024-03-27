@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Album;
 use App\Form\AlbumType;
+use App\Entity\UserAlbumFormat;
 use App\Repository\AlbumRepository;
 use App\Repository\UserRepository;
 use App\Repository\SongRepository;
+use App\Repository\FormatRepository;
+use App\Repository\UserAlbumFormatRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,8 +87,8 @@ class AlbumController extends AbstractController
         return $this->redirectToRoute('app_album_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/add_collection/{idAlbum}/{idUser}', name: 'add_collection', methods: ['GET'])]
-    public function addCollection(int $idAlbum, int $idUser, AlbumRepository $albumRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Request $request): Response
+    #[Route('/add_collection/{idAlbum}/{idUser}/{idFormat}', name: 'add_collection', methods: ['GET'])]
+    public function addCollection(int $idAlbum, int $idUser, int $idFormat, AlbumRepository $albumRepository, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository, FormatRepository $formatRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $returnUrl = $request->query->get('returnUrl');
         $parametre = $request->query->get('parametre');
@@ -93,26 +96,24 @@ class AlbumController extends AbstractController
         if($parametre) { //s'il y a un paramètre comme un id (pour la page de l'artiste)
             $param = ['idArtist' => $parametre];
         }
+        $format = $formatRepository->find($idFormat);
         $album = $albumRepository->find($idAlbum);
         $user = $userRepository->find($idUser);
-        $userAlbum = $userRepository->findByAlbum($album);
-
-        if($userAlbum) { //l'utilisateur à référencé cet album, on va donc l'enlever de sa collection
-            if ($album && $user) {  //on remplit la table intermédiaire user_album
-                $user->removeAlbum($album);
-                $entityManager->persist($user);
+        $userAlbumFormatsRepo = $userAlbumFormatRepository->findByUserAlbumFormat($user, $album, $format);
+        if($userAlbumFormatsRepo) { //l'utilisateur à déjà référencé cet album
+            foreach ($userAlbumFormatsRepo as $userAlbumFormat) {
+                $entityManager->remove($userAlbumFormat);
                 $entityManager->flush();
             }
         } else {
-            if ($album && $user) {  //on remplit la table intermédiaire user_album
-                $user->addAlbum($album);
-                $entityManager->persist($user);
-                $entityManager->flush();
-            }
+            $userAlbumFormat = new UserAlbumFormat();
+            $userAlbumFormat->setUser($user);
+            $userAlbumFormat->setAlbum($album);
+            $userAlbumFormat->setFormat($format);
+            $entityManager->persist($userAlbumFormat);
+            $entityManager->flush();
         }
-        // dd($albumC);
-
-          
+                 
         return $this->redirectToRoute($returnUrl, $param);
     }
 }
