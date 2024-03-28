@@ -16,6 +16,7 @@ use App\Entity\Genre;
 use App\Entity\Song;
 use App\Entity\Format;
 use App\Repository\ArtistRepository;
+use App\Repository\UserAlbumFormatRepository;
 use App\Repository\MediaRepository;
 use App\Repository\CountryRepository;
 use App\Repository\FormatRepository;
@@ -41,30 +42,40 @@ class FileController extends AbstractController
     }
 
     #[Route('/download_csv/{filename}/{idUser}', name: 'download_csv', methods: ['GET'])]
-    public function downloadCSV(string $filename, int $idUser, UserRepository $userRepository): Response
+    public function downloadCSV(string $filename, int $idUser, UserAlbumFormatRepository $userAlbumFormatRepository): Response
     {
-        $user = $userRepository->find($idUser);
-        $albums = $user->getAlbums();
+        $userAlbumFormats = $userAlbumFormatRepository->findBy(
+            [], 
+            ['format' => 'ASC']
+        );
 
-        $callback = function () use ($albums) {
+        // usort($userAlbumFormats, function($a, $b) {
+        //     // Accéder au champ "format" de chaque objet et comparer les valeurs
+        //     return strcmp($a->getFormat()->getLibelle(), $b->getFormat()->getLibelle());
+        // });
+
+        $callback = function () use ($userAlbumFormats) {
             $handle = fopen('php://output', 'w+');
-            fputcsv($handle, ['Artists', 'Title', 'Year']);
-            $lines = [];
-            foreach ($albums as $album) {
+            fputcsv($handle, ['Artists', 'Title', 'Year', 'Format'], ';');
+        
+            foreach ($userAlbumFormats as $userAlbumFormat) {
                 $artists = "";
-                $artistsAlbum = $album->getArtists();
-                foreach($artistsAlbum as $artist) {
-                    $artists = $artists.", ".$artist->getName();
+                $artistsAlbum = $userAlbumFormat->getAlbum()->getArtists();
+                foreach ($artistsAlbum as $artist) {
+                    $artists .= $artist->getName() . ', ';
                 }
-                $line = $artists . ';' . $album->getTitle() . ';' . $album->getYear();
-                $lines[] = explode(';', $line);
-            }
-            foreach ($lines as $line) {
+                $artists = rtrim($artists, ', ');
+        
+                $line = [
+                    $artists,
+                    $userAlbumFormat->getAlbum()->getTitle(),
+                    $userAlbumFormat->getAlbum()->getYear(),
+                    $userAlbumFormat->getFormat()->getLibelle()
+                ];
                 fputcsv($handle, $line, ';');
             }
             fclose($handle);
         };
-
         $response = new StreamedResponse($callback);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
@@ -76,19 +87,33 @@ class FileController extends AbstractController
     }
 
     #[Route('/download_pdf/{filename}/{idUser}', name: 'download_pdf', methods: ['GET'])]
-    public function downloadPDF(string $filename, int $idUser, UserRepository $userRepository): Response
+    public function downloadPDF(string $filename, int $idUser, UserAlbumFormatRepository $userAlbumFormatRepository, ): Response
     {
-        $user = $userRepository->find($idUser);
-        $albums = $user->getAlbums();
+        // $userAlbumFormats = $userAlbumFormatRepository->findAll();
+        $userAlbumFormats = $userAlbumFormatRepository->findBy(
+            [], 
+            ['format' => 'ASC']
+        );
         $dompdf = new Dompdf();
-        $html = '<table><tr><th>Artistes</th><th>Album</th><th>Année</th></tr>';
-        foreach ($albums as $album) {
-            $artists = "";
-            $artistsAlbum = $album->getArtists();
-            foreach($artistsAlbum as $artist) {
-                $artists = $artists.", ".$artist->getName();
+        $html = '<table>';
+        foreach ($userAlbumFormats as $userAlbumFormat) {
+            $currentFormat = $userAlbumFormat->getFormat()->getLibelle(); //format actuel
+
+            if(!isset($previousFormat)) { //1ere ligne
+                $previousFormat = "";
             }
-            $html .= '<tr><td>' . $artists . '</td><td>' . $album->getTitle() . '</td><td>' . $album->getYear() . '</td></tr>';
+            if($currentFormat !== $previousFormat) {
+                $html .= '<tr><td colspan="3"><strong>'.$currentFormat.'</strong></td></tr>';
+                $previousFormat = $currentFormat;
+            }
+            
+            $artists = "";
+            $artistsAlbum = $userAlbumFormat->getAlbum()->getArtists();
+            foreach ($artistsAlbum as $artist) {
+                $artists .= $artist->getName() . ', ';
+            }
+            $artists = rtrim($artists, ', ');
+            $html .= '<tr><td>'.$artists.'</td><td>'.$userAlbumFormat->getAlbum()->getTitle().'</td><td>'.$userAlbumFormat->getAlbum()->getYear().'</td></tr>';
         }
         $html .= '</table></body></html>';
         $dompdf->loadHtml($html);
