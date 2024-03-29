@@ -31,6 +31,15 @@ class SongRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findByPartialTitle(string $title) : array {
+        return $this->createQueryBuilder('s')
+           ->where('s.title LIKE :title')
+           ->setParameter('title', '%'.$title.'%')
+           ->getQuery()
+           ->getResult()
+       ;
+    }
     //    /**
     //     * @return Song[] Returns an array of Song objects
     //     */

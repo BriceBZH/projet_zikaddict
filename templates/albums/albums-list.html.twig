@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body %}
-    <main id="container" class="list_albums">
+    <main id="container" class="cards">
         <h2>
             Liste des albums
         </h2>
@@ -16,13 +16,15 @@
                     <article >
                     {# onclick="window.location='{{ path('album', {idAlbum: album.id}) }}'; #}
                         <h3>{{album.getTitle()}}</h3>
-                        {% set currentRoute = app.request.attributes.get('_route') %}
-                        <img src="{{ asset('imgs/collec.png')}}" alt="collection" data-target="album{{loop.index}}" />
-                        <p class="formats album{{loop.index}}">
-                            {% for format in album.formats %}
-                                <a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id}) }}" class="collec">{{format.libelle}}</a>
-                            {% endfor %}
-                        </p>
+                        {% if app.user.userIdentifier is defined %}
+                            {% set currentRoute = app.request.attributes.get('_route') %}
+                            <img src="{{ asset('imgs/collec.png')}}" alt="collection" data-target="album{{loop.index}}" />
+                            <p class="formats album{{loop.index}}">
+                                {% for format in album.formats %}
+                                    <a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id}) }}" class="collec">{{format.libelle}}</a>
+                                {% endfor %}
+                            </p>
+                        {% endif %}
                         <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>            
                     </article>
                 </li>

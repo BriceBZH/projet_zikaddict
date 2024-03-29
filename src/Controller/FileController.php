@@ -49,11 +49,6 @@ class FileController extends AbstractController
             ['format' => 'ASC']
         );
 
-        // usort($userAlbumFormats, function($a, $b) {
-        //     // Accéder au champ "format" de chaque objet et comparer les valeurs
-        //     return strcmp($a->getFormat()->getLibelle(), $b->getFormat()->getLibelle());
-        // });
-
         $callback = function () use ($userAlbumFormats) {
             $handle = fopen('php://output', 'w+');
             fputcsv($handle, ['Artists', 'Title', 'Year', 'Format'], ';');

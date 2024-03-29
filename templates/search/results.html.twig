@@ -1,0 +1,53 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Results{% endblock %}
+
+{% block body %}
+    <main id="container" class="cards">
+        <h2>
+            Résultats pour {{app.request.query.get('query')}}
+        </h2>
+        {% if results.artists is not empty %}
+            <p>Artist(s)</p>
+        {% endif %}
+        <ul>
+                {% for artist in results.artists %}
+                    <li data-image-url="{{ asset('imgs/' ~ artist.media.url) }}" data-image-alt="{{ artist.media.alt }}">
+                        <article class=$class>
+                            <h3>{{artist.name}}</h3>
+                            <p><a href="{{ path('artist', {idArtist: artist.id}) }}">Plus</a>
+                        </article>
+                    </li>
+                {% endfor %}
+        </ul>
+        {% if results.albums is not empty %}
+            <p>Album(s)</p>
+        {% endif %}
+        <ul>  
+            {% for album in results.albums %}
+                <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
+                    <article >
+                        <h3>{{album.title}}</h3>
+                        <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>
+                    </article>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if results.songs is not empty %}
+            <p>Chanson(s)</p>
+        {% endif %}
+        <ul>
+            {% for song in results.songs %}
+                <li>
+                    <article >
+                        <h3>{{song.title}}</h3>
+                        <p><a href="{{ path('song', {idSong: song.id}) }}">Plus</a>
+                    </article>
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}

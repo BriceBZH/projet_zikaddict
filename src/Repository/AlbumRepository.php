@@ -30,6 +30,15 @@ class AlbumRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findByPartialTitle(string $title) : array {
+        return $this->createQueryBuilder('a')
+           ->where('a.title LIKE :title')
+           ->setParameter('title', '%'.$title.'%')
+           ->getQuery()
+           ->getResult()
+       ;
+    }
     //    /**
     //     * @return Album[] Returns an array of Album objects
     //     */

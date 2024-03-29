@@ -31,6 +31,15 @@ class ArtistRepository extends ServiceEntityRepository
            ->getResult()
        ;
     }
+
+    public function findByPartialName(string $name) : array {
+        return $this->createQueryBuilder('a')
+           ->where('a.name LIKE :name')
+           ->setParameter('name', '%'.$name.'%')
+           ->getQuery()
+           ->getResult()
+       ;
+    }
     // public function findAll() : array {
     //     $entityManager = $this->getEntityManager();
     //     $query = $entityManager->createQuery(

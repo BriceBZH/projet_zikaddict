@@ -1,4 +1,4 @@
-.list_albums {
+.cards {
     background-color: $lightGrey;
     h2 {
         color: $red;
@@ -25,24 +25,28 @@
             &:hover {
                 background-color: #ddd; // Couleur de fond au survol
             }
+            // article {
+            //     padding: 1em;
+            //     color: white;
+            //     display: flex;
+            //     .collec {
+            //         width: 50%;
+            //     }
+            //     img {
+            //         width: 20%;
+            //     }
+            //     a {
+            //         color: orange;
+            //     }
+            //     .formats {
+            //         display: none;
+            //     }
+            // }
             article {
                 padding: 1em;
                 color: white;
-                display: flex;
-                .collec {
-                    width: 50%;
-                    // img {
-                    //     width: 20%;
-                    // }
-                }
-                img {
-                    width: 20%;
-                }
                 a {
                     color: orange;
-                }
-                .formats {
-                    display: none;
                 }
             }
             &::before {
