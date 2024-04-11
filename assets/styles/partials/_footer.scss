@@ -4,6 +4,7 @@
         width : 100%;
         display: flex;
         justify-content: space-evenly;
+        flex-direction: column;
         li {
             border: 1px solid $black;
             background-color: white;
@@ -13,6 +14,29 @@
             }
             &:hover {
                 background-color: $yellow;
+            }
+        }
+    }
+    /* *****************************************************************
+    DESKTOP
+    ***************************************************************** */
+
+    @media screen and (min-width: $min-width) {
+        ul {
+            width : 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            li {
+                border: 1px solid $black;
+                background-color: white;
+                padding: 0.5em;
+                a {
+                    color: $black;
+                }
+                &:hover {
+                    background-color: $yellow;
+                }
             }
         }
     }

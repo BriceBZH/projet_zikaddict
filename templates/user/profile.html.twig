@@ -30,11 +30,13 @@
                     {% endfor %}
                 </tbody>
                 <tfoot>
+                    {% if app.user.isVerified %}
                     <tr>
                         <td><a href="{{ path('download_csv', {filename: 'collection.csv', idUser: app.user.id}) }}">Excel</a></td>
                         <td><a href="{{ path('download_pdf', {filename: 'collection.pdf', idUser: app.user.id}) }}">Pdf</a></td>
                         <td></td>
                     </tr>
+                    {% endif %}
                 </tfoot>
             </table>
         </ul>

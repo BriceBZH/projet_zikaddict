@@ -3,14 +3,14 @@
     color: $white;
     .libelleLogo {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         h1 {
             font-family: "Sirin Stencil";
             text-transform: uppercase;
             font-size: 4em;
-            width :50%;
+            width :100%;
             align-items: center;
             text-align: center;
             color: black;
@@ -23,7 +23,8 @@
         }
         .search-form {
             display: inline-block;
-            width: 25%;       
+            width: 100%;
+            text-align: center;     
             .search-input {
                 padding: 8px;
                 border-radius: 4px;
@@ -48,6 +49,8 @@
         menu {
             width: 100%;
             display: flex;
+            flex-direction: column;
+            text-align: center;
             list-style: none;
             justify-content: space-evenly;
             li {
@@ -60,6 +63,22 @@
                     color: $black;
                     background-color: $yellow;  
                 }
+            }
+        }
+    }
+    /* *****************************************************************
+    DESKTOP
+    ***************************************************************** */
+
+    @media screen and (min-width: $min-width) {
+        .libelleLogo {
+            justify-content: space-between;
+            flex-direction: row;
+        }
+
+        nav {
+            menu {
+                flex-direction: row;
             }
         }
     }

@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", function() {
     cards.forEach(function(card) {
         const art = card.firstChild.nextSibling;
         const imageUrl = card.dataset.imageUrl;
-        card.style.backgroundColor = "rgba(0,0,0,0.5)";
+        // card.style.backgroundColor = "rgba(0,0,0,0.5)";
         card.style.background = `url('${imageUrl}') no-repeat`;
         card.style.backgroundSize = "cover";
-        art.style.marginTop = "-60%";
+        // art.style.marginTop = "-40%";
     });
     //selection du format de l'album de la collection
     document.addEventListener("click", function(e){
