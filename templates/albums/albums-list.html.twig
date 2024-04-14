@@ -10,6 +10,12 @@
         <h2>
             Liste des albums
         </h2>
+        <div class="modal-container">
+            <div class="overlay modal-trigger"></div>
+            <div class="modal-content">
+                <button class="close-modal modal-trigger">X</button>
+            </div>
+        </div>
         <ul>
             {% for album in albums %}
                 <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
@@ -17,7 +23,7 @@
                         <h3>{{album.getTitle()}}</h3>
                         {% if app.user.userIdentifier is defined %}
                             {% set currentRoute = app.request.attributes.get('_route') %}
-                            <img src="{{ asset('imgs/collec.png')}}" class="image_collection" alt="collection" data-target="album{{loop.index}}" />
+                            <img src="{{ asset('imgs/collec.png')}}" class="image_collection modal-trigger" alt="collection" data-target="album{{loop.index}}" />
                             <p class="formats album{{loop.index}}">
                                 {% for format in album.formats %}
                                     <a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id}) }}" class="collec">{{format.libelle}}</a>
