@@ -6,7 +6,7 @@
         
         <ul>
             <li class="menu-li" data-target="collection-table">Collection</li>
-            <table id="collection-table" class="menu-table my-5 table table-striped">
+            <table id="collection-table" class="menu-table hidden my-5 table table-striped">
                 <thead>
                     <tr>
                         <th>Artist</th>
@@ -16,29 +16,71 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for userAlbumFormat in userAlbumFormats %}
+                    {% for userAlbumCollection in userAlbumsCollection %}
                         <tr>
                             <td>
-                                {% for artist in userAlbumFormat.album.artists %}
+                                {% for artist in userAlbumCollection.album.artists %}
                                     {{ artist.name }}{% if not loop.last %}, {% endif %}
                                 {% endfor %}
                             </td>
-                            <td>{{userAlbumFormat.album.title}}</td>
-                            <td>{{userAlbumFormat.format.libelle}}</td>
-                            <td></td>
+                            <td>{{userAlbumCollection.album.title}}</td>
+                            <td>{{userAlbumCollection.format.libelle}}</td>
+                            <td><form method="post" action="{{ path('user_album_format_delete', {'id': userAlbumCollection.id, idUser: app.user.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ userAlbumCollection.id) }}">
+                                <button class="btn">Delete</button>
+                            </form></td>
                         </tr>
                     {% endfor %}
                 </tbody>
                 <tfoot>
                     {% if app.user.isVerified %}
                     <tr>
-                        <td><a href="{{ path('download_csv', {filename: 'collection.csv', idUser: app.user.id}) }}">Excel</a></td>
-                        <td><a href="{{ path('download_pdf', {filename: 'collection.pdf', idUser: app.user.id}) }}">Pdf</a></td>
+                        <td><a href="{{ path('download_csv_collection', {filename: 'collection.csv', idUser: app.user.id}) }}">Excel</a></td>
+                        <td><a href="{{ path('download_pdf_collection', {filename: 'collection.pdf', idUser: app.user.id}) }}">Pdf</a></td>
                         <td></td>
+                    </tr>
+                    {% endif %}
+                </tfoot>
+            </table>
+            <li class="menu-li" data-target="search-table">Search</li>
+            <table id="search-table" class="menu-table hidden my-5 table table-striped">
+                <thead>
+                    <tr>
+                        <th>Artist</th>
+                        <th>Album</th>
+                        <th>Format</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for userAlbumSearch in userAlbumsSearch %}
+                        <tr>
+                            <td>
+                                {% for artist in userAlbumSearch.album.artists %}
+                                    {{ artist.name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>{{userAlbumSearch.album.title}}</td>
+                            <td>{{userAlbumSearch.format.libelle}}</td>
+                            <td><form method="post" action="{{ path('user_album_format_delete', {'id': userAlbumSearch.id, idUser: app.user.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ userAlbumSearch.id) }}">
+                                <button class="btn">Delete</button>
+                            </form></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    {% if app.user.isVerified %}
+                    <tr>
+                        <td><a href="{{ path('download_csv_search', {filename: 'search.csv', idUser: app.user.id}) }}">Excel</a></td>
+                        <td><a href="{{ path('download_pdf_search', {filename: 'search.pdf', idUser: app.user.id}) }}">Pdf</a></td>
                     </tr>
                     {% endif %}
                 </tfoot>
             </table>
         </ul>
     </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}

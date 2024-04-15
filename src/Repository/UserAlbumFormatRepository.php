@@ -24,14 +24,26 @@ class UserAlbumFormatRepository extends ServiceEntityRepository
         parent::__construct($registry, UserAlbumFormat::class);
     }
 
-    public function findByUserAlbumFormat(User $user, Album $album, Format $format): array {
+    public function findByUserAlbumFormatType(User $user, Album $album, Format $format, string $type): array {
         return $this->createQueryBuilder('uaf')
             ->andWhere(':user = uaf.user')
             ->andWhere(':album = uaf.album')
             ->andWhere(':format = uaf.format')
+            ->andWhere(':type = uaf.type')
             ->setParameter('user', $user)
             ->setParameter('album', $album)
             ->setParameter('format', $format)
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByUserCollectionType(User $user, string $type): array {
+        return $this->createQueryBuilder('uaf')
+            ->andWhere(':user = uaf.user')
+            ->andWhere(':type = uaf.type')
+            ->setParameter('user', $user)
+            ->setParameter('type', $type)
             ->getQuery()
             ->getResult();
     }

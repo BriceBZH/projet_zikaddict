@@ -26,7 +26,7 @@ class Artist
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $birthDate = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deathDate = null;
 
     #[ORM\ManyToMany(targetEntity: Album::class, inversedBy: 'artists')]

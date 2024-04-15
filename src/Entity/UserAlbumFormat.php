@@ -25,6 +25,9 @@ class UserAlbumFormat
     #[ORM\JoinColumn(nullable: false)]
     private ?Format $format = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,6 +65,18 @@ class UserAlbumFormat
     public function setFormat(?Format $format): static
     {
         $this->format = $format;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

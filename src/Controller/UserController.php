@@ -9,6 +9,7 @@ use App\Repository\ArtistRepository;
 use App\Repository\AlbumRepository;
 use App\Repository\SongRepository;
 use App\Repository\GenreRepository;
+use App\Repository\UserAlbumFormatRepository;
 use App\Repository\FormatRepository;
 use App\Repository\CountryRepository;
 use App\Repository\MediaRepository;
@@ -37,13 +38,17 @@ class UserController extends AbstractController
     }
 
     #[Route('/profile/{idUser}', name: 'profile', methods: ['GET'])]
-    public function profile(UserRepository $userRepository, int $idUser): Response
+    public function profile(UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository, int $idUser): Response
     {
         $user = $userRepository->find($idUser);
-        $userAlbumFormats = $user->getUserAlbumFormats();
+        $typeCollection = "Collection";
+        $typeSearch = "Search";
+        $userAlbumsCollection = $userAlbumFormatRepository->findByUserCollectionType($user, $typeCollection);
+        $userAlbumsSearch = $userAlbumFormatRepository->findByUserCollectionType($user, $typeSearch);
         return $this->render("user/profile.html.twig", [
             'user' => $user,
-            'userAlbumFormats' => $userAlbumFormats,
+            'userAlbumsCollection' => $userAlbumsCollection,
+            'userAlbumsSearch' => $userAlbumsSearch,
         ]);
     }
 

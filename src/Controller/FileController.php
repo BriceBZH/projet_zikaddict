@@ -41,13 +41,16 @@ class FileController extends AbstractController
         return $this->file($directory . '/' . $filename);
     }
 
-    #[Route('/download_csv/{filename}/{idUser}', name: 'download_csv', methods: ['GET'])]
-    public function downloadCSV(string $filename, int $idUser, UserAlbumFormatRepository $userAlbumFormatRepository): Response
+    #[Route('/download_csv_collection/{filename}/{idUser}', name: 'download_csv_collection', methods: ['GET'])]
+    public function downloadCSVCollection(string $filename, int $idUser, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository): Response
     {
-        $userAlbumFormats = $userAlbumFormatRepository->findBy(
-            [], 
-            ['format' => 'ASC']
-        );
+        // $userAlbumFormats = $userAlbumFormatRepository->findBy(
+        //     [], 
+        //     ['format' => 'ASC']
+        // );
+        $user = $userRepository->find($idUser);
+        $type = "Collection";
+        $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
 
         $callback = function () use ($userAlbumFormats) {
             $handle = fopen('php://output', 'w+');
@@ -81,14 +84,99 @@ class FileController extends AbstractController
         return $response;
     }
 
-    #[Route('/download_pdf/{filename}/{idUser}', name: 'download_pdf', methods: ['GET'])]
-    public function downloadPDF(string $filename, int $idUser, UserAlbumFormatRepository $userAlbumFormatRepository, ): Response
+    #[Route('/download_pdf_collection/{filename}/{idUser}', name: 'download_pdf_collection', methods: ['GET'])]
+    public function downloadPDFCollection(string $filename, int $idUser, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository, ): Response
     {
-        // $userAlbumFormats = $userAlbumFormatRepository->findAll();
-        $userAlbumFormats = $userAlbumFormatRepository->findBy(
-            [], 
-            ['format' => 'ASC']
-        );
+        // $userAlbumFormats = $userAlbumFormatRepository->findBy(
+        //     [], 
+        //     ['format' => 'ASC']
+        // );
+        $user = $userRepository->find($idUser);
+        $type = "Collection";
+        $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
+        $dompdf = new Dompdf();
+        $html = '<table>';
+        foreach ($userAlbumFormats as $userAlbumFormat) {
+            $currentFormat = $userAlbumFormat->getFormat()->getLibelle(); //format actuel
+
+            if(!isset($previousFormat)) { //1ere ligne
+                $previousFormat = "";
+            }
+            if($currentFormat !== $previousFormat) {
+                $html .= '<tr><td colspan="3"><strong>'.$currentFormat.'</strong></td></tr>';
+                $previousFormat = $currentFormat;
+            }
+            
+            $artists = "";
+            $artistsAlbum = $userAlbumFormat->getAlbum()->getArtists();
+            foreach ($artistsAlbum as $artist) {
+                $artists .= $artist->getName() . ', ';
+            }
+            $artists = rtrim($artists, ', ');
+            $html .= '<tr><td>'.$artists.'</td><td>'.$userAlbumFormat->getAlbum()->getTitle().'</td><td>'.$userAlbumFormat->getAlbum()->getYear().'</td></tr>';
+        }
+        $html .= '</table></body></html>';
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+        return new Response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+        ]);
+    }
+
+    #[Route('/download_csv_search/{filename}/{idUser}', name: 'download_csv_search', methods: ['GET'])]
+    public function downloadCSVSearch(string $filename, int $idUser, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository): Response
+    {
+        // $userAlbumFormats = $userAlbumFormatRepository->findBy(
+        //     [], 
+        //     ['format' => 'ASC']
+        // );
+        $user = $userRepository->find($idUser);
+        $type = "Search";
+        $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
+
+        $callback = function () use ($userAlbumFormats) {
+            $handle = fopen('php://output', 'w+');
+            fputcsv($handle, ['Artists', 'Title', 'Year', 'Format'], ';');
+        
+            foreach ($userAlbumFormats as $userAlbumFormat) {
+                $artists = "";
+                $artistsAlbum = $userAlbumFormat->getAlbum()->getArtists();
+                foreach ($artistsAlbum as $artist) {
+                    $artists .= $artist->getName() . ', ';
+                }
+                $artists = rtrim($artists, ', ');
+        
+                $line = [
+                    $artists,
+                    $userAlbumFormat->getAlbum()->getTitle(),
+                    $userAlbumFormat->getAlbum()->getYear(),
+                    $userAlbumFormat->getFormat()->getLibelle()
+                ];
+                fputcsv($handle, $line, ';');
+            }
+            fclose($handle);
+        };
+        $response = new StreamedResponse($callback);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $filename
+        ));
+
+        return $response;
+    }
+
+    #[Route('/download_pdf_search/{filename}/{idUser}', name: 'download_pdf_search', methods: ['GET'])]
+    public function downloadPDFSearch(string $filename, int $idUser, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository, ): Response
+    {
+        // $userAlbumFormats = $userAlbumFormatRepository->findBy(
+        //     [], 
+        //     ['format' => 'ASC']
+        // );
+        $user = $userRepository->find($idUser);
+        $type = "Search";
+        $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
         $dompdf = new Dompdf();
         $html = '<table>';
         foreach ($userAlbumFormats as $userAlbumFormat) {

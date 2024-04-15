@@ -92,6 +92,7 @@ class AlbumController extends AbstractController
     {
         $returnUrl = $request->query->get('returnUrl');
         $parametre = $request->query->get('parametre');
+        $type = "Collection";
         $param = [];
         if($parametre) { //s'il y a un paramètre comme un id (pour la page de l'artiste)
             $param = ['idArtist' => $parametre];
@@ -99,7 +100,7 @@ class AlbumController extends AbstractController
         $format = $formatRepository->find($idFormat);
         $album = $albumRepository->find($idAlbum);
         $user = $userRepository->find($idUser);
-        $userAlbumFormatsRepo = $userAlbumFormatRepository->findByUserAlbumFormat($user, $album, $format);
+        $userAlbumFormatsRepo = $userAlbumFormatRepository->findByUserAlbumFormatType($user, $album, $format, $type);
         if($userAlbumFormatsRepo) { //l'utilisateur à déjà référencé cet album
             foreach ($userAlbumFormatsRepo as $userAlbumFormat) {
                 $entityManager->remove($userAlbumFormat);
@@ -110,6 +111,39 @@ class AlbumController extends AbstractController
             $userAlbumFormat->setUser($user);
             $userAlbumFormat->setAlbum($album);
             $userAlbumFormat->setFormat($format);
+            $userAlbumFormat->setType($type);
+            $entityManager->persist($userAlbumFormat);
+            $entityManager->flush();
+        }
+                 
+        return $this->redirectToRoute($returnUrl, $param);
+    }
+
+    #[Route('/add_search/{idAlbum}/{idUser}/{idFormat}', name: 'add_search', methods: ['GET'])]
+    public function addSearch(int $idAlbum, int $idUser, int $idFormat, AlbumRepository $albumRepository, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository, FormatRepository $formatRepository, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $returnUrl = $request->query->get('returnUrl');
+        $parametre = $request->query->get('parametre');
+        $type = "Search";
+        $param = [];
+        if($parametre) { //s'il y a un paramètre comme un id (pour la page de l'artiste)
+            $param = ['idArtist' => $parametre];
+        }
+        $format = $formatRepository->find($idFormat);
+        $album = $albumRepository->find($idAlbum);
+        $user = $userRepository->find($idUser);
+        $userAlbumFormatsRepo = $userAlbumFormatRepository->findByUserAlbumFormatType($user, $album, $format, $type);
+        if($userAlbumFormatsRepo) { //l'utilisateur à déjà référencé cet album
+            foreach ($userAlbumFormatsRepo as $userAlbumFormat) {
+                $entityManager->remove($userAlbumFormat);
+                $entityManager->flush();
+            }
+        } else {
+            $userAlbumFormat = new UserAlbumFormat();
+            $userAlbumFormat->setUser($user);
+            $userAlbumFormat->setAlbum($album);
+            $userAlbumFormat->setFormat($format);
+            $userAlbumFormat->setType($type);
             $entityManager->persist($userAlbumFormat);
             $entityManager->flush();
         }
