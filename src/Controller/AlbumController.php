@@ -22,7 +22,7 @@ class AlbumController extends AbstractController
     #[Route('/', name: 'albums', methods: ['GET'])]
     public function displayAll(AlbumRepository $albumRepository): Response {
         return $this->render("albums/albums-list.html.twig", [
-            'albums' => $albumRepository->findAll(),
+            'albums' => $albumRepository->findByValid(),
         ]);
     }
 
@@ -76,7 +76,7 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'album_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'album_delete', methods: ['POST'])]
     public function delete(Request $request, Album $album, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$album->getId(), $request->request->get('_token'))) {
@@ -84,7 +84,20 @@ class AlbumController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_album_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/valid', name: 'album_valid', methods: ['POST'])]
+    public function valid(Request $request, Album $album, EntityManagerInterface $entityManager, AlbumRepository $albumRepository): Response
+    {
+        if ($this->isCsrfTokenValid('valid'.$album->getId(), $request->request->get('_token'))) {
+            $album = $albumRepository->find($album->getId());
+            $album->setValid(1);
+            $entityManager->persist($album);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/add_collection/{idAlbum}/{idUser}/{idFormat}', name: 'add_collection', methods: ['GET'])]

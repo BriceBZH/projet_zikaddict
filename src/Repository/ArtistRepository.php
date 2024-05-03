@@ -26,7 +26,9 @@ class ArtistRepository extends ServiceEntityRepository
     public function findBySong(Song $song) : array {
         return $this->createQueryBuilder('a')
            ->andWhere(':songs MEMBER OF a.songs')
+           ->andWhere('a.valid = :valid')
            ->setParameter('songs', $song)
+           ->setParameter('valid', 1)
            ->getQuery()
            ->getResult()
        ;
@@ -35,7 +37,27 @@ class ArtistRepository extends ServiceEntityRepository
     public function findByPartialName(string $name) : array {
         return $this->createQueryBuilder('a')
            ->where('a.name LIKE :name')
+           ->andWhere('a.valid = :valid')
            ->setParameter('name', '%'.$name.'%')
+           ->setParameter('valid', 1)
+           ->getQuery()
+           ->getResult()
+       ;
+    }
+
+    public function findByValid() : array {
+        return $this->createQueryBuilder('a')
+           ->where('a.valid = :valid')
+           ->setParameter('valid', 1)
+           ->getQuery()
+           ->getResult()
+       ;
+    }
+
+    public function findByNotValid() : array {
+        return $this->createQueryBuilder('a')
+           ->where('a.valid = :valid')
+           ->setParameter('valid', 0)
            ->getQuery()
            ->getResult()
        ;

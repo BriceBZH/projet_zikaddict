@@ -20,6 +20,9 @@ class Media
     #[ORM\Column(length: 255)]
     private ?string $alt = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $urlSource = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +55,18 @@ class Media
     public function setAlt(string $alt): static
     {
         $this->alt = $alt;
+
+        return $this;
+    }
+
+    public function getUrlSource(): ?string
+    {
+        return $this->urlSource;
+    }
+
+    public function setUrlSource(string $urlSource): static
+    {
+        $this->urlSource = $urlSource;
 
         return $this;
     }

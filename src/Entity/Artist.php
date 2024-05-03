@@ -43,6 +43,9 @@ class Artist
     #[ORM\JoinColumn(nullable: false)]
     private ?Country $country = null;
 
+    #[ORM\Column]
+    private ?bool $valid = null;
+
     public function __construct()
     {
         $this->albums = new ArrayCollection();
@@ -129,6 +132,18 @@ class Artist
     public function setCountry(?Country $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function isValid(): ?bool
+    {
+        return $this->valid;
+    }
+
+    public function setValid(bool $valid): static
+    {
+        $this->valid = $valid;
 
         return $this;
     }

@@ -4,21 +4,268 @@
     <main id="container" class="admin">
         ADMIN
         <ul>
-            <li class="menu-li" data-target="artists-table">Artistes</li>
-            <table id="artists-table" class="menu-table hidden my-5 table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Description</th>
-                        <th>Date de naissance</th>
-                        <th>Date de mort</th>
-                        <th>Pays</th>
-                        <th>Média</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+            <li class="menu-li" data-target="data-online">Données en ligne</li>
+            <article id="data-online" class="menu-table hidden">
+                <h3>Artistes</h3>
+                <table class="my-5 table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Date de naissance</th>
+                            <th>Date de mort</th>
+                            <th>Pays</th>
+                            <th>Média</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for artist in artists %}
+                            <tr>
+                                <td>{{artist.name}}</td>
+                                <td>{{artist.description}}</td>
+                                <td>{{artist.birthDate.format('Y-m-d H:i:s')}}</td>
+                                {# <td>{{artist.deathDate.format('Y-m-d H:i:s')}}</td> #}
+                                <td>{{artist.country.name}}</td>
+                                <td>{{artist.media.id}}</td>
+                                <td>{{artist.media.id}}</td>
+                                <td class="action">
+                                    <a href="{{ path('artist_edit', {'id': artist.id}) }}" class="btn btn-success">
+                                        <span class="bi bi-pencil-fill"></span>
+                                    </a>
+                                    <form method="post" action="{{ path('artist_delete', {'id': artist.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet artiste ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artist.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Albums</h3>
+                <table class="my-5 table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Année</th>
+                            <th>Date de création</th>
+                            <th>Date de MAJ</th>
+                            <th>Média</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for album in albums %}
+                            <tr>
+                                <td>{{album.title}}</td>
+                                <td>{{album.year}}</td>
+                                <td>{{album.createdAt.format('Y-m-d H:i:s')}}</td>
+                                <td>{{album.updateAt.format('Y-m-d H:i:s')}}</td>
+                                <td>{{album.media.id}}</td>
+                                <td class="action">
+                                    <a href="{{ path('album_edit', {'id': album.id}) }}" class="btn btn-success">
+                                        <span class="bi bi-pencil-fill"></span>
+                                    </a>
+                                    <form method="post" action="{{ path('album_delete', {'id': album.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet album ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ album.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Chansons</h3>
+                <table class="my-5 table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Description</th>
+                            <th>Durée</th>
+                            <th>Genre</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for song in songs %}
+                            <tr>
+                                <td>{{song.title}}</td>
+                                <td>{{song.description}}</td>
+                                <td>{{song.duration}}</td>
+                                {# <td>{{song.updateAt.format('Y-m-d H:i:s')}}</td> #}
+                                {# <td>{{song.album.title}}</td> #}
+                                <td>{{song.genre.libelle}}</td>
+                                <td class="action">
+                                    <a href="{{ path('song_edit', {'id': song.id}) }}" class="btn btn-success">
+                                        <span class="bi bi-pencil-fill"></span>
+                                    </a>
+                                    <form method="post" action="{{ path('song_delete', {'id': song.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cette chanson ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ song.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Genres</h3>
+                <table class="my-5 table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Libellé</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for genre in genres %}
+                            <tr>
+                                <td>{{genre.libelle}}</td>
+                                <td class="action">
+                                    <a href="{{ path('genre_edit', {'id': genre.id}) }}" class="btn btn-success">
+                                        <span class="bi bi-pencil-fill"></span>
+                                    </a>
+                                    <form method="post" action="{{ path('genre_delete', {'id': genre.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer ce genre ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ genre.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Formats</h3>
+                <table class="my-5 table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Libellé</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for format in formats %}
+                            <tr>
+                                <td>{{format.libelle}}</td>
+                                <td class="action">
+                                    <a href="{{ path('format_edit', {'id': format.id}) }}" class="btn btn-success">
+                                        <span class="bi bi-pencil-fill"></span>
+                                    </a>
+                                    <form method="post" action="{{ path('format_delete', {'id': format.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer ce format ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ format.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Utilisateurs</h3>
+                <table id="users-table" class="my-5 table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nom d'utilisateur</th>
+                            <th>Email</th>
+                            <th>Date de création</th>
+                            <th>Vérifié</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{user.username}}</td>
+                                {# <td>{{user.roles}}</td> #}
+                                <td>{{user.email}}</td>
+                                <td>{{user.createdAt.format('Y-m-d H:i:s')}}</td>
+                                <td>{{user.isVerified}}</td>
+                                <td class="action">
+                                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-success">
+                                        <span class="bi bi-pencil-fill"></span>
+                                    </a>
+                                    <form method="post" action="{{ path('user_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet utilisateur ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Pays</h3>
+                <table class="my-5 table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for country in countries %}
+                            <tr>
+                                <td>{{ country.name }}</td>
+                                <td class="action">
+                                    <a href="{{ path('country_edit', {'id': country.id}) }}" class="btn btn-success">
+                                        <span class="bi bi-pencil-fill"></span>
+                                    </a>
+                                    <form method="post" action="{{ path('country_delete', {'id': country.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer ce pays ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ country.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Médias</h3>
+                <table class="my-5 table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Alt</th>
+                            <th>Url</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for media in medias %}
+                            <tr>
+                                <td>{{media.alt}}</td>
+                                <td>{{media.url}}</td>
+                                <td class="action">
+                                    <a href="{{ path('media_edit', {'id': media.id}) }}" class="btn btn-success">
+                                        <span class="bi bi-pencil-fill"></span>
+                                    </a>
+                                    <form method="post" action="{{ path('media_delete', {'id': media.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer ce média ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ media.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </article>
+            <li class="menu-li" data-target="validate-table">Contrôle et validation</li>
+            <h3>Artistes</h3>
+            <h3>Albums</h3>
+            <h3>Chansons</h3>
+            <table id="validate-table" class="menu-table hidden">
                 <tbody>
-                    {% for artist in artists %}
+                    {% for artist in artistsNotValid %}
                         <tr>
                             <td>{{artist.name}}</td>
                             <td>{{artist.description}}</td>
@@ -28,9 +275,12 @@
                             <td>{{artist.media.id}}</td>
                             <td>{{artist.media.id}}</td>
                             <td class="action">
-                                <a href="{{ path('artist_edit', {'id': artist.id}) }}" class="btn btn-success">
-                                    <span class="bi bi-pencil-fill"></span>
-                                </a>
+                                <form method="post" action="{{ path('artist_valid', {'id': artist.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet artiste ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ artist.id) }}">
+                                    <button type="submit" class="btn btn-warning">
+                                        <span class="bi bi-cart-check"></span>
+                                    </button>
+                                </form>
                                 <form method="post" action="{{ path('artist_delete', {'id': artist.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet artiste ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artist.id) }}">
                                     <button type="submit" class="btn btn-danger">
@@ -40,22 +290,7 @@
                             </td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-            <li class="menu-li" data-target="albums-table">Albums</li>
-            <table id="albums-table" class="menu-table hidden my-5 table table-striped">
-                <thead>
-                    <tr>
-                        <th>Titre</th>
-                        <th>Année</th>
-                        <th>Date de création</th>
-                        <th>Date de MAJ</th>
-                        <th>Média</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for album in albums %}
+                    {% for album in albumsNotValid %}
                         <tr>
                             <td>{{album.title}}</td>
                             <td>{{album.year}}</td>
@@ -63,9 +298,12 @@
                             <td>{{album.updateAt.format('Y-m-d H:i:s')}}</td>
                             <td>{{album.media.id}}</td>
                             <td class="action">
-                                <a href="{{ path('album_edit', {'id': album.id}) }}" class="btn btn-success">
-                                    <span class="bi bi-pencil-fill"></span>
-                                </a>
+                                <form method="post" action="{{ path('album_valid', {'id': album.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet album ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ album.id) }}">
+                                    <button type="submit" class="btn btn-warning">
+                                        <span class="bi bi-cart-check"></span>
+                                    </button>
+                                </form>
                                 <form method="post" action="{{ path('album_delete', {'id': album.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet album ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ album.id) }}">
                                     <button type="submit" class="btn btn-danger">
@@ -75,21 +313,7 @@
                             </td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-            <li class="menu-li" data-target="songs-table">Chansons</li>
-            <table id="songs-table" class="menu-table hidden my-5 table table-striped">
-                <thead>
-                    <tr>
-                        <th>Titre</th>
-                        <th>Description</th>
-                        <th>Durée</th>
-                        <th>Genre</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for song in songs %}
+                    {% for song in songsNotValid %}
                         <tr>
                             <td>{{song.title}}</td>
                             <td>{{song.description}}</td>
@@ -98,155 +322,14 @@
                             {# <td>{{song.album.title}}</td> #}
                             <td>{{song.genre.libelle}}</td>
                             <td class="action">
-                                <a href="{{ path('song_edit', {'id': song.id}) }}" class="btn btn-success">
-                                    <span class="bi bi-pencil-fill"></span>
-                                </a>
+                                <form method="post" action="{{ path('song_valid', {'id': song.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cette chanson ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ song.id) }}">
+                                    <button type="submit" class="btn btn-warning">
+                                        <span class="bi bi-cart-check"></span>
+                                    </button>
+                                </form>
                                 <form method="post" action="{{ path('song_delete', {'id': song.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cette chanson ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ song.id) }}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <span class="bi bi-trash-fill"></span>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <li class="menu-li" data-target="genres-table">Genres</li>
-            <table id="genres-table" class="menu-table hidden my-5 table table-striped">
-                <thead>
-                    <tr>
-                        <th>Libellé</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for genre in genres %}
-                        <tr>
-                            <td>{{genre.libelle}}</td>
-                            <td class="action">
-                                <a href="{{ path('genre_edit', {'id': genre.id}) }}" class="btn btn-success">
-                                    <span class="bi bi-pencil-fill"></span>
-                                </a>
-                                <form method="post" action="{{ path('genre_delete', {'id': genre.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer ce genre ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ genre.id) }}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <span class="bi bi-trash-fill"></span>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <li class="menu-li" data-target="formats-table">Formats</li>
-            <table id="formats-table" class="menu-table hidden my-5 table table-striped">
-                <thead>
-                    <tr>
-                        <th>Libellé</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for format in formats %}
-                        <tr>
-                            <td>{{format.libelle}}</td>
-                            <td class="action">
-                                <a href="{{ path('format_edit', {'id': format.id}) }}" class="btn btn-success">
-                                    <span class="bi bi-pencil-fill"></span>
-                                </a>
-                                <form method="post" action="{{ path('format_delete', {'id': format.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer ce format ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ format.id) }}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <span class="bi bi-trash-fill"></span>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <li class="menu-li" data-target="users-table">Utilisateurs</li>
-            <table id="users-table" class="menu-table hidden my-5 table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nom d'utilisateur</th>
-                        <th>Email</th>
-                        <th>Date de création</th>
-                        <th>Vérifié</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                        <tr>
-                            <td>{{user.username}}</td>
-                            {# <td>{{user.roles}}</td> #}
-                            <td>{{user.email}}</td>
-                            <td>{{user.createdAt.format('Y-m-d H:i:s')}}</td>
-                            <td>{{user.isVerified}}</td>
-                            <td class="action">
-                                <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-success">
-                                    <span class="bi bi-pencil-fill"></span>
-                                </a>
-                                <form method="post" action="{{ path('user_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet utilisateur ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <span class="bi bi-trash-fill"></span>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <li class="menu-li" data-target="countries-table">Pays</li>
-            <table id="countries-table" class="menu-table hidden my-5 table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for country in countries %}
-                        <tr>
-                            <td>{{ country.name }}</td>
-                            <td class="action">
-                                <a href="{{ path('country_edit', {'id': country.id}) }}" class="btn btn-success">
-                                    <span class="bi bi-pencil-fill"></span>
-                                </a>
-                                <form method="post" action="{{ path('country_delete', {'id': country.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer ce pays ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ country.id) }}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <span class="bi bi-trash-fill"></span>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <li class="menu-li" data-target="medias-table">Médias</li>
-            <table id="medias-table" class="menu-table hidden my-5 table table-striped">
-                <thead>
-                    <tr>
-                        <th>Alt</th>
-                        <th>Url</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for media in medias %}
-                        <tr>
-                            <td>{{media.alt}}</td>
-                            <td>{{media.url}}</td>
-                            <td class="action">
-                                <a href="{{ path('media_edit', {'id': media.id}) }}" class="btn btn-success">
-                                    <span class="bi bi-pencil-fill"></span>
-                                </a>
-                                <form method="post" action="{{ path('media_delete', {'id': media.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer ce média ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ media.id) }}">
                                     <button type="submit" class="btn btn-danger">
                                         <span class="bi bi-trash-fill"></span>
                                     </button>

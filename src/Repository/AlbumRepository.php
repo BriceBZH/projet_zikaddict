@@ -25,7 +25,9 @@ class AlbumRepository extends ServiceEntityRepository
     public function findByArtist(Artist $artist) : array {
         return $this->createQueryBuilder('al')
             ->andWhere(':artists MEMBER OF al.artists')
+            ->andWhere('al.valid = :valid')
             ->setParameter('artists', $artist)
+            ->setParameter('valid', 1)
             ->getQuery()
             ->getResult()
         ;
@@ -34,7 +36,27 @@ class AlbumRepository extends ServiceEntityRepository
     public function findByPartialTitle(string $title) : array {
         return $this->createQueryBuilder('a')
            ->where('a.title LIKE :title')
+           ->andWhere('a.valid = :valid')
            ->setParameter('title', '%'.$title.'%')
+           ->setParameter('valid', 1)
+           ->getQuery()
+           ->getResult()
+       ;
+    }
+
+    public function findByValid() : array {
+        return $this->createQueryBuilder('a')
+           ->where('a.valid = :valid')
+           ->setParameter('valid', 1)
+           ->getQuery()
+           ->getResult()
+       ;
+    }
+
+    public function findByNotValid() : array {
+        return $this->createQueryBuilder('a')
+           ->where('a.valid = :valid')
+           ->setParameter('valid', 0)
            ->getQuery()
            ->getResult()
        ;

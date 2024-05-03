@@ -18,7 +18,7 @@ class ArtistController extends AbstractController
     #[Route('/', name: 'artists', methods: ['GET'])]
     public function displayAll(ArtistRepository $artistRepository): Response {
         return $this->render("artists/artists-list.html.twig", [
-            'artists' => $artistRepository->findAll(),
+            'artists' => $artistRepository->findByValid(),
         ]);
     }
 
@@ -69,7 +69,7 @@ class ArtistController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'artist_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'artist_delete', methods: ['POST'])]
     public function delete(Request $request, Artist $artist, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$artist->getId(), $request->request->get('_token'))) {
@@ -77,6 +77,19 @@ class ArtistController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_artist_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/valid', name: 'artist_valid', methods: ['POST'])]
+    public function valid(Request $request, Artist $artist, EntityManagerInterface $entityManager, ArtistRepository $artistRepository): Response
+    {
+        if ($this->isCsrfTokenValid('valid'.$artist->getId(), $request->request->get('_token'))) {
+            $artist = $artistRepository->find($artist->getId());
+            $artist->setValid(1);
+            $entityManager->persist($artist);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
     }
 }

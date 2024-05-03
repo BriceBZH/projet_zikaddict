@@ -15,6 +15,7 @@ use App\Entity\Album;
 use App\Entity\Genre;
 use App\Entity\Song;
 use App\Entity\Format;
+use App\Entity\Media;
 use App\Repository\ArtistRepository;
 use App\Repository\UserAlbumFormatRepository;
 use App\Repository\MediaRepository;
@@ -241,6 +242,7 @@ class FileController extends AbstractController
                 $albumFormat = $data[7];
                 $songGenre = $data[8];
                 $songTitle = $data[9];
+                $urlMedia = $data[12];
                 if(isset($data[10])) {
                     $songDescription = $data[10];
                 } else {
@@ -266,6 +268,7 @@ class FileController extends AbstractController
                     "songTitle" => $songTitle,
                     "songDescription" => $songDescription,
                     "songDuration" => $songDuration,
+                    "urlMedia" => $urlMedia,
                 ];
             }
             fclose($handle);
@@ -277,8 +280,31 @@ class FileController extends AbstractController
             $album = $albumRepository->findOneBy(['title' => $item['albumTitle']]);
             $song = $songRepository->findOneBy(['title' => $item['songTitle']]);
             $genre = $genreRepository->findOneBy(['libelle' => $item['songGenre']]);
+            $media = $mediaRepository->findOneBy(['alt' => $item['artistName']]);
             $formatExp = explode(",", $item['albumFormat']);
-            
+            //Media
+
+            $img = '../assets/imgs/'.$item['artistName'];
+            $imageName = $item['artistName'];
+            $content = @file_get_contents($item['urlMedia']);
+
+            if ($content === false) {
+                echo "Erreur lors du téléchargement de l'image depuis l'URL.";
+            } else {
+                $extension = pathinfo($item['urlMedia'], PATHINFO_EXTENSION);
+                $img .= '.' . $extension;
+                $imageName .= '.' . $extension;
+                file_put_contents($img, $content);
+            }
+
+            if(!$media) { //le media pour cet artiste n'existe pas donc on l'ajoute
+                $media = new Media();
+                $media->setUrl($imageName);
+                $media->setAlt($item['artistName']);
+                $media->setUrlSource($item['urlMedia']);
+                $entityManager->persist($media);
+                $entityManager->flush();
+            }
             if(!$country) { //le pays n'existe pas donc on l'ajoute
                 $country = new Country();
                 $country->setName($item['artistCountry']);
@@ -322,8 +348,7 @@ class FileController extends AbstractController
                     $deathDate = DateTime::createFromFormat('Y-m-d', $item['artistDeathDate']);
                 }
                 $artist->setDeathDate($deathDate);
-                $artistMedia = $mediaRepository->find($item['artistMedia']);
-                $artist->setMedia($artistMedia);
+                $artist->setMedia($media);
                 $artist->setCountry($country);
                 $entityManager->persist($artist);
                 $entityManager->flush();

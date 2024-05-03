@@ -41,6 +41,9 @@ class Album
     #[ORM\JoinColumn(nullable: false)]
     private ?Media $media = null;
 
+    #[ORM\Column]
+    private ?bool $valid = null;
+
     public function __construct()
     {
         $this->artists = new ArrayCollection();
@@ -191,6 +194,18 @@ class Album
     public function removeFormat(Format $format): static
     {
         $this->formats->removeElement($format);
+
+        return $this;
+    }
+
+    public function isValid(): ?bool
+    {
+        return $this->valid;
+    }
+
+    public function setValid(bool $valid): static
+    {
+        $this->valid = $valid;
 
         return $this;
     }

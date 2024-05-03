@@ -34,6 +34,9 @@ class Song
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Genre $genre = null;
+
+    #[ORM\Column]
+    private ?bool $valid = null;
     public function __construct()
     {
         $this->artists = new ArrayCollection();
@@ -148,6 +151,18 @@ class Song
         if ($this->albums->removeElement($album)) {
             $album->removeSong($this);
         }
+
+        return $this;
+    }
+
+    public function isValid(): ?bool
+    {
+        return $this->valid;
+    }
+
+    public function setValid(bool $valid): static
+    {
+        $this->valid = $valid;
 
         return $this;
     }

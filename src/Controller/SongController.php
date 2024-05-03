@@ -62,7 +62,7 @@ class SongController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'song_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'song_delete', methods: ['POST'])]
     public function delete(Request $request, Song $song, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$song->getId(), $request->request->get('_token'))) {
@@ -70,6 +70,19 @@ class SongController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_song_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}', name: 'song_valid', methods: ['POST'])]
+    public function valid(Request $request, Song $song, EntityManagerInterface $entityManager, SongRepository $songRepository): Response
+    {
+        if ($this->isCsrfTokenValid('valid'.$song->getId(), $request->request->get('_token'))) {
+            $song = $songRepository->find($song->getId());
+            $song->setValid(1);
+            $entityManager->persist($song);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
     }
 }

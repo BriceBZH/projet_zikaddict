@@ -27,8 +27,11 @@ class UserController extends AbstractController
     {
         return $this->render("user/admin.html.twig", [
             'artists' => $artistRepository->findAll(),
+            'artistsNotValid' => $artistRepository->findByNotValid(),
             'albums' => $albumRepository->findAll(),
+            'albumsNotValid' => $albumRepository->findByNotValid(),
             'songs' => $songRepository->findAll(),
+            'songsNotValid' => $songRepository->findByNotValid(),
             'genres' => $genreRepository->findAll(),
             'formats' => $formatRepository->findAll(),
             'users' => $userRepository->findAll(),
