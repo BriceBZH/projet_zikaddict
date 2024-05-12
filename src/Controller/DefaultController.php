@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\MediaRepository;
 
 class DefaultController extends AbstractController
 {
@@ -17,10 +18,10 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/credits', name: 'credits')]
-    public function credits(): Response
+    public function credits(MediaRepository $mediaRepository): Response
     {
         return $this->render('default/credits.html.twig', [
-
+            'medias' => $mediaRepository->findAll(),
         ]);
     }
 

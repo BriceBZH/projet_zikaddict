@@ -3,6 +3,9 @@
 {% block body %}
     <main id="container" class="admin">
         ADMIN
+        {% for notice in app.flashes('notice') %}
+            {{ notice }}
+        {% endfor %}
         <ul>
             <li class="menu-li" data-target="data-online">Données en ligne</li>
             <article id="data-online" class="menu-table hidden">
@@ -349,7 +352,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <form method="post" action="{{ path('upload_csv') }}" enctype="multipart/form-data" accept-charset="UTF-8">
+                            <form method="post" action="{{ path('upload_csv', {route: 'admin'}) }}" enctype="multipart/form-data" accept-charset="UTF-8">
                                 <input type="file" name="csv_file" accept=".csv" />
                                 <button type="submit">Envoyer</button>
                             </form>

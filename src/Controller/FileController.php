@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -45,10 +46,6 @@ class FileController extends AbstractController
     #[Route('/download_csv_collection/{filename}/{idUser}', name: 'download_csv_collection', methods: ['GET'])]
     public function downloadCSVCollection(string $filename, int $idUser, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository): Response
     {
-        // $userAlbumFormats = $userAlbumFormatRepository->findBy(
-        //     [], 
-        //     ['format' => 'ASC']
-        // );
         $user = $userRepository->find($idUser);
         $type = "Collection";
         $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
@@ -88,10 +85,6 @@ class FileController extends AbstractController
     #[Route('/download_pdf_collection/{filename}/{idUser}', name: 'download_pdf_collection', methods: ['GET'])]
     public function downloadPDFCollection(string $filename, int $idUser, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository, ): Response
     {
-        // $userAlbumFormats = $userAlbumFormatRepository->findBy(
-        //     [], 
-        //     ['format' => 'ASC']
-        // );
         $user = $userRepository->find($idUser);
         $type = "Collection";
         $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
@@ -128,10 +121,6 @@ class FileController extends AbstractController
     #[Route('/download_csv_search/{filename}/{idUser}', name: 'download_csv_search', methods: ['GET'])]
     public function downloadCSVSearch(string $filename, int $idUser, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository): Response
     {
-        // $userAlbumFormats = $userAlbumFormatRepository->findBy(
-        //     [], 
-        //     ['format' => 'ASC']
-        // );
         $user = $userRepository->find($idUser);
         $type = "Search";
         $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
@@ -171,10 +160,6 @@ class FileController extends AbstractController
     #[Route('/download_pdf_search/{filename}/{idUser}', name: 'download_pdf_search', methods: ['GET'])]
     public function downloadPDFSearch(string $filename, int $idUser, UserRepository $userRepository, UserAlbumFormatRepository $userAlbumFormatRepository, ): Response
     {
-        // $userAlbumFormats = $userAlbumFormatRepository->findBy(
-        //     [], 
-        //     ['format' => 'ASC']
-        // );
         $user = $userRepository->find($idUser);
         $type = "Search";
         $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
@@ -209,8 +194,21 @@ class FileController extends AbstractController
     }
 
     #[Route('/upload_csv', name: 'upload_csv', methods: ['GET', 'POST'])]
-    public function upload(Request $request, ArtistRepository $artistRepository, MediaRepository $mediaRepository, GenreRepository $genreRepository, SongRepository $songRepository, CountryRepository $countryRepository, AlbumRepository $albumRepository, FormatRepository $formatRepository, EntityManagerInterface $entityManager): Response
+    public function upload(AuthorizationCheckerInterface $authorization, Request $request, ArtistRepository $artistRepository, MediaRepository $mediaRepository, GenreRepository $genreRepository, SongRepository $songRepository, CountryRepository $countryRepository, AlbumRepository $albumRepository, FormatRepository $formatRepository, EntityManagerInterface $entityManager): Response
     {
+        $route = $request->query->get('route');
+        $idUser = $request->query->get('idUser');
+        if ($authorization->isGranted('ROLE_ADMIN')) {
+            $valid = true;
+        } else {
+            $valid = false;
+        }
+        $param = [];
+        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+            $param = ['idUser' => $idUser];
+        }
+        
+
         // Récupérer le fichier uploadé
         $csvFile = $request->files->get('csv_file');
 
@@ -230,26 +228,25 @@ class FileController extends AbstractController
             fgetcsv($handle, 1000, ";");
             while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
                 $data = array_map('utf8_encode', $data);
-                $artistName = $data[0];
-                $artistCountry = $data[1];
-                $artistDescription = $data[2];
-                $artistBirthDate = $data[3];
-                $artistDeathDate = $data[4];
-                $artistMedia = 11;
-                $albumTitle = $data[5];
-                $albumYear = (int) $data[6];
-                $albumMedia = 11;
-                $albumFormat = $data[7];
-                $songGenre = $data[8];
-                $songTitle = $data[9];
-                $urlMedia = $data[12];
-                if(isset($data[10])) {
-                    $songDescription = $data[10];
+                $artistName = trim($data[0]);
+                $artistCountry = trim($data[1]);
+                $artistDescription = trim($data[2]);
+                $artistBirthDate = trim($data[3]);
+                $artistDeathDate = trim($data[4]);
+                $artistMedia = trim($data[5]);
+                $albumTitle = trim($data[6]);
+                $albumYear = (int) trim($data[7]);
+                $albumFormat = trim($data[8]);
+                $albumMedia = trim($data[9]);
+                $songGenre = trim($data[10]);
+                $songTitle = trim($data[11]);
+                if(isset($data[12])) {
+                    $songDescription = trim($data[12]);
                 } else {
                     $songDescription = "";
                 }
-                if(isset($data[11])) {
-                    $songDuration = (int) $data[11];
+                if(isset($data[13])) {
+                    $songDuration = (int) trim($data[13]);
                 } else {
                     $songDuration = 0;
                 }    
@@ -259,7 +256,6 @@ class FileController extends AbstractController
                     "artistDescription" => $artistDescription,
                     "artistBirthDate" => $artistBirthDate,
                     "artistDeathDate" => $artistDeathDate,
-                    "artistMedia" => $artistMedia,
                     "albumTitle" => $albumTitle,
                     "albumYear" => $albumYear,
                     "albumMedia" => $albumMedia,
@@ -268,7 +264,7 @@ class FileController extends AbstractController
                     "songTitle" => $songTitle,
                     "songDescription" => $songDescription,
                     "songDuration" => $songDuration,
-                    "urlMedia" => $urlMedia,
+                    "artistMedia" => $artistMedia,
                 ];
             }
             fclose($handle);
@@ -280,29 +276,56 @@ class FileController extends AbstractController
             $album = $albumRepository->findOneBy(['title' => $item['albumTitle']]);
             $song = $songRepository->findOneBy(['title' => $item['songTitle']]);
             $genre = $genreRepository->findOneBy(['libelle' => $item['songGenre']]);
-            $media = $mediaRepository->findOneBy(['alt' => $item['artistName']]);
+            $mediaArtist = $mediaRepository->findOneBy(['alt' => $item['artistName']]);
+            $mediaAlbum = $mediaRepository->findOneBy(['alt' => $item['albumTitle']]);
             $formatExp = explode(",", $item['albumFormat']);
-            //Media
-
-            $img = '../assets/imgs/'.$item['artistName'];
-            $imageName = $item['artistName'];
-            $content = @file_get_contents($item['urlMedia']);
-
-            if ($content === false) {
-                echo "Erreur lors du téléchargement de l'image depuis l'URL.";
+            
+            if(!empty($item['artistMedia'])) { // if artist media is not empty
+                $img = '../assets/imgs/'.$item['artistName'];
+                $artistMediaName = $item['artistName'];
+                $content = @file_get_contents($item['artistMedia']);
+                if ($content === false) {
+                    echo "Erreur lors du téléchargement de l'image depuis l'URL.";
+                } else {
+                    $extension = pathinfo($item['artistMedia'], PATHINFO_EXTENSION);
+                    $img .= '.' . $extension;
+                    $artistMediaName .= '.' . $extension;
+                    file_put_contents($img, $content);
+                } 
             } else {
-                $extension = pathinfo($item['urlMedia'], PATHINFO_EXTENSION);
-                $img .= '.' . $extension;
-                $imageName .= '.' . $extension;
-                file_put_contents($img, $content);
+                $this->addFlash('notice', 'Le média pour l\'artiste est obligatoire');
+
+                return $this->redirectToRoute($route, $param);
             }
 
-            if(!$media) { //le media pour cet artiste n'existe pas donc on l'ajoute
-                $media = new Media();
-                $media->setUrl($imageName);
-                $media->setAlt($item['artistName']);
-                $media->setUrlSource($item['urlMedia']);
-                $entityManager->persist($media);
+            if(!empty($item['albumMedia'])) { // if album media is not empty
+                $img = '../assets/imgs/'.$item['albumTitle'];
+                $albumMediaName = $item['albumTitle'];
+                $content = @file_get_contents($item['albumMedia']);
+                if ($content === false) {
+                    echo "Erreur lors du téléchargement de l'image depuis l'URL.";
+                } else {
+                    $extension = pathinfo($item['albumMedia'], PATHINFO_EXTENSION);
+                    $img .= '.' . $extension;
+                    $albumMediaName .= '.' . $extension;
+                    file_put_contents($img, $content);
+                }
+            }
+
+            if(!$mediaArtist) { //le media pour cet artiste n'existe pas donc on l'ajoute
+                $mediaArtist = new Media();
+                $mediaArtist->setUrl($artistMediaName);
+                $mediaArtist->setAlt($item['artistName']);
+                $mediaArtist->setUrlSource($item['artistMedia']);
+                $entityManager->persist($mediaArtist);
+                $entityManager->flush();
+            }
+            if(!$mediaAlbum) { //le media pour cet artiste n'existe pas donc on l'ajoute
+                $mediaAlbum = new Media();
+                $mediaAlbum->setUrl($albumMediaName);
+                $mediaAlbum->setAlt($item['albumTitle']);
+                $mediaAlbum->setUrlSource($item['albumMedia']);
+                $entityManager->persist($mediaAlbum);
                 $entityManager->flush();
             }
             if(!$country) { //le pays n'existe pas donc on l'ajoute
@@ -311,14 +334,14 @@ class FileController extends AbstractController
                 $entityManager->persist($country);
                 $entityManager->flush();
             }
-            if(!$album) { //l'album n'existe pas donc on l'ajoute
+            if(!$album && $item['albumTitle']) { //l'album n'existe pas donc on l'ajoute
                 $album = new Album();
                 $album->setTitle($item['albumTitle']);
                 $album->setYear($item['albumYear']);
                 $album->setCreatedAt(new \DateTimeImmutable());
                 $album->setUpdateAt(new \DateTimeImmutable());
-                $albumMedia = $mediaRepository->find($item['albumMedia']);
-                $album->setMedia($albumMedia);
+                $album->setMedia($mediaAlbum);
+                $album->setValid($valid);
                 $entityManager->persist($album);
                 $entityManager->flush();
             }
@@ -334,6 +357,7 @@ class FileController extends AbstractController
                 $song->setDescription($item['songDescription']);
                 $song->setDuration($item['songDuration']);
                 $song->setGenre($genre);
+                $song->setValid($valid);
                 $entityManager->persist($song);
                 $entityManager->flush();
             }
@@ -348,8 +372,9 @@ class FileController extends AbstractController
                     $deathDate = DateTime::createFromFormat('Y-m-d', $item['artistDeathDate']);
                 }
                 $artist->setDeathDate($deathDate);
-                $artist->setMedia($media);
+                $artist->setMedia($mediaArtist);
                 $artist->setCountry($country);
+                $artist->setValid($valid);
                 $entityManager->persist($artist);
                 $entityManager->flush();
             }
@@ -383,8 +408,7 @@ class FileController extends AbstractController
                 $entityManager->flush();
             }
         }
-        // $this->addFlash('Fichier CSV téléchargé et traité avec succès.');
-        return $this->redirectToRoute('index');
+        return $this->redirectToRoute($route, $param);
     }
 
 }
