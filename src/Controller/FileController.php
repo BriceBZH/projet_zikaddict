@@ -295,7 +295,7 @@ class FileController extends AbstractController
             } else {
                 $this->addFlash('notice', 'Le média pour l\'artiste est obligatoire');
 
-                return $this->redirectToRoute($route, $param);
+                return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
             }
 
             if(!empty($item['albumMedia'])) { // if album media is not empty
@@ -408,7 +408,7 @@ class FileController extends AbstractController
                 $entityManager->flush();
             }
         }
-        return $this->redirectToRoute($route, $param);
+        return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
     }
 
 }

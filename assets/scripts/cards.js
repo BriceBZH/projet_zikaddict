@@ -10,9 +10,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //selection du format de l'album de la collection
     const modalContainer = document.querySelector(".modal-container");
+    const closeModal = document.querySelector(".close-modal");
     const modalTriggers = document.querySelectorAll(".modal-trigger");
 
     modalTriggers.forEach(trigger => trigger.addEventListener("click", toggleModal));
+    closeModal.addEventListener("click", closeModalHandler);
 
     function toggleModal() {
         modalContainer.classList.toggle("active");
@@ -22,6 +24,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Mettre à jour le contenu de la fenêtre modale avec le contenu du paragraphe
         const modalContent = document.querySelector(".modal-content");
-        modalContent.innerHTML = formatsContent;
+        modalContent.innerHTML = formatsContent + '<button class="close-modal">X</button>';
+
+    // Ajouter un gestionnaire d'événement pour le bouton de fermeture
+    const closeButton = modalContent.querySelector(".close-modal");
+    closeButton.addEventListener("click", closeModalHandler);
+    }
+
+    function closeModalHandler() {
+        modalContainer.classList.remove("active");
     }
 });
