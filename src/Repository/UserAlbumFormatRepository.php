@@ -40,10 +40,16 @@ class UserAlbumFormatRepository extends ServiceEntityRepository
 
     public function findByUserCollectionType(User $user, string $type): array {
         return $this->createQueryBuilder('uaf')
+            ->innerJoin("uaf.format", 'f')
+            ->innerJoin("uaf.album", 'al')
+            ->innerJoin("al.artists", 'ar')
             ->andWhere(':user = uaf.user')
             ->andWhere(':type = uaf.type')
             ->setParameter('user', $user)
             ->setParameter('type', $type)
+            ->orderBy('f.libelle', 'ASC')
+            ->addOrderBy('ar.name', 'ASC')
+            ->addOrderBy('al.title', 'ASC')
             ->getQuery()
             ->getResult();
     }
