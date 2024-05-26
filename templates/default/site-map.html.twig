@@ -1,10 +1,27 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <main id="container" class="list_albums">
-        <h2>
-            Plan du site
-        </h2>
-        
+    <main id="container" class="others">
+        <h2>Plan du site</h2>
+        <ul class="two-columns">
+            <li class="title">Général</li>
+                <li><a href="{{ path('index') }}">Accueil</a></<li>
+                <li><a href="{{ path('login') }}">Connexion</a></<li>
+                <li><a href="{{ path('register') }}">Inscription</a></<li>
+                <li><a href="{{ path('presentation') }}">Présentation du site</a></<li>
+                <li><a href="{{ path('credits') }}">Crédits</a></<li>
+            <li class="title">Artistes</li>
+            {% for artist in artists %}
+                <li><a href="{{ path('artist', {idArtist: artist.id}) }}">{{artist.name}}</a></<li>
+            {% endfor %}
+            <li class="title">Albums</li>
+            {% for album in albums %}
+                <li><a href="{{ path('album', {idAlbum: album.id}) }}">{{album.title}}</a></<li>
+            {% endfor %}
+            <li class="title">Chansons</li>
+            {% for song in songs %}
+                <li><a href="{{ path('song', {idSong: song.id}) }}">{{song.title}}</a></<li>
+            {% endfor %}
+        </ul>
     </main>
 {% endblock %}

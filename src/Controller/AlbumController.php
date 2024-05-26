@@ -38,26 +38,6 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    // #[Route('/new', name: 'app_album_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $album = new Album();
-    //     $form = $this->createForm(AlbumType::class, $album);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($album);
-    //         $entityManager->flush();
-
-    //         return $this->redirectToRoute('app_album_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->render('album/new.html.twig', [
-    //         'album' => $album,
-    //         'form' => $form,
-    //     ]);
-    // }
-
     #[Route('/{id}/edit', name: 'album_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Album $album, EntityManagerInterface $entityManager): Response
     {

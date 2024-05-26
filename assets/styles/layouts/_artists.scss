@@ -1,5 +1,4 @@
 .list_artists {
-    background-color: $lightGrey;
     h2 {
         color: $red;
         text-align: center;
@@ -19,7 +18,6 @@
             width: 30%;
             min-height: 150px;
             max-width: 270px;
-            background-color: $lightGrey;
             margin: 0.5em;
             transition: background-color 0.3s ease; // Transition fluide de la couleur de fond
             &:hover {

@@ -14,26 +14,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/media')]
 class MediaController extends AbstractController
 {
-    // #[Route('/new', name: 'app_media_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $medium = new Media();
-    //     $form = $this->createForm(MediaType::class, $medium);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($medium);
-    //         $entityManager->flush();
-
-    //         return $this->redirectToRoute('app_media_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->render('media/new.html.twig', [
-    //         'medium' => $medium,
-    //         'form' => $form,
-    //     ]);
-    // }
-
     #[Route('/{id}/edit', name: 'media_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Media $medium, EntityManagerInterface $entityManager): Response
     {

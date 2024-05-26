@@ -24,26 +24,6 @@ class SongController extends AbstractController
         ]);
     }
 
-    // #[Route('/new', name: 'app_song_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $song = new Song();
-    //     $form = $this->createForm(SongType::class, $song);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($song);
-    //         $entityManager->flush();
-
-    //         return $this->redirectToRoute('app_song_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->render('song/new.html.twig', [
-    //         'song' => $song,
-    //         'form' => $form,
-    //     ]);
-    // }
-
     #[Route('/{id}/edit', name: 'song_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Song $song, EntityManagerInterface $entityManager): Response
     {

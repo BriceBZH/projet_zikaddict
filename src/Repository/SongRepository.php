@@ -53,6 +53,15 @@ class SongRepository extends ServiceEntityRepository
            ->getResult()
        ;
     }
+
+    public function findByValid() : array {
+        return $this->createQueryBuilder('s')
+           ->where('s.valid = :valid')
+           ->setParameter('valid', 1)
+           ->getQuery()
+           ->getResult()
+       ;
+    }
     //    /**
     //     * @return Song[] Returns an array of Song objects
     //     */

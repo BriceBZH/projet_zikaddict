@@ -1,9 +1,6 @@
 .cards {
     background-color: $lightGrey;
-    h2 {
-        color: $red;
-        text-align: center;
-    }
+    
     h3 {
         color: $emeraldGreen;
         width: 100%;
@@ -123,33 +120,33 @@
 
     @media screen and (min-width: $min-width) {
         background-color: $lightGrey;
-    h2 {
-        color: $red;
-        text-align: center;
-    }
-    h3 {
-        color: $emeraldGreen;
-    }
-    ul {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-        width: 100%;
-        li {
-            border-radius: 8px;
-            box-sizing: border-box;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 22%;
-            // max-width: 25%;
-            // min-height: 150px;
-            // max-width: 270px;
-            background-color: $lightGrey;
-            margin: 0.5em;
-            transition: background-color 0.3s ease; // Transition fluide de la couleur de fond
-            // article {
-            //     padding-top: 3em;
-            // }
+        h2 {
+            color: $red;
+            text-align: center;
         }
-    }
+        h3 {
+            color: $emeraldGreen;
+        }
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            width: 100%;
+            li {
+                border-radius: 8px;
+                box-sizing: border-box;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 22%;
+                // max-width: 25%;
+                // min-height: 150px;
+                // max-width: 270px;
+                background-color: $lightGrey;
+                margin: 0.5em;
+                transition: background-color 0.3s ease; // Transition fluide de la couleur de fond
+                // article {
+                //     padding-top: 3em;
+                // }
+            }
+        }
     }
 }

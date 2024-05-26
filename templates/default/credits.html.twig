@@ -2,31 +2,13 @@
 
 {% block body %}
     <main id="container" class="others">
-    {% for media in medias %}
-        <p>{{media.alt}} : {{media.urlSource}}</p>
-    {% endfor %}
-    <h2>Remerciements</h2>
-
-    <p>Nous tenons à exprimer notre gratitude envers les contributeurs qui ont partagé les images utilisées sur notre site web. Ces images ont été utilisées dans le cadre d'un projet de formation et ne sont pas destinées à un usage commercial. Nous reconnaissons et apprécions le travail des auteurs et nous nous engageons à respecter leurs droits d'auteur. Si vous êtes l'auteur d'une des images utilisées et que vous souhaitez que celle-ci soit retirée, veuillez nous contacter et nous la retirerons immédiatement.</p>
-    {# <a href="https://img.nrj.fr/VHLqHiQjV0lFGcp_O7Tm6Kr2lAk=/0x450/smart/http%3A%2F%2Fmedia.nrj.fr%2Fraw%2F2020%2F07%2Fbob-marley-retour-sur-ses-plus-grands-concerts-1595254123.jpg">Bob marley</a>
-    <a href="https://img.nrj.fr/GaiD9jo5tC3QaFZ76AJEyBh_SXE=/0x450/smart/http%3A%2F%2Fmedia.nrj.fr%2F1900x1200%2F2018%2F01%2Feminem_7983.jpg">Eminem</a>
-    <a href="https://www.solidays.org/wp-content/uploads/2021/05/alpha-bondy-1140x570.jpg">Alpha Blondy</a>
-    <a href="https://www.reggae.fr/uploads/articles_photos/large/4477.jpg">Naaman</a>
-    <a href="https://swiftmedia.s3.amazonaws.com/pacific.swiftcom.com/images/sites/5/2018/04/15090807/Alborosie-act-041418.jpg">Alborosie</a>
-    <a href="https://media.lhebdoduvendredi.com/illustrations/00020938_normal.jpg">Pierpoljak</a>
-    <a href="https://photos.bandsintown.com/thumb/212645.jpeg">Ilements</a>
-    <a href="https://images.ladepeche.fr/api/v1/images/view/5c37d86c8fe56f3e6754d5a0/full/image.jpg">Ice Cube</a>
-    <a href="https://information.tv5monde.com/sites/tv5-info/files/styles/entete/public/2023-02/field_media_image-1887837-AFP-TV_20230213_ACE_FRA_AfriquePolitique_338X7MT_fr.webp?itok=lai2wz7g">Tiken Jah Fakoly</a>
-    <a href="https://www.francetvinfo.fr/pictures/JLnUA5cKZTgglJktgdI0w8PBNsI/36x0:623x330/2656x1494/filters:format(avif):quality(50)/2019/04/12/tupacpoeticjusticeok.jpg">Tupac</a>
-    <a href="https://m.media-amazon.com/images/I/81J3LJGOsfL._UF1000,1000_QL80_.jpg">Exodus</a>
-    <a href="https://i.ebayimg.com/images/g/ZNwAAOSwPKtlhBy4/s-l1600.jpg">Survival</a>
-    <a href="https://images.epagine.fr/285/0602547276285.jpg">Uprising</a>
-    <a href="https://www.melodisque.com/wp-content/uploads/2020/05/bob-marley-rastaman.jpg">Rastaman Vibration</a>
-    <a href="https://m.media-amazon.com/images/I/71EFb-BEAeL._SL1400_.jpg">Legend</a>
-    <a href="https://m.media-amazon.com/images/I/81imoxLfpUL._SL1400_.jpg">Burnin'</a>
-    <a href="https://www.lagrosseradio.com/_images/fck/36336.jpg">Harrisson Stafford</a>
-    <a href="https://media.contentapi.ea.com/content/www-easports/fr_FR/fifa/ultimate-team/news/2016/damian-marley-interview/_jcr_content/headerImages/image.img.jpg">Damian marley</a>
-    <a href="https://www.reggae.fr/uploads/articles_photos/large/4417.jpg">Temple Road</a>
-    <a href="https://e-cdn-images.dzcdn.net/images/cover/8753878c554fe8a6c7de4c5c0a160138/500x500-000000-80-0-0.jpg">2 Times Revolution</a> #}
+        <h2>Crédits des images</h2>
+        <ul class="two-columns">
+            {% for media in medias %}
+                <li><a href="{{media.urlSource}}">{{media.alt}}</a></<li>
+            {% endfor %}
+        </ul>
+        <h2>Remerciements</h2>
+        <p>Nous tenons à exprimer notre gratitude envers les contributeurs qui ont partagé les images utilisées sur notre site web. Ces images ont été utilisées dans le cadre d'un projet de formation et ne sont pas destinées à un usage commercial. Nous reconnaissons et apprécions le travail des auteurs et nous nous engageons à respecter leurs droits d'auteur. Si vous êtes l'auteur d'une des images utilisées et que vous souhaitez que celle-ci soit retirée, veuillez nous contacter et nous la retirerons immédiatement.</p>
     </main>
 {% endblock %}

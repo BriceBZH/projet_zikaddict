@@ -1,0 +1,24 @@
+.others {
+    text-align: center;
+    .two-columns {
+        .title {
+            padding: 1rem;
+            font-weight: bold;
+        }
+    }
+    
+    /* *****************************************************************
+    DESKTOP
+    ***************************************************************** */
+
+    @media screen and (min-width: $min-width) {
+        .two-columns {
+            column-count: 2;
+            column-gap: 10%; /* Ajustez l'espace entre les colonnes si nécessaire */
+            .two-columns li {
+                break-inside: avoid; /* Empêche les éléments de se briser entre les colonnes */
+            }
+        }
+    }
+    
+}

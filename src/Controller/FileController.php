@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory;
 use App\Entity\Artist;
 use App\Entity\Country;
 use App\Entity\Album;
@@ -90,30 +92,50 @@ class FileController extends AbstractController
         $type = "Collection";
         $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
 
-        $callback = function () use ($userAlbumFormats) {
-            $handle = fopen('php://output', 'w+');
-            fputcsv($handle, ['Artists', 'Title', 'Year', 'Format'], ';');
-        
-            foreach ($userAlbumFormats as $userAlbumFormat) {
-                $artists = "";
-                $artistsAlbum = $userAlbumFormat->getAlbum()->getArtists();
-                foreach ($artistsAlbum as $artist) {
-                    $artists .= $artist->getName() . ', ';
-                }
-                $artists = rtrim($artists, ', ');
-        
-                $line = [
-                    $artists,
-                    $userAlbumFormat->getAlbum()->getTitle(),
-                    $userAlbumFormat->getAlbum()->getYear(),
-                    $userAlbumFormat->getFormat()->getLibelle()
+        // Organiser les données par format, artiste et albums
+        $albumsByFormat = [];
+
+        foreach ($userAlbumFormats as $userAlbumFormat) {
+            $format = $userAlbumFormat->getFormat()->getLibelle();
+            $artistsAlbum = $userAlbumFormat->getAlbum()->getArtists();
+            $albumTitle = $userAlbumFormat->getAlbum()->getTitle();
+            $albumYear = $userAlbumFormat->getAlbum()->getYear();
+
+            foreach ($artistsAlbum as $artist) {
+                $artistName = $artist->getName();
+                $albumsByFormat[$format][$artistName][] = [
+                    'title' => $albumTitle,
+                    'year' => $albumYear
                 ];
-                fputcsv($handle, $line, ';');
             }
-            fclose($handle);
-        };
-        $response = new StreamedResponse($callback);
-        $response->headers->set('Content-Type', 'text/docx');
+        }
+
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+
+        foreach ($albumsByFormat as $format => $artists) {
+            $section->addTitle($format, 2);
+            foreach ($artists as $artist => $albums) {
+                $section->addText($artist . ':');
+                $listStyle = ['indent' => 1];
+                foreach ($albums as $album) {
+                    $section->addListItem($album['title'] . ' (' . $album['year'] . ')', 0, null, $listStyle);
+                }
+            }
+        }
+
+        // Générer le fichier DOCX
+        $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+        $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter->save($tempFile);
+
+        // Créer la réponse streamée pour le téléchargement
+        $response = new StreamedResponse(function () use ($tempFile) {
+            readfile($tempFile);
+            unlink($tempFile); // Supprimer le fichier temporaire après lecture
+        });
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
         $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $filename
@@ -268,30 +290,50 @@ class FileController extends AbstractController
         $type = "Search";
         $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
 
-        $callback = function () use ($userAlbumFormats) {
-            $handle = fopen('php://output', 'w+');
-            fputcsv($handle, ['Artists', 'Title', 'Year', 'Format'], ';');
-        
-            foreach ($userAlbumFormats as $userAlbumFormat) {
-                $artists = "";
-                $artistsAlbum = $userAlbumFormat->getAlbum()->getArtists();
-                foreach ($artistsAlbum as $artist) {
-                    $artists .= $artist->getName() . ', ';
-                }
-                $artists = rtrim($artists, ', ');
-        
-                $line = [
-                    $artists,
-                    $userAlbumFormat->getAlbum()->getTitle(),
-                    $userAlbumFormat->getAlbum()->getYear(),
-                    $userAlbumFormat->getFormat()->getLibelle()
+        // Organiser les données par format, artiste et albums
+        $albumsByFormat = [];
+
+        foreach ($userAlbumFormats as $userAlbumFormat) {
+            $format = $userAlbumFormat->getFormat()->getLibelle();
+            $artistsAlbum = $userAlbumFormat->getAlbum()->getArtists();
+            $albumTitle = $userAlbumFormat->getAlbum()->getTitle();
+            $albumYear = $userAlbumFormat->getAlbum()->getYear();
+
+            foreach ($artistsAlbum as $artist) {
+                $artistName = $artist->getName();
+                $albumsByFormat[$format][$artistName][] = [
+                    'title' => $albumTitle,
+                    'year' => $albumYear
                 ];
-                fputcsv($handle, $line, ';');
             }
-            fclose($handle);
-        };
-        $response = new StreamedResponse($callback);
-        $response->headers->set('Content-Type', 'text/docx');
+        }
+
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+
+        foreach ($albumsByFormat as $format => $artists) {
+            $section->addTitle($format, 2);
+            foreach ($artists as $artist => $albums) {
+                $section->addText($artist . ':');
+                $listStyle = ['indent' => 1];
+                foreach ($albums as $album) {
+                    $section->addListItem($album['title'] . ' (' . $album['year'] . ')', 0, null, $listStyle);
+                }
+            }
+        }
+
+        // Générer le fichier DOCX
+        $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+        $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter->save($tempFile);
+
+        // Créer la réponse streamée pour le téléchargement
+        $response = new StreamedResponse(function () use ($tempFile) {
+            readfile($tempFile);
+            unlink($tempFile); // Supprimer le fichier temporaire après lecture
+        });
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
         $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $filename
@@ -313,8 +355,7 @@ class FileController extends AbstractController
         $param = [];
         if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
             $param = ['idUser' => $idUser];
-        }
-        
+        }  
 
         // Récupérer le fichier uploadé
         $csvFile = $request->files->get('csv_file');

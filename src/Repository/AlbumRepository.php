@@ -23,43 +23,47 @@ class AlbumRepository extends ServiceEntityRepository
     }
 
     public function findByArtist(Artist $artist) : array {
-        return $this->createQueryBuilder('al')
+        $result = $this->createQueryBuilder('al')
             ->andWhere(':artists MEMBER OF al.artists')
             ->andWhere('al.valid = :valid')
             ->setParameter('artists', $artist)
             ->setParameter('valid', 1)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+
+        return $result ?: [];
     }
 
     public function findByPartialTitle(string $title) : array {
-        return $this->createQueryBuilder('a')
+        $result = $this->createQueryBuilder('a')
            ->where('a.title LIKE :title')
            ->andWhere('a.valid = :valid')
            ->setParameter('title', '%'.$title.'%')
            ->setParameter('valid', 1)
            ->getQuery()
-           ->getResult()
-       ;
+           ->getResult();
+
+        return $result ?: [];
     }
 
     public function findByValid() : array {
-        return $this->createQueryBuilder('a')
+        $result = $this->createQueryBuilder('a')
            ->where('a.valid = :valid')
            ->setParameter('valid', 1)
            ->getQuery()
-           ->getResult()
-       ;
+           ->getResult();
+
+        return $result ?: [];
     }
 
     public function findByNotValid() : array {
-        return $this->createQueryBuilder('a')
+        $result = $this->createQueryBuilder('a')
            ->where('a.valid = :valid')
            ->setParameter('valid', 0)
            ->getQuery()
-           ->getResult()
-       ;
+           ->getResult();
+
+        return $result ?: [];
     }
     //    /**
     //     * @return Album[] Returns an array of Album objects
