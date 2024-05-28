@@ -108,7 +108,7 @@ class AlbumController extends AbstractController
             $entityManager->persist($userAlbumFormat);
             $entityManager->flush();
         }
-                 
+    
         return $this->redirectToRoute($returnUrl, $param);
     }
 

@@ -5,14 +5,27 @@
         <h2>
             Liste des albums de {{artist.getName()}}
         </h2>
+        <div class="modal-container">
+            <div class="overlay modal-trigger"></div>
+            <div class="modal-content">
+            </div>
+        </div>
         <ul>
             {% for album in albums %}
                 <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
-                <article onclick="window.location='{{ path('album', {idAlbum: album.id}) }}';">
+                    <article>
                         <h3>{{album.getTitle()}}</h3>
-                        {% set currentRoute = app.request.attributes.get('_route') %}
-                        {% set param = app.request.attributes.get('idArtist') %}
-                        <a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, parametre: param}) }}" class="collec"><img src="{{ asset('imgs/collec.png')}}" alt="collection" /></a>
+                        {% if app.user.userIdentifier is defined %}
+                            {% set currentRoute = app.request.attributes.get('_route') %}
+                            {% set param = app.request.attributes.get('idArtist') %}
+                            <img src="{{ asset('imgs/img_formats.png')}}" class="image_collection modal-trigger" alt="collection" data-target="album{{loop.index}}" />
+                            <p class="formats album{{loop.index}}">
+                                Liste des formats pour l'album {{album.getTitle()}}
+                                {% for format in album.formats %}
+                                    {{format.libelle}}<a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id, parametre: param}) }}" class="collec">Collection</a><a href="{{ path('add_search', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id, parametre: param}) }}" class="collec">Search</a>
+                                {% endfor %}
+                            </p>
+                        {% endif %}
                         <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>
                     </article>
                 </li>

@@ -18,7 +18,7 @@
         <ul>
             {% for album in albums %}
                 <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
-                    <article >
+                    <article>
                         <h3>{{album.getTitle()}}</h3>
                         {% if app.user.userIdentifier is defined %}
                             {% set currentRoute = app.request.attributes.get('_route') %}
