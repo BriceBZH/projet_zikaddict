@@ -46,10 +46,10 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    #[Route('/contact', name: 'contact')]
-    public function contact(): Response
+    #[Route('/politique', name: 'politique')]
+    public function politique(): Response
     {
-        return $this->render('default/contact.html.twig', [
+        return $this->render('default/politique.html.twig', [
 
         ]);
     }
