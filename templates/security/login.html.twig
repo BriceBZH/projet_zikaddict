@@ -3,7 +3,8 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<main id="container" class="list_albums">
+<main id="container" class="forms">
+    <h2>Connexion</h2>
     <form method="post">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -14,32 +15,18 @@
                 You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('logout') }}">Logout</a>
             </div>
         {% endif %}
+        <fieldset>
+            <label for="username">Login : </label>
+            <input type="text" value="{{ last_username }}" name="_username" id="username" autocomplete="username" required autofocus>
+        </fieldset>
+        <fieldset>
+            <label for="password">Mot de passe : </label>
+            <input type="password" name="_password" id="password" autocomplete="current-password" required>
+        </fieldset>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Username</label>
-        <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="username" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
-
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
-            </div>
-        #}
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
+        <button class="button" type="submit">Connexion</button>
     </form>
-    <a href="{{ path('register') }}">Register</a>
+    <p>Pour vous inscrire c'est ici : <a href="{{ path('register') }}">Inscription</a></p>
     </main>
 {% endblock %}
