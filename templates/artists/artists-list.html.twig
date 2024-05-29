@@ -1,23 +1,21 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <main id="container" class="cards">
-        <h2>
-            Liste des artistes
-        </h2>
+    <main class="cards">
+        <h2>Liste des artistes</h2>
         <ul>
-        {% for artist in artists %}
-            <li data-image-url="{{ asset('imgs/' ~ artist.media.url) }}" data-image-alt="{{ artist.media.alt }}">
-                <article onclick="window.location='{{ path('artist', {idArtist: artist.id}) }}';">
-                    <h3>{{artist.getName()}}</h3>
-                    <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
-                    {% if artist.getDeathDate() is not null %}
-                    <p>{{artist.getDeathDate().format("d/m/Y")}}</p>
-                    {% endif %}   
-                    <a href="{{ path('artist', {idArtist: artist.id}) }}">Plus</a>
-                </article>
-            </li>
-        {% endfor %}
+            {% for artist in artists %}
+                <li data-image-url="{{ asset('imgs/' ~ artist.media.url) }}" data-image-alt="{{ artist.media.alt }}">
+                    <article onclick="window.location='{{ path('artist', {idArtist: artist.id}) }}';">
+                        <h3>{{artist.getName()}}</h3>
+                        <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
+                        {% if artist.getDeathDate() is not null %}
+                        <p>{{artist.getDeathDate().format("d/m/Y")}}</p>
+                        {% endif %}   
+                        <a href="{{ path('artist', {idArtist: artist.id}) }}" class="link">Plus</a>
+                    </article>
+                </li>
+            {% endfor %}
         </ul>
     </main>
     {% block javascripts %}

@@ -2,7 +2,7 @@
     padding: 1em;
     max-width: 1100px;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
     // first part : select first p if 2 p in container, second part : select second p if 2 p in container with +
     p:first-of-type:nth-last-of-type(2),
     p:first-of-type:nth-last-of-type(2) + p {

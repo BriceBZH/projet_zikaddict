@@ -3,45 +3,56 @@
 {% block title %}Results{% endblock %}
 
 {% block body %}
-    <main id="container" class="cards">
-        <h2>
-            Résultats pour {{app.request.query.get('query')}}
-        </h2>
+    <main class="cards">
+        <h2>Résultats pour {{app.request.query.get('query')}}</h2>
         {% if results.artists is not empty %}
-            <p>Artist(s)</p>
+            <p class="text">Artist(s)</p>
         {% endif %}
         <ul>
-                {% for artist in results.artists %}
-                    <li data-image-url="{{ asset('imgs/' ~ artist.media.url) }}" data-image-alt="{{ artist.media.alt }}">
-                        <article class=$class>
-                            <h3>{{artist.name}}</h3>
-                            <p><a href="{{ path('artist', {idArtist: artist.id}) }}">Plus</a>
-                        </article>
-                    </li>
-                {% endfor %}
+            {% for artist in results.artists %}
+                <li data-image-url="{{ asset('imgs/' ~ artist.media.url) }}" data-image-alt="{{ artist.media.alt }}">
+                    <article onclick="window.location='{{ path('artist', {idArtist: artist.id}) }}';">
+                        <h3>{{artist.getName()}}</h3>
+                        <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
+                        {% if artist.getDeathDate() is not null %}
+                        <p>{{artist.getDeathDate().format("d/m/Y")}}</p>
+                        {% endif %}   
+                        <a href="{{ path('artist', {idArtist: artist.id}) }}" class="link">Plus</a>
+                    </article>
+                </li>
+            {% endfor %}
         </ul>
         {% if results.albums is not empty %}
-            <p>Album(s)</p>
+            <p class="text">Album(s)</p>
         {% endif %}
         <ul>  
             {% for album in results.albums %}
                 <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
-                    <article >
-                        <h3>{{album.title}}</h3>
-                        <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>
+                    <article>
+                        <h3>{{album.getTitle()}}</h3>
+                        <p>{{album.year}}</p>
+                        <p>{{album.songs|length }} Chansons</p>
+                        <p><a href="{{ path('album', {idAlbum: album.id}) }}" class="link">Plus</a> 
                     </article>
                 </li>
             {% endfor %}
         </ul>
         {% if results.songs is not empty %}
-            <p>Chanson(s)</p>
+            <p class="text">Chanson(s)</p>
         {% endif %}
         <ul>
             {% for song in results.songs %}
-                <li>
-                    <article >
-                        <h3>{{song.title}}</h3>
-                        <p><a href="{{ path('song', {idSong: song.id}) }}">Plus</a>
+            {# {{dump(song)}} #}
+            {# {{dump(song.albums)}} #}
+                {% set firstAlbum = null %}
+                {% for album in song.getAlbums() %}
+                    {% set firstAlbum = album %}
+                {% endfor %}
+                {# {{dump(firstAlbum)}} #}
+                <li data-image-url="{{ asset('imgs/' ~ firstAlbum.media.url) }}" data-image-alt="{{ firstAlbum.media.alt }}">
+                    <article>
+                        <h3>{{song.getTitle()}}</h3>
+                        <p><a href="{{ path('song', {idSong: song.id}) }}" class="link">Plus</a>
                     </article>
                 </li>
             {% endfor %}

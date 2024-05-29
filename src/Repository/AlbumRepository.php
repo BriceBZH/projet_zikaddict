@@ -50,6 +50,7 @@ class AlbumRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('a')
            ->where('a.valid = :valid')
            ->setParameter('valid', 1)
+           ->orderBy('a.title', 'ASC')
            ->getQuery()
            ->getResult();
 

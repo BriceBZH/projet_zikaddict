@@ -29,6 +29,7 @@ class SongRepository extends ServiceEntityRepository
             ->andWhere('s.valid = :valid')
             ->setParameter('albums', $album)
             ->setParameter('valid', 1)
+            ->orderBy('s.title', 'ASC')
             ->getQuery()
             ->getResult()
         ;

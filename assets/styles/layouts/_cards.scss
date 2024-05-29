@@ -1,6 +1,9 @@
 .cards {
     background-color: $lightGrey;
-    
+    .text {
+        text-align: center;
+        padding: 1em;
+    }
     h3 {
         color: $emeraldGreen;
         width: 100%;
@@ -73,7 +76,7 @@
             box-sizing: border-box;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 45%;
-            // min-height: 160px;
+            min-height: 150px;
             // max-width: 45%;
             background-color: $lightGrey;
             margin: 0.5em;
@@ -82,7 +85,8 @@
                 background-color: #ddd; // Couleur de fond au survol
             }
             article {
-                // border: 1px solid red;
+                position: relative;
+                min-height: 150px;
                 background-color:rgba(0, 0, 0, 0.5);
                 border-radius: 8px;
                 padding: 0.5em;
@@ -98,8 +102,10 @@
                 .formats {
                     display: none;
                 }
-                a {
+                .link {
+                    position: absolute;
                     color: orange;
+                    bottom: 0.5em;
                 }
             }
             // &::before {

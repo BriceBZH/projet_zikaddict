@@ -1,10 +1,8 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
-    <main id="container" class="list_songs">
-        <h2>
-            Liste des chansons
-        </h2>
+    <main class="cards">
+        <h2>Liste des chansons</h2>
         <ul>
             {% for song in songs %}
                 <li>

@@ -1,19 +1,27 @@
 {% extends "base.html.twig" %}
 
-{% block main %}
-    <main id="container" class="list_artists">
-        <h2>
-            Liste des artistes de la chanson {{song.getTitle()}}
-        </h2>
+{% block body %}
+    <main class="cards">
+        <h2>Liste des artistes</h2>
+        <p class="text">
+            {{song.description}}
+        </p>
         <ul>
             {% for artist in artists %}
-                <li>
-                    <article class=$class>
+                <li data-image-url="{{ asset('imgs/' ~ artist.media.url) }}" data-image-alt="{{ artist.media.alt }}">
+                    <article onclick="window.location='{{ path('artist', {idArtist: artist.id}) }}';">
                         <h3>{{artist.getName()}}</h3>
-                        <p><a href="{{ path('artist', {idArtist: artist.id}) }}">Plus</a>
+                        <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
+                        {% if artist.getDeathDate() is not null %}
+                        <p>{{artist.getDeathDate().format("d/m/Y")}}</p>
+                        {% endif %}   
+                        <a href="{{ path('artist', {idArtist: artist.id}) }}" class="link">Plus</a>
                     </article>
                 </li>
             {% endfor %}
         </ul>
     </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}

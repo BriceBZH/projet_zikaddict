@@ -18,6 +18,8 @@
                 <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
                     <article>
                         <h3>{{album.getTitle()}}</h3>
+                        <p>{{album.year}}</p>
+                        <p>{{album.songs|length }} Chansons</p>
                         {% if app.user.userIdentifier is defined %}
                             {% set currentRoute = app.request.attributes.get('_route') %}
                             <img src="{{ asset('imgs/img_formats.png')}}" class="image_collection modal-trigger" alt="collection" data-target="album{{loop.index}}" />
@@ -28,7 +30,7 @@
                                 {% endfor %}
                             </p>
                         {% endif %}
-                        <p><a href="{{ path('album', {idAlbum: album.id}) }}">Plus</a>            
+                        <p><a href="{{ path('album', {idAlbum: album.id}) }}" class="link">Plus</a>            
                     </article>
                 </li>
             {% endfor %}

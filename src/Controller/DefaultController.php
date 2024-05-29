@@ -53,4 +53,15 @@ class DefaultController extends AbstractController
 
         ]);
     }
+
+    #[Route('/error/{code}', name: 'error')]
+    public function error(int $code): Response
+    {
+        if($code === 404) {
+            return $this->render('default/404.html.twig');
+        }
+        return $this->render('default/error.html.twig', [
+            'code' => $code
+        ]);
+    }
 }
