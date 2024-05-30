@@ -6,6 +6,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        padding-bottom: 0.5em;
         h1 {
             font-family: "Sirin Stencil";
             text-transform: uppercase;
@@ -13,7 +14,7 @@
             width :100%;
             align-items: center;
             text-align: center;
-            color: black;
+            color: $black;
         }
         img {
             width :100%;
@@ -44,15 +45,29 @@
             }
         }
     }
+    
+    #icons {
+        display: block;
+        cursor: pointer;
+        font-size: 1.5em;
+        padding: 0.5em;
+        color: $black;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    
+    #icons:before {
+        content: attr(data-content);
+    }
+    
     nav {
-        background-color: $black;
         menu {
+            display: none;
             width: 100%;
-            display: flex;
-            flex-direction: column;
+            background-color: $black;
             text-align: center;
             list-style: none;
-            justify-content: space-evenly;
             li {
                 font-weight: bold;
                 padding: 0.3em;
@@ -62,19 +77,33 @@
                 }
                 &:hover {
                     color: $black;
-                    background-color: $yellow;  
+                    background-color: $yellow;
                 }
             }
         }
     }
+    
+    nav.active menu {
+        display: block;
+    }  
+    
     /* *****************************************************************
     DESKTOP
     ***************************************************************** */
 
     @media screen and (min-width: $min-width) {
+        #icons {
+            display: none;
+        }
+        
+        #icons:before {
+            display: none;
+        }
+
         .libelleLogo {
             justify-content: space-between;
             flex-direction: row;
+            padding-bottom: 0;
             h1 {
                 font-size: 8rem;
             }
@@ -83,6 +112,8 @@
         nav {
             menu {
                 flex-direction: row;
+                justify-content: space-evenly;
+                display: flex;
             }
         }
     }

@@ -63,6 +63,18 @@ class ArtistRepository extends ServiceEntityRepository
            ->getResult()
        ;
     }
+
+    public function deleteArtist(Artist $artist) : void {
+        $idArtist = $artist->getId();
+        $conn = $this->getEntityManager()->getConnection();
+        $query = $conn->prepare('SELECT * FROM your_table WHERE your_condition = :condition');
+        $parameters = [
+            'id' => $idUser
+            ];
+        $query->execute($parameters);
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+    }
+
     // public function findAll() : array {
     //     $entityManager = $this->getEntityManager();
     //     $query = $entityManager->createQuery(

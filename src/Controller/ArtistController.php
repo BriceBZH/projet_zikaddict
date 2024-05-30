@@ -73,8 +73,11 @@ class ArtistController extends AbstractController
     public function delete(Request $request, Artist $artist, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$artist->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($artist);
-            $entityManager->flush();
+            $artist->getAlbums()->initialize();
+            dd($artist->getAlbums());
+            //méthode normale symfony
+            // $entityManager->remove($artist);
+            // $entityManager->flush();
         }
 
         return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
