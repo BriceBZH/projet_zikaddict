@@ -20,5 +20,12 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # App\EventListener\ErrorListener:
+    #     tags:
+    #         - { name: kernel.event_listener, event: kernel.exception }
+
+    # App\Controller\DefaultController:
+    #     autowire: true
+
+    # Symfony\Component\HttpKernel\Controller\ControllerResolver:
+    #     alias: debug.controller_resolver.inner
