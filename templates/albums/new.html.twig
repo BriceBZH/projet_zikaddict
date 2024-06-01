@@ -3,9 +3,11 @@
 {% block title %}New Album{% endblock %}
 
 {% block body %}
-    <h1>Create new Album</h1>
+    <main class="forms_bis">
+        <h2>Ajouter un album</h2>
 
-    {{ include('album/_form.html.twig') }}
+        {{ include('albums/_form.html.twig') }}
 
-    <a href="{{ path('app_album_index') }}">back to list</a>
+        <a href="{{ path('index') }}">Retour au profil</a>
+    </main>
 {% endblock %}

@@ -3,9 +3,11 @@
 {% block title %}New Artist{% endblock %}
 
 {% block body %}
-    <h1>Create new Artist</h1>
+    <main class="forms_bis">
+        <h2>Ajouter un artiste</h2>
 
-    {{ include('artist/_form.html.twig') }}
+        {{ include('artists/_form.html.twig') }}
 
-    <a href="{{ path('app_artist_index') }}">back to list</a>
+        <a href="{{ path('index') }}">Retour au profil</a>
+    </main>
 {% endblock %}

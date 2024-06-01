@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Album;
+use App\Entity\Media;
 use App\Form\AlbumType;
 use App\Entity\UserAlbumFormat;
 use App\Repository\AlbumRepository;
 use App\Repository\UserRepository;
 use App\Repository\SongRepository;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use App\Repository\FormatRepository;
 use App\Repository\UserAlbumFormatRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,6 +25,74 @@ class AlbumController extends AbstractController
     public function displayAll(AlbumRepository $albumRepository): Response {
         return $this->render("albums/albums-list.html.twig", [
             'albums' => $albumRepository->findByValid(),
+        ]);
+    }
+
+    #[Route('/new', name: 'album_new', methods: ['GET', 'POST'])]
+    public function new(AuthorizationCheckerInterface $authorization, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $route = $request->query->get('route');
+        $idUser = $request->query->get('idUser');
+        if ($authorization->isGranted('ROLE_ADMIN')) {
+            $valid = true;
+        } else {
+            $valid = false;
+        }
+        $param = [];
+        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+            $param = ['idUser' => $idUser];
+        } 
+
+        $album = new Album();
+        $form = $this->createForm(AlbumType::class, $album);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //if user is admin, valid is true, else valid is false
+            $album->setValid($valid);
+            $album->setCreatedAt(new \DateTimeImmutable());
+            $album->setUpdateAt(new \DateTimeImmutable());
+
+            foreach ($album->getArtists() as $artist) {
+                $artist->addAlbum($album);
+            }
+
+            foreach ($album->getFormats() as $format) {
+                $album->addFormat($format);
+            }
+
+            $media =  $form->get('mediabis')->getData();
+            $albumTitle =  $album->getTitle();
+            if(!empty($media)) { // if album media is not empty
+                $img = '../assets/imgs/'.$albumTitle;
+                $content = @file_get_contents($media);
+                if ($content === false) {
+                    echo "Erreur lors du téléchargement de l'image depuis l'URL.";
+                } else {
+                    $extension = pathinfo($media, PATHINFO_EXTENSION);
+                    $img .= '.'.$extension;
+                    $albumTitleImg = $albumTitle.'.'.$extension;
+                    file_put_contents($img, $content);
+                }
+            }
+
+            //add media for artist
+            $mediaAlbum = new Media();
+            $mediaAlbum->setUrl($albumTitleImg);
+            $mediaAlbum->setAlt($albumTitle);
+            $mediaAlbum->setUrlSource($media);
+            $album->setMedia($mediaAlbum);
+
+            $entityManager->persist($mediaAlbum);         
+            $entityManager->persist($album);
+            $entityManager->flush();
+
+            return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('albums/new.html.twig', [
+            'album' => $album,
+            'form' => $form,
         ]);
     }
 

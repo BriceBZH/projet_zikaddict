@@ -14,25 +14,32 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/genre')]
 class GenreController extends AbstractController
 {
-    // #[Route('/new', name: 'app_genre_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $genre = new Genre();
-    //     $form = $this->createForm(GenreType::class, $genre);
-    //     $form->handleRequest($request);
+    #[Route('/new', name: 'genre_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $route = $request->query->get('route');
+        $idUser = $request->query->get('idUser');
+        $param = [];
+        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+            $param = ['idUser' => $idUser];
+        }
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($genre);
-    //         $entityManager->flush();
+        $genre = new Genre();
+        $form = $this->createForm(GenreType::class, $genre);
+        $form->handleRequest($request);
 
-    //         return $this->redirectToRoute('app_genre_index', [], Response::HTTP_SEE_OTHER);
-    //     }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($genre);
+            $entityManager->flush();
 
-    //     return $this->render('genre/new.html.twig', [
-    //         'genre' => $genre,
-    //         'form' => $form,
-    //     ]);
-    // }
+            return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('genre/new.html.twig', [
+            'genre' => $genre,
+            'form' => $form,
+        ]);
+    }
 
     #[Route('/{id}/edit', name: 'genre_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Genre $genre, EntityManagerInterface $entityManager): Response

@@ -1,9 +1,8 @@
 {% extends "base.back.html.twig" %}
 
 {% block body %}
-    <main id="container" class="admin">
-        PROFILE
-        
+    <main class="admin">
+        <h2>PROFILE de {{app.user.username}}</h2>
         <ul>
             <li class="menu-li" data-target="collection-table">Collection</li>
             <table id="collection-table" class="menu-table hidden my-5 table table-striped">
@@ -101,9 +100,20 @@
                     </tr>
                 </tbody>
             </table>
+            <li class="menu-li" data-target="add-informations">Ajout d'informations</li>
+            <section id="add-informations" class="menu-table hidden">
+                <h3>Ajout d'informations</h3>
+                <p class="text">Chaque information que vous allez ajouter sera soumises à vérification par un administrateur</p>
+                <a href="{{ path('artist_new', {route: 'profile', idUser: app.user.id}) }}">Nouvel artiste</a>
+                <a href="{{ path('album_new', {route: 'profile', idUser: app.user.id}) }}">Nouvel album</a>
+                <a href="{{ path('format_new', {route: 'profile', idUser: app.user.id}) }}">Nouveau format</a>
+                <a href="{{ path('genre_new', {route: 'profile', idUser: app.user.id}) }}">Nouveau genre</a>
+                <a href="{{ path('country_new', {route: 'profile', idUser: app.user.id}) }}">Nouveau pays</a>
+                <a href="{{ path('song_new', {route: 'profile', idUser: app.user.id}) }}">Nouvelle chanson</a>
+            </section>
         </ul>
     </main>
-    {% block javascripts %}
-        {{ parent() }}
-    {% endblock %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}

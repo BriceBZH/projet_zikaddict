@@ -15,25 +15,32 @@ use Symfony\Component\Routing\Attribute\Route;
 class CountryController extends AbstractController
 {
 
-    // #[Route('/new', name: 'app_country_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $country = new Country();
-    //     $form = $this->createForm(CountryType::class, $country);
-    //     $form->handleRequest($request);
+    #[Route('/new', name: 'country_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $route = $request->query->get('route');
+        $idUser = $request->query->get('idUser');
+        $param = [];
+        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+            $param = ['idUser' => $idUser];
+        }
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($country);
-    //         $entityManager->flush();
+        $country = new Country();
+        $form = $this->createForm(CountryType::class, $country);
+        $form->handleRequest($request);
 
-    //         return $this->redirectToRoute('app_country_index', [], Response::HTTP_SEE_OTHER);
-    //     }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($country);
+            $entityManager->flush();
 
-    //     return $this->render('country/new.html.twig', [
-    //         'country' => $country,
-    //         'form' => $form,
-    //     ]);
-    // }
+            return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('country/new.html.twig', [
+            'country' => $country,
+            'form' => $form,
+        ]);
+    }
 
     #[Route('/{id}/edit', name: 'country_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Country $country, EntityManagerInterface $entityManager): Response

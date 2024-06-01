@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Format;
+use App\Entity\Album;
 use App\Form\FormatType;
 use App\Repository\FormatRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,25 +16,36 @@ use Symfony\Component\Routing\Attribute\Route;
 class FormatController extends AbstractController
 {
 
-    // #[Route('/new', name: 'app_format_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $format = new Format();
-    //     $form = $this->createForm(FormatType::class, $format);
-    //     $form->handleRequest($request);
+    #[Route('/new', name: 'format_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $route = $request->query->get('route');
+        $idUser = $request->query->get('idUser');
+        $param = [];
+        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+            $param = ['idUser' => $idUser];
+        }
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($format);
-    //         $entityManager->flush();
+        $album = new Album();
+        $format = new Format();
+        $form = $this->createForm(FormatType::class, $format);
+        $form->handleRequest($request);
 
-    //         return $this->redirectToRoute('app_format_index', [], Response::HTTP_SEE_OTHER);
-    //     }
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($format->getAlbums() as $album) {
+                $album->addFormat($format);
+            }
+            $entityManager->persist($format);
+            $entityManager->flush();
 
-    //     return $this->render('format/new.html.twig', [
-    //         'format' => $format,
-    //         'form' => $form,
-    //     ]);
-    // }
+            return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('format/new.html.twig', [
+            'format' => $format,
+            'form' => $form,
+        ]);
+    }
 
     #[Route('/{id}/edit', name: 'format_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Format $format, EntityManagerInterface $entityManager): Response

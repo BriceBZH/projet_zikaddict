@@ -7,6 +7,7 @@ use App\Form\SongType;
 use App\Repository\SongRepository;
 use App\Repository\ArtistRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,49 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/songs')]
 class SongController extends AbstractController
 {
+    #[Route('/new', name: 'song_new', methods: ['GET', 'POST'])]
+    public function new(AuthorizationCheckerInterface $authorization, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $route = $request->query->get('route');
+        $idUser = $request->query->get('idUser');
+        if ($authorization->isGranted('ROLE_ADMIN')) {
+            $valid = true;
+        } else {
+            $valid = false;
+        }
+        $param = [];
+        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+            $param = ['idUser' => $idUser];
+        } 
+
+        $song = new Song();
+        $form = $this->createForm(SongType::class, $song);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //if user is admin, valid is true, else valid is false
+            $song->setValid($valid);
+
+            foreach ($song->getArtists() as $artist) {
+                $artist->addSong($song);
+            }
+
+            foreach ($song->getAlbums() as $album) {
+                $album->addSong($song);
+            }
+
+            $entityManager->persist($song);
+            $entityManager->flush();
+
+            return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('songs/new.html.twig', [
+            'song' => $song,
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/{idSong}', name: 'song', methods: ['GET'])]
     public function displayOne(SongRepository $songRepository, ArtistRepository $artistRepository, int $idSong): Response {
         $song = $songRepository->find($idSong);

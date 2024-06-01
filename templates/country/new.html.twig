@@ -3,9 +3,11 @@
 {% block title %}New Country{% endblock %}
 
 {% block body %}
-    <h1>Create new Country</h1>
+    <main class="forms_bis">
+        <h2>Ajouter un pays</h2>
 
-    {{ include('country/_form.html.twig') }}
+        {{ include('country/_form.html.twig') }}
 
-    <a href="{{ path('app_country_index') }}">back to list</a>
+        <a href="{{ path('index') }}">Retour au profil</a>
+    </main>
 {% endblock %}

@@ -54,11 +54,7 @@
                 </nav>
             </header>
         {% endblock %}
-        {% block body %}
-            {% block javascripts %}
-                {{ encore_entry_script_tags('app') }}
-                <script src="{{ asset('/scripts/script.js') }}" type="application/javascript" ></script>
-            {% endblock %}
+        {% block body %} 
         {% endblock %}
         {% block footer %}
             <footer class="footer">
@@ -71,6 +67,10 @@
                 <hr />
                 <p>Ce site a pour vocation d'être un projet de formation, il n'est pas à but lucratif et n'est pas destiné à être utilisé en dehors de l'examen de fin de formation.</p>
             </footer>
+        {% endblock %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+            <script src="{{ asset('/scripts/script.js') }}" type="application/javascript" ></script>
         {% endblock %}
     </body>
 </html>
