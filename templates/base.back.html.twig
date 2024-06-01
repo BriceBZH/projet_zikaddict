@@ -31,7 +31,8 @@
                         <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
                 </div>
-                <nav>
+                <div id="icons"></div>
+                <nav id="nav">
                     <menu>
                         <li><a href="{{ path('index') }}">Accueil</a></li>
                         <li><a href="{{ path('artists') }}">Artistes</a></li>
@@ -70,6 +71,7 @@
         {% endblock %}
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+            <script src="{{ asset('scripts/menu.js') }}" type="application/javascript"></script>
             <script src="{{ asset('/scripts/script.js') }}" type="application/javascript" ></script>
         {% endblock %}
     </body>

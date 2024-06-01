@@ -1,20 +1,62 @@
 .admin {
+    .form_button {
+        background-color: $lightGrey;
+        border-radius: 15px;
+        padding: 0.5em;
+        text-decoration: none;
+        border: 1px solid $black;
+        &:hover {
+            background-color: $blueElectrik;
+            color: $white;
+        }
+    }
+    
     ul {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 1em;
         .menu-li {
             width: 80%;
-            border: 1px solid black;
+            border: 1px solid $black;
+            border-radius: 15px;
             text-align: center;
             &:hover {
-                background-color: red;
+                background-color: $orange;
                 cursor: pointer;
             }
+            #li_icons {
+                display: inline;
+                position: absolute;
+                right: 10em;
+                background-color: $black;
+                width: 1em;
+                color: $white;
+            }       
         }
-        
+        .menu-table {
+            width: 80%; // Définir une largeur pour le tableau
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            border: 1px solid $black;
+            border-radius: 15px;
+            background-color: $white;
+            margin-bottom: 0;
+        }
+        .hidden {
+            display: none;
+        }
     }
-    .hidden {
-        display: none;
-        .action {
-            display:flex;
+    
+
+    @media screen and (min-width: $min-width) {
+        ul {
+            .menu-li {
+                #li_icons {
+                    right: 20em;
+                }
+            }
         }
     }
 }

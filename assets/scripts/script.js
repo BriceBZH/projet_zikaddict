@@ -17,15 +17,15 @@ document.addEventListener("DOMContentLoaded", function() {
             let target = this.getAttribute('data-target');
             tables.forEach(function(table) {
                 if (table.id === target) {
-                    if (table.style.display === 'block') {
-                        table.style.display = 'none';
-                    } else {
-                        table.style.display = 'block';
-                    }
-                } else {
-                    table.style.display = 'none';
+                    table.classList.toggle("hidden");
                 }
             });
+            let icon = this.querySelector('#li_icons');
+                if (icon.textContent === '⊻') {
+                    icon.textContent = '⊼';
+                } else {
+                    icon.textContent = '⊻';
+                }
         });
     });
 });

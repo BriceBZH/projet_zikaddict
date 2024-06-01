@@ -4,8 +4,8 @@
     <main class="admin">
         <h2>PROFILE de {{app.user.username}}</h2>
         <ul>
-            <li class="menu-li" data-target="collection-table">Collection</li>
-            <table id="collection-table" class="menu-table hidden my-5 table table-striped">
+            <li class="menu-li" data-target="collection-table">Collection d'albums<div id="li_icons">⊻</div></li>
+            <table id="collection-table" class="menu-table hidden table table-striped">
                 <thead>
                     <tr>
                         <th>Artist</th>
@@ -43,8 +43,8 @@
                     {% endif %}
                 </tfoot>
             </table>
-            <li class="menu-li" data-target="search-table">Search</li>
-            <table id="search-table" class="menu-table hidden my-5 table table-striped">
+            <li class="menu-li" data-target="search-table">Album recherchés<div id="li_icons">⊻</div></li>
+            <table id="search-table" class="menu-table hidden table table-striped">
                 <thead>
                     <tr>
                         <th>Artist</th>
@@ -82,7 +82,7 @@
                     {% endif %}
                 </tfoot>
             </table>
-            <li class="menu-li" data-target="import-table">Import de fichier</li>
+            <li class="menu-li" data-target="import-table">Import de fichier<div id="li_icons">⊻</div></li>
             <table id="import-table" class="menu-table hidden">
                 <tbody>
                     <tr>
@@ -100,16 +100,16 @@
                     </tr>
                 </tbody>
             </table>
-            <li class="menu-li" data-target="add-informations">Ajout d'informations</li>
+            <li class="menu-li" data-target="add-informations">Ajout d'informations<div id="li_icons">⊻</div></li>
             <section id="add-informations" class="menu-table hidden">
                 <h3>Ajout d'informations</h3>
                 <p class="text">Chaque information que vous allez ajouter sera soumises à vérification par un administrateur</p>
-                <a href="{{ path('artist_new', {route: 'profile', idUser: app.user.id}) }}">Nouvel artiste</a>
-                <a href="{{ path('album_new', {route: 'profile', idUser: app.user.id}) }}">Nouvel album</a>
-                <a href="{{ path('format_new', {route: 'profile', idUser: app.user.id}) }}">Nouveau format</a>
-                <a href="{{ path('genre_new', {route: 'profile', idUser: app.user.id}) }}">Nouveau genre</a>
-                <a href="{{ path('country_new', {route: 'profile', idUser: app.user.id}) }}">Nouveau pays</a>
-                <a href="{{ path('song_new', {route: 'profile', idUser: app.user.id}) }}">Nouvelle chanson</a>
+                <a href="{{ path('artist_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvel artiste</a>
+                <a href="{{ path('album_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvel album</a>
+                <a href="{{ path('format_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouveau format</a>
+                <a href="{{ path('genre_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouveau genre</a>
+                <a href="{{ path('country_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouveau pays</a>
+                <a href="{{ path('song_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvelle chanson</a>
             </section>
         </ul>
     </main>
