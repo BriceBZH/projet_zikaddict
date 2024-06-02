@@ -1,6 +1,24 @@
 .header {
     background-color: $blueElectrik;
     color: $white;
+    #accessibility-tools {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: $lightGrey;
+        padding: 10px;
+        border-radius: 5px;
+        display: none;
+    }    
+    #tools {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        padding: 10px;
+        background-color: $lightGrey;
+        border: none;
+        border-radius: 5px;
+    }
     .libelleLogo {
         display: flex;
         flex-direction: column;
@@ -92,6 +110,14 @@
     ***************************************************************** */
 
     @media screen and (min-width: $min-width) {
+        #tools {
+            left: unset;
+            right: 10px;        
+        }
+        #accessibility-tools {
+            left: unset;
+            right: 10px;        
+        }
         #icons {
             display: none;
         }

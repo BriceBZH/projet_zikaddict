@@ -29,7 +29,11 @@ body {
   font-size: 1.8em;
   line-height: 1.5;
   background-color: $lightGrey;
-  color : $black;
+  color: $black;
+  &.dark_mode {
+    background-color: $black;
+    color: $white;
+  }
   h2 {
     font-family: "Sirin Stencil";
     font-size: 2.5rem;

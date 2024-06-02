@@ -17,6 +17,12 @@
 <body>
     {% block header %}
         <header class="header">
+            <button id="tools">Accessibilité</button>
+            <div id="accessibility-tools">
+                <button id="increase_text_size">A+</button>
+                <button id="decrease_text_size">A-</button>
+                <button id="dark_mode">Mode Sombre</button>
+            </div>
             <div class="libelleLogo">
                 <a href="{{ path('index') }}"><img alt="logo" class="logo" src="{{ asset('imgs/logo.png') }}" /></a>
                 <h1>Zik Addict</h1>
@@ -67,6 +73,7 @@
         {{ encore_entry_script_tags('app') }}
         <script src="{{ asset('scripts/menu.js') }}" type="application/javascript"></script>
         <script src="{{ asset('scripts/cards.js') }}" type="application/javascript"></script>
+        <script src="{{ asset('scripts/accessibility.js') }}" type="application/javascript"></script>
     {% endblock %}
 </body>
 </html>
