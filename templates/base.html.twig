@@ -2,6 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Site pour collecteur d'albums de musique de tout type, ici référencez vos collections">
+    <meta name="keywords" content="Référencement d'album par artiste musicaux">
+    <meta property="og:title" content="Zik Addict">
+    <meta property="og:description" content="Site pour collecteur d'albums de musique de tout type, ici référencez vos collections">
+    <meta property="og:image" content="{{ asset('imgs/logo.png') }}">
+    <meta property="og:url" content="{{ app.request.uri }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Zik Addict">
+    <meta name="twitter:description" content="Site pour collecteur d'albums de musique de tout type, ici référencez vos collections">
+    <meta name="twitter:image" content="{{ asset('imgs/logo.png') }}">
+    <link rel="canonical" href="{{ app.request.uri }}">
     <title>{% block title %}{% endblock %}| ZikAddict</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9,27 +21,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Athiti:wght@500&family=Merienda&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20128%20128'%3E%3Ctext%20y='1.2em'%20font-size='96'%3E⚫️%3C/text%3E%3Ctext%20y='1.3em'%20x='0.2em'%20font-size='76'%20fill='%23fff'%3Esf%3C/text%3E%3C/svg%3E">
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
 </head>
 <body>
     {% block header %}
-        <header class="header">
-            <button id="tools">Accessibilité</button>
-            <div id="accessibility-tools">
-                <button id="increase_text_size">A+</button>
-                <button id="decrease_text_size">A-</button>
-                <button id="dark_mode">Mode Sombre</button>
-            </div>
+        <header class="header"> 
             <div class="libelleLogo">
-                <a href="{{ path('index') }}"><img alt="logo" class="logo" src="{{ asset('imgs/logo.png') }}" /></a>
+                <a href="{{ path('index') }}"><img alt="logo Zik Addict" class="logo" src="{{ asset('imgs/logo.png') }}" /></a>
                 <h1>Zik Addict</h1>
-                <form class="search-form" action="{{ path('search') }}" method="GET">
-                    <input class="search-input" type="text" name="query" placeholder="Rechercher...">
-                    <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </form>
+                <div class="test">
+                    <div id="tools-accessibility">
+                        <button id="tools">Accessibilité</button>
+                        <div id="accessibility-tools">
+                            <button id="increase_text_size">A+</button>
+                            <button id="decrease_text_size">A-</button>
+                            <button id="dark_mode">Mode Sombre</button>
+                        </div>
+                    </div>
+                    <form class="search-form" action="{{ path('search') }}" method="GET">
+                        <input class="search-input" type="text" name="query" placeholder="Rechercher...">
+                        <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                </div>
+                
             </div>
             <div id="icons"></div>
             <nav id="nav">
@@ -71,9 +88,9 @@
     {% endblock %}
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
-        <script src="{{ asset('scripts/menu.js') }}" type="application/javascript"></script>
-        <script src="{{ asset('scripts/cards.js') }}" type="application/javascript"></script>
-        <script src="{{ asset('scripts/accessibility.js') }}" type="application/javascript"></script>
+        <script src="{{ asset('scripts/menu.js') }}"></script>
+        <script src="{{ asset('scripts/cards.js') }}"></script>
+        <script src="{{ asset('scripts/accessibility.js') }}"></script>
     {% endblock %}
 </body>
 </html>

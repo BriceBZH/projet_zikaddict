@@ -64,6 +64,15 @@ class ArtistRepository extends ServiceEntityRepository
        ;
     }
 
+    /* Equals findByNotValid() with PDO
+    $query = $this->db->prepare('SELECT * FROM artists WHERE valid = :valid');
+    $parameters = [
+        'valid' => 0,
+    ];
+    $query->execute($parameters);
+    $artistDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     // public function deleteArtist(Artist $artist) : void {
     //     $idArtist = $artist->getId();
     //     $conn = $this->getEntityManager()->getConnection();

@@ -5,10 +5,10 @@ document.addEventListener("DOMContentLoaded", function() {
     icons.addEventListener("click", () => {
         nav.classList.toggle("on");
         if (document.querySelector("nav").classList.contains("on")) {
-            // Si la classe on est présente, changez le contenu de l'icône à "✕"
+            // If the class "on" is present, change the icon content to "✕".
             icons.setAttribute("data-content", "✕");
         } else {
-            // Si la classe on n'est pas présente, changez le contenu de l'icône à "☰"
+            // If the class "on" is not present, change the icon content to "☰".
             icons.setAttribute("data-content", "☰");
         }
     })

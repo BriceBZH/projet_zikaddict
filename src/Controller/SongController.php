@@ -21,13 +21,13 @@ class SongController extends AbstractController
     {
         $route = $request->query->get('route');
         $idUser = $request->query->get('idUser');
-        if ($authorization->isGranted('ROLE_ADMIN')) {
+        if ($authorization->isGranted('ROLE_ADMIN')) { //if user as admin role, valid is TRUE
             $valid = true;
         } else {
             $valid = false;
         }
         $param = [];
-        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+        if($idUser) { //If there is a parameter like an id (for the user's page)
             $param = ['idUser' => $idUser];
         } 
 
@@ -35,15 +35,14 @@ class SongController extends AbstractController
         $form = $this->createForm(SongType::class, $song);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            //if user is admin, valid is true, else valid is false
+        if ($form->isSubmitted() && $form->isValid()) { //if user is admin, valid is true, else valid is false
             $song->setValid($valid);
 
-            foreach ($song->getArtists() as $artist) {
+            foreach ($song->getArtists() as $artist) { //add song in artist's collection
                 $artist->addSong($song);
             }
 
-            foreach ($song->getAlbums() as $album) {
+            foreach ($song->getAlbums() as $album) { //add song in album's collection
                 $album->addSong($song);
             }
 
