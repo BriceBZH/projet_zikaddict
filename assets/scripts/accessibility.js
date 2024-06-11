@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showTools.addEventListener('click', () => {
         if (tools.style.display === 'none' || tools.style.display === '') {
-            tools.style.display = 'block';
+            tools.style.display = 'flex';
         } else {
             tools.style.display = 'none';
         }

@@ -1,24 +1,6 @@
 .header {
     background-color: $blueElectrik;
-    color: $white;
-    #accessibility-tools {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        background-color: $lightGrey;
-        padding: 10px;
-        border-radius: 5px;
-        display: none;
-    }    
-    #tools {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        padding: 10px;
-        background-color: $lightGrey;
-        border: none;
-        border-radius: 5px;
-    }
+    color: $white;   
     .libelleLogo {
         display: flex;
         flex-direction: column;
@@ -45,7 +27,6 @@
             flex-direction: row;
             width: 100%;
             text-align: center;
-            // margin-bottom: 10px;
             .search-input {
                 padding: 8px;
                 border-radius: 4px;
@@ -71,8 +52,28 @@
                 }
             }
         }
+        #tools-accessibility {
+            #accessibility-tools {
+                position: fixed;
+                top: 60px;
+                left: 10px;
+                background-color: $lightGrey;
+                padding: 10px;
+                border-radius: 5px;
+                display: none;
+            }    
+            #tools {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                padding: 10px;
+                background-color: $lightGrey;
+                border: none;
+                border-radius: 5px;
+            }
+        }
     }
-    
+ 
     #icons {
         display: block;
         cursor: pointer;
@@ -119,14 +120,6 @@
     ***************************************************************** */
 
     @media screen and (min-width: $min-width) {
-        // #tools {
-        //     left: unset;
-        //     right: 10px;        
-        // }
-        // #accessibility-tools {
-        //     left: unset;
-        //     right: 10px;        
-        // }
         #icons {
             display: none;
         }
@@ -136,11 +129,45 @@
         }
 
         .libelleLogo {
-            justify-content: space-evently;
+            display: flex;
+            justify-content: space-around;
             flex-direction: row;
             padding-bottom: 0;
             h1 {
-                font-size: 8rem;
+                width: 60%;
+                font-size: 10rem;
+            }
+            a {
+                padding: 0.5em;
+                width :15%;
+                img {
+                    width :100%;
+                    height: 100%;
+                }
+            }
+            .bloc {
+                display: flex;
+                flex-direction: column;
+                align-items: end;
+                width: 20%;
+                height: 100%;
+                padding-bottom: 2em;
+                #tools-accessibility {
+                    padding-bottom: 1em;
+                    display: flex;
+                    flex-direction: row;
+                    #accessibility-tools {
+                        position: static;
+                    }   
+                    #tools {
+                        position: static;
+                        margin-right: 2px;
+                    }
+                }
+                .search-form {
+                    display: flex;
+                    justify-content: right;
+                }
             }
         }
 
