@@ -2,93 +2,93 @@
 
 ## Description
 
-Zik Addict est une application web conçue pour les collectionneurs d’albums de musique. L'objectif principal est de permettre aux utilisateurs de référencer leurs albums et de créer des listes d'albums qu'ils cherchent à acquérir. En générant ces listes dans des formats pratiques tels que Word, Excel ou PDF, Zik Addict simplifie la gestion et l'organisation des collections musicales.
+Zik Addict is a web application designed for music album collectors. Its primary goal is to allow users to catalog their albums and create wishlists of albums they wish to acquire. By generating these lists in practical formats such as Word, Excel, or PDF, Zik Addict simplifies the management and organization of music collections.
 
-Avec une base de données fournie, Zik Addict permet également aux utilisateurs de découvrir de nouveaux artistes ou des albums d’artistes déjà connus, enrichissant ainsi leur expérience musicale.
+With a provided database, Zik Addict also enables users to discover new artists or albums from familiar artists, enriching their music experience.
 
-## Fonctionnalités
+## Features
 
-- Référencement d'albums de musique.
-- Création de listes d'albums recherchés.
-- Génération de listes en formats Word, Excel et PDF.
-- Découverte de nouveaux artistes et albums grâce à une base de données fournie.
-- Gestion et organisation simplifiées des collections musicales.
-- Utilisation de Sass pour le style.
+- Cataloging music albums.
+- Creating wishlists of desired albums.
+- Generating lists in Word, Excel, and PDF formats.
+- Discovering new artists and albums through a provided database.
+- Simplified management and organization of music collections.
+- Utilization of Sass for styling.
 
 ## Technologies
 
-- **Framework** : Symfony 7.0.4
-- **Langage** : PHP
-- **Base de données** : MySQL / PostgreSQL / SQLite
-- **Front-end** : HTML, CSS (Sass), JavaScript
-- **Exports** : Word, Excel, PDF
+- **Framework**: Symfony 7.0.4
+- **Language**: PHP
+- **Database**: MySQL / PostgreSQL / SQLite
+- **Front-end**: HTML, CSS (Sass), JavaScript
+- **Exports**: Word, Excel, PDF
 
 ## Installation
 
-### Prérequis
+### Prerequisites
 
-- PHP 7.4 ou supérieur
+- PHP 7.4 or higher
 - Composer
 - Symfony CLI
-- Serveur web (Apache, Nginx, etc.)
-- Base de données (MySQL, PostgreSQL, SQLite, etc.)
+- Web server (Apache, Nginx, etc.)
+- Database (MySQL, PostgreSQL, SQLite, etc.)
 
-### Étapes d'installation
+### Installation Steps
 
-1. Clonez le dépôt :
+1. Clone the repository:
     ```bash
     git clone https://github.com/BriceBZH/projet_zikaddict.git
     cd projet_zikaddict
     ```
 
-2. Installez les dépendances :
+2. Install dependencies:
     ```bash
     composer install
     ```
 
-3. Configurez les variables d'environnement :
+3. Configure environment variables:
     ```bash
     cp .env.example .env
     ```
-    Mettez à jour `.env` avec les paramètres de votre base de données et autres configurations nécessaires.
+    Update `.env` with your database and other configuration settings.
 
-4. Importez la base de données depuis le dump fourni :
+4. Import the database from the provided dump:
     ```bash
     mysql -u root -p ma_base_de_donnees < dump/mon_dump.sql
     ```
-    Remplacez `ma_base_de_donnees` par le nom de votre base de données et ajustez la commande en fonction de votre système de gestion de base de données.
+    Replace `ma_base_de_donnees` with your database name and adjust the command based on your database management system.
 
-5. Lancez le serveur de développement Symfony :
+5. Start the Symfony development server:
     ```bash
-    symfony server:start
+    symfony serve
     ```
-    Accédez à l'application via `http://localhost:8000`.
+    Access the application via `http://localhost:8000`.
 
-## Utilisation
+## Usage
 
-1. **Référencement d'albums** : Ajoutez vos albums de musique préférés à votre collection personnelle.
-2. **Création de listes** : Créez et gérez des listes d'albums que vous souhaitez acquérir.
-3. **Export des listes** : Exportez vos listes au format Word, Excel ou PDF pour une gestion plus facile.
-4. **Découverte musicale** : Utilisez la base de données pour découvrir de nouveaux artistes et albums.
+1. **Album cataloging**: Add your favorite music albums to your personal collection.
+2. **Wishlist creation**: Create and manage lists of albums you want to acquire.
+3. **List exports**: Export your lists in Word, Excel, or PDF format for easier management.
+4. **Music discovery**: Utilize the database to discover new artists and albums.
 
 ## Contribution
 
-Les contributions sont les bienvenues ! Pour contribuer :
+Contributions are welcome! To contribute:
 
-1. Forkez le projet.
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/ma-fonctionnalité`).
-3. Commitez vos changements (`git commit -m 'Ajout de ma fonctionnalité'`).
-4. Poussez vers la branche (`git push origin feature/ma-fonctionnalité`).
-5. Ouvrez une Pull Request.
+1. Fork the project.
+2. Create a feature branch (`git checkout -b feature/my-feature`).
+3. Commit your changes (`git commit -m 'Added my feature'`).
+4. Push to the branch (`git push origin feature/my-feature`).
+5. Open a pull request.
 
-## Licence
+## License
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Auteurs
+## Authors
 
 RUBEAUX Brice
 
 ---
 
-Merci d'utiliser Zik Addict !
+Thank you for using Zik Addict!
