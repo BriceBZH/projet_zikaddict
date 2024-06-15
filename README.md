@@ -85,9 +85,9 @@ Les contributions sont les bienvenues ! Pour contribuer :
 
 Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
-## Contact
+## Auteurs
 
-Pour toute question ou suggestion, n'hésitez pas à contacter l'équipe de développement à l'adresse email : contact@zikaddict.com.
+RUBEAUX Brice
 
 ---
 
