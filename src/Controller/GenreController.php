@@ -35,6 +35,8 @@ class GenreController extends AbstractController
             return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
         }
 
+        $this->addFlash('notice', 'Le genre musical est bien ajouté');
+
         return $this->render('genre/new.html.twig', [
             'genre' => $genre,
             'form' => $form,

@@ -40,7 +40,7 @@ body {
     text-transform: uppercase;
     color: $red;
     text-align: center;
-    margin-bottom: 2em;
+    margin-bottom: 4em;
     margin-top: 1em;
   }
   h2::before {
@@ -61,9 +61,10 @@ body {
     font-family: "Sirin Stencil";
     font-size: 1.8rem;
   }
-  // a {
-  //   text-decoration: none;
-  // }
+  a {
+    color: $blueElectrik;
+    font-weight: bold;
+  }
 }
 
 

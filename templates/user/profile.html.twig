@@ -3,6 +3,9 @@
 {% block body %}
     <main class="admin">
         <h2>PROFILE de {{app.user.username}}</h2>
+        {% for notice in app.flashes('notice') %}
+            <span class="flash_notice">{{ notice }}</span>
+        {% endfor %}
         <ul>
             <li class="menu-li" data-target="collection-table">Collection d'albums<div id="li_icons">⊻</div></li>
             <table id="collection-table" class="menu-table hidden table table-striped">

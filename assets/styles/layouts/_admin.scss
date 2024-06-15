@@ -10,7 +10,18 @@
             color: $white;
         }
     }
-    
+    .flash_notice {
+        text-align: center;
+        background-color: $orange;
+        color: $black;
+        border: 1px solid $black;
+        width: 50%;
+        border-radius: 10px;
+        display: block; /* Utiliser display: block pour que chaque message soit sur une nouvelle ligne */
+        padding: 1em; /* Pour espacer les messages entre eux */
+        margin: 0 auto;
+    }
+
     ul {
         display: flex;
         align-items: center;
@@ -46,6 +57,9 @@
         }
         .hidden {
             display: none;
+        }
+        .medias_admin {
+            width: 20%;
         }
     }
     
