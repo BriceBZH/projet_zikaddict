@@ -1,0 +1,44 @@
+.index {
+    padding: 1em;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: left;
+    ul {
+        width: 100%;
+        li {
+            display: flex;
+            flex-direction: row;
+            align-items: center; // Alignement vertical des éléments sur l'axe croisé
+            margin-bottom: 0.5em;
+            img {
+                display: inline-block;
+                margin-right: 1em;
+            }
+            .album-info {
+                flex: 1; // Permet au texte de prendre tout l'espace disponible
+                p {
+                    margin: 0; // Supprime les marges par défaut des paragraphes
+                    display: inline-block;
+                }
+                .note {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+    
+    /* *****************************************************************
+    DESKTOP
+    ***************************************************************** */
+
+    @media screen and (min-width: $min-width) {
+        .two-columns {
+            column-count: 2;
+            column-gap: 70%; /* Ajustez l'espace entre les colonnes si nécessaire */
+            .two-columns li {
+                break-inside: avoid; /* Empêche les éléments de se briser entre les colonnes */
+            }
+        }
+    }
+    
+}

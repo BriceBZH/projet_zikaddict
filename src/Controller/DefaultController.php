@@ -3,21 +3,46 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ArtistRepository;
 use App\Repository\AlbumRepository;
 use App\Repository\SongRepository;
 use App\Repository\MediaRepository;
+use App\Services\DeezerService;
 
 class DefaultController extends AbstractController
 {
+    private $deezerService;
+
+    public function __construct(DeezerService $deezerService)
+    {
+        $this->deezerService = $deezerService;
+    }
+
     #[Route('/', name: 'index')]
     public function index(): Response
     {
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController',
         ]);
+    }
+
+    #[Route('/test', name: 'test')]
+    public function test(DeezerService $deezerService): Response
+    {
+        $api_albums_url = $this->deezerService->getAlbumsUrl();
+        $data = json_decode($api_albums_url, true);
+        return new JsonResponse($data);
+    }
+
+    #[Route('/test2/{idAlbum}', name: 'test2')]
+    public function test2(DeezerService $deezerService, int $idAlbum): Response
+    {
+        $api_album_url = $this->deezerService->getAlbumUrl($idAlbum);
+        $data = json_decode($api_album_url, true);
+        return new JsonResponse($data);
     }
 
     #[Route('/credits', name: 'credits')]
