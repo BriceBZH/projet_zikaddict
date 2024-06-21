@@ -29,8 +29,8 @@ class GenreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $escapedName = htmlspecialchars($genre->getLibelle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $genre->setLibelle($escapedName);
+            $escaped = htmlspecialchars($genre->getLibelle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $genre->setLibelle($escaped);
             $entityManager->persist($genre);
             $entityManager->flush();
 
@@ -52,9 +52,13 @@ class GenreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $escaped = htmlspecialchars($genre->getLibelle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $genre->setLibelle($escaped);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_genre_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('notice', 'Le genre musical à bien été modifié');
+
+            return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('genre/edit.html.twig', [

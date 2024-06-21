@@ -23,7 +23,7 @@ class MediaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_media_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('media/edit.html.twig', [
@@ -40,6 +40,6 @@ class MediaController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_media_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
     }
 }

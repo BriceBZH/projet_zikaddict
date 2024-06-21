@@ -39,7 +39,7 @@ class FormatController extends AbstractController
             }
             $entityManager->persist($format);
             $entityManager->flush();
-            
+
             $this->addFlash('notice', 'Le format est bien ajouté');
 
             return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
@@ -58,9 +58,13 @@ class FormatController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $escapedName = htmlspecialchars($format->getLibelle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $format->setLibelle($escapedName);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_format_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('notice', 'Le format à bien été modifié');
+
+            return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('format/edit.html.twig', [
