@@ -30,8 +30,12 @@ class CountryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $escapedName = htmlspecialchars($country->getName(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $country->setName($escapedName);
             $entityManager->persist($country);
             $entityManager->flush();
+
+            $this->addFlash('notice', 'Le pays est bien ajouté');
 
             return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
         }

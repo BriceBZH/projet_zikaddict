@@ -1,5 +1,7 @@
 {% extends "base.back.html.twig" %}
 
+{% block title %}Profile de {{app.user.username}}{% endblock %}
+
 {% block body %}
     <main class="admin">
         <h2>PROFILE de {{app.user.username}}</h2>
@@ -105,7 +107,7 @@
             </table>
             <li class="menu-li" data-target="add-informations">Ajout d'informations<div id="li_icons">⊻</div></li>
             <section id="add-informations" class="menu-table hidden">
-                <h3>Ajout d'informations</h3>
+                <h3>Formulaires d'ajout d'informations</h3>
                 <p class="text">Chaque information que vous allez ajouter sera soumises à vérification par un administrateur</p>
                 <a href="{{ path('artist_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvel artiste</a>
                 <a href="{{ path('album_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvel album</a>
@@ -116,7 +118,4 @@
             </section>
         </ul>
     </main>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
 {% endblock %}

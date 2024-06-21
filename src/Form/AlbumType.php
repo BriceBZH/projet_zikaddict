@@ -17,13 +17,18 @@ class AlbumType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('year')
+            ->add('title', null, [
+                'label' => "Titre de l'album"
+            ])
+            ->add('year', null, [
+                'label' => "Année de sortie"
+            ])
             ->add('artists', EntityType::class, [
                 'class' => Artist::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => false,
+                'label' => "Artistes"
             ])
             ->add('formats', EntityType::class, [
                 'class' => Format::class,

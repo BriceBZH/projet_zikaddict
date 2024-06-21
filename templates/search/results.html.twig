@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Results{% endblock %}
+{% block title %}Resultats{% endblock %}
 
 {% block body %}
     <main class="cards">
@@ -31,7 +31,6 @@
                     <article>
                         <h3>{{album.getTitle()}}</h3>
                         <p>{{album.year}}</p>
-                        <p>{{album.songs|length }} Chansons</p>
                         <p><a href="{{ path('album', {idAlbum: album.id}) }}" class="link">Plus</a> 
                     </article>
                 </li>

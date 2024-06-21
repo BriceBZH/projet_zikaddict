@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Format{% endblock %}
+{% block title %}Modifier le format{% endblock %}
 
 {% block body %}
-    <h1>Edit Format</h1>
+    <main class="forms_bis">
+        <h2>Modifier le format</h2>
 
-    {{ include('format/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('format/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('admin') }}">back to list</a>
+        <a href="{{ path('admin') }}">Retour au profil</a>
+    </main>
 {% endblock %}

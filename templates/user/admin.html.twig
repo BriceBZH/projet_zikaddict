@@ -1,13 +1,15 @@
 {% extends "base.back.html.twig" %}
 
+{% block title %}Administration de {{app.user.username}}{% endblock %}
+
 {% block body %}
     <main class="admin">
-        ADMIN
+        <h2>PROFILE administrateur de {{app.user.username}}</h2>
         {% for notice in app.flashes('notice') %}
-            {{ notice }}
+            <span class="flash_notice">{{ notice }}</span>
         {% endfor %}
         <ul>
-            <li class="menu-li" data-target="data-online">Données en ligne</li>
+            <li class="menu-li" data-target="data-online">Données en ligne<div id="li_icons">⊻</div></li>
             <article id="data-online" class="menu-table hidden">
                 <h3>Artistes</h3>
                 <table class="my-5 table table-striped">
@@ -67,8 +69,8 @@
                             <tr>
                                 <td>{{album.title}}</td>
                                 <td>{{album.year}}</td>
-                                <td>{{album.createdAt.format('Y-m-d H:i:s')}}</td>
-                                <td>{{album.updateAt.format('Y-m-d H:i:s')}}</td>
+                                <td>{{album.createdAt.format('d/m/Y H:i:s')}}</td>
+                                <td>{{album.updateAt.format('d/m/Y H:i:s')}}</td>
                                 <td><img src="{{ asset('imgs/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" /></td>
                                 <td class="action">
                                     <a href="{{ path('album_edit', {'id': album.id}) }}" class="btn btn-success">
@@ -102,7 +104,6 @@
                                 <td>{{song.title}}</td>
                                 <td>{{song.description}}</td>
                                 <td>{{song.duration}}</td>
-                                {# <td>{{song.updateAt.format('Y-m-d H:i:s')}}</td> #}
                                 {# <td>{{song.album.title}}</td> #}
                                 <td>{{song.genre.libelle}}</td>
                                 <td class="action">
@@ -265,87 +266,130 @@
                     </tbody>
                 </table>
             </article>
-            <li class="menu-li" data-target="validate-table">Contrôle et validation</li>
-            <h3>Artistes</h3>
-            <h3>Albums</h3>
-            <h3>Chansons</h3>
-            <table id="validate-table" class="menu-table hidden">
-                <tbody>
-                    {% for artist in artistsNotValid %}
+            <li class="menu-li" data-target="validate-table">Contrôle et validation<div id="li_icons">⊻</div></li>
+            <article id="validate-table" class="menu-table hidden">
+                <h3>Artistes</h3>
+                <table class="my-5 table table-striped">
+                    <thead>
                         <tr>
-                            <td>{{artist.name}}</td>
-                            <td>{{artist.description}}</td>
-                            <td>{{artist.birthDate.format('Y-m-d H:i:s')}}</td>
-                            {# <td>{{artist.deathDate.format('Y-m-d H:i:s')}}</td> #}
-                            <td>{{artist.country.name}}</td>
-                            <td>{{artist.media.id}}</td>
-                            <td>{{artist.media.id}}</td>
-                            <td class="action">
-                                <form method="post" action="{{ path('artist_valid', {'id': artist.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet artiste ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ artist.id) }}">
-                                    <button type="submit" class="btn btn-warning">
-                                        <span class="bi bi-cart-check"></span>
-                                    </button>
-                                </form>
-                                <form method="post" action="{{ path('artist_delete', {'id': artist.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet artiste ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artist.id) }}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <span class="bi bi-trash-fill"></span>
-                                    </button>
-                                </form>
-                            </td>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Date de naissance</th>
+                            <th>Date de mort</th>
+                            <th>Pays</th>
+                            <th>Média</th>
+                            <th>Actions</th>
                         </tr>
-                    {% endfor %}
-                    {% for album in albumsNotValid %}
+                    </thead>
+                    <tbody>
+                        {% for artist in artistsNotValid %}
+                            <tr>
+                                <td>{{artist.name}}</td>
+                                <td>{{artist.description}}</td>
+                                <td>{{artist.birthDate.format('d/m/Y')}}</td>
+                                {% if artist.deathDate is not null %}
+                                    <td>{{artist.deathDate.format('d/m/Y')}}</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                                <td>{{artist.country.name}}</td>
+                                <td><img src="{{ asset('imgs/' ~ artist.media.url) }}" alt="{{ artist.media.alt }}" class="medias_admin" /></td>
+                                <td class="action">
+                                    <form method="post" action="{{ path('artist_valid', {'id': artist.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet artiste ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ artist.id) }}">
+                                        <button type="submit" class="btn btn-warning">
+                                            <span class="bi bi-cart-check"></span>
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{{ path('artist_delete', {'id': artist.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet artiste ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artist.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Albums</h3>
+                <table class="my-5 table table-striped">
+                    <thead>
                         <tr>
-                            <td>{{album.title}}</td>
-                            <td>{{album.year}}</td>
-                            <td>{{album.createdAt.format('Y-m-d H:i:s')}}</td>
-                            <td>{{album.updateAt.format('Y-m-d H:i:s')}}</td>
-                            <td>{{album.media.id}}</td>
-                            <td class="action">
-                                <form method="post" action="{{ path('album_valid', {'id': album.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet album ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ album.id) }}">
-                                    <button type="submit" class="btn btn-warning">
-                                        <span class="bi bi-cart-check"></span>
-                                    </button>
-                                </form>
-                                <form method="post" action="{{ path('album_delete', {'id': album.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet album ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ album.id) }}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <span class="bi bi-trash-fill"></span>
-                                    </button>
-                                </form>
-                            </td>
+                            <th>Titre</th>
+                            <th>Année</th>
+                            <th>Date de création</th>
+                            <th>Date de MAJ</th>
+                            <th>Média</th>
+                            <th>Actions</th>
                         </tr>
-                    {% endfor %}
-                    {% for song in songsNotValid %}
+                    </thead>
+                    <tbody>
+                        {% for album in albumsNotValid %}
+                            <tr>
+                                <td>{{album.title}}</td>
+                                <td>{{album.year}}</td>
+                                <td>{{album.createdAt.format('d/m/Y H:i:s')}}</td>
+                                <td>{{album.updateAt.format('d/m/Y H:i:s')}}</td>
+                                <td><img src="{{ asset('imgs/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" /></td>
+                                <td class="action">
+                                    <form method="post" action="{{ path('album_valid', {'id': album.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet album ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ album.id) }}">
+                                        <button type="submit" class="btn btn-warning">
+                                            <span class="bi bi-cart-check"></span>
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{{ path('album_delete', {'id': album.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet album ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ album.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Chansons</h3>
+                <table class="my-5 table table-striped"> 
+                    <thead>
                         <tr>
-                            <td>{{song.title}}</td>
-                            <td>{{song.description}}</td>
-                            <td>{{song.duration}}</td>
-                            {# <td>{{song.updateAt.format('Y-m-d H:i:s')}}</td> #}
-                            {# <td>{{song.album.title}}</td> #}
-                            <td>{{song.genre.libelle}}</td>
-                            <td class="action">
-                                <form method="post" action="{{ path('song_valid', {'id': song.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cette chanson ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ song.id) }}">
-                                    <button type="submit" class="btn btn-warning">
-                                        <span class="bi bi-cart-check"></span>
-                                    </button>
-                                </form>
-                                <form method="post" action="{{ path('song_delete', {'id': song.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cette chanson ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ song.id) }}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <span class="bi bi-trash-fill"></span>
-                                    </button>
-                                </form>
-                            </td>
+                            <th>Titre</th>
+                            <th>Description</th>
+                            <th>Durée</th>
+                            <th>Genre</th>
+                            <th>Actions</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <li class="menu-li" data-target="import-table">Import de fichier</li>
+                    </thead>
+                    <tbody>
+                        {% for song in songsNotValid %}
+                            <tr>
+                                <td>{{song.title}}</td>
+                                <td>{{song.description}}</td>
+                                <td>{{song.duration}}</td>
+                                {# <td>{{song.updateAt.format('Y-m-d H:i:s')}}</td> #}
+                                {# <td>{{song.album.title}}</td> #}
+                                <td>{{song.genre.libelle}}</td>
+                                <td class="action">
+                                    <form method="post" action="{{ path('song_valid', {'id': song.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cette chanson ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ song.id) }}">
+                                        <button type="submit" class="btn btn-warning">
+                                            <span class="bi bi-cart-check"></span>
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{{ path('song_delete', {'id': song.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cette chanson ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ song.id) }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="bi bi-trash-fill"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </article>
+            <li class="menu-li" data-target="import-table">Import de fichier<div id="li_icons">⊻</div></li>
             <table id="import-table" class="menu-table hidden">
                 <tbody>
                     <tr>
@@ -363,6 +407,17 @@
                     </tr>
                 </tbody>
             </table>
+            <li class="menu-li" data-target="add-informations">Ajout d'informations<div id="li_icons">⊻</div></li>
+            <section id="add-informations" class="menu-table hidden">
+                <h3>Formulaires d'ajout d'informations</h3>
+                <p class="text">Chaque information que vous allez ajouter sera soumises à vérification par un administrateur</p>
+                <a href="{{ path('artist_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvel artiste</a>
+                <a href="{{ path('album_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvel album</a>
+                <a href="{{ path('format_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouveau format</a>
+                <a href="{{ path('genre_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouveau genre</a>
+                <a href="{{ path('country_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouveau pays</a>
+                <a href="{{ path('song_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvelle chanson</a>
+            </section>
         </ul>
     </main>
 {% endblock %}

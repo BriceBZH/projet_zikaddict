@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Media{% endblock %}
+{% block title %}Modifier le média{% endblock %}
 
 {% block body %}
-    <h1>Edit Media</h1>
+    <main class="forms_bis">
+        <h2>Modifier le média</h2>
 
-    {{ include('media/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('media/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_media_index') }}">back to list</a>
+        <a href="{{ path('admin') }}">Retour au profil</a>
+    </main>
 {% endblock %}

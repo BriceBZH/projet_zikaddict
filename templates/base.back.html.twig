@@ -1,9 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
-        <html lang="fr">
         <meta charset="UTF-8">
-        <title> {% block title %}{% endblock %}| ZikAddict</title>
+        <meta name="description" content="Site pour collecteur d'albums de musique de tout type, ici référencez vos collections">
+        <meta name="keywords" content="Référencement d'album par artiste musicaux">
+        <meta property="og:title" content="Zik Addict">
+        <meta property="og:description" content="Site pour collecteur d'albums de musique de tout type, ici référencez vos collections">
+        <meta property="og:image" content="{{ asset('imgs/logo.png') }}">
+        <meta property="og:url" content="{{ app.request.uri }}">
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Zik Addict">
+        <meta name="twitter:description" content="Site pour collecteur d'albums de musique de tout type, ici référencez vos collections">
+        <meta name="twitter:image" content="{{ asset('imgs/logo.png') }}">
+        <link rel="canonical" href="{{ app.request.uri }}">
+        <title>{% block title %}{% endblock %} | ZikAddict</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Sirin+Stencil&display=swap" rel="stylesheet">
@@ -13,28 +24,27 @@
         <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20128%20128'%3E%3Ctext%20y='1.2em'%20font-size='96'%3E⚫️%3C/text%3E%3Ctext%20y='1.3em'%20x='0.2em'%20font-size='76'%20fill='%23fff'%3Esf%3C/text%3E%3C/svg%3E">        {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
-
-        {# {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %} #}
     </head>
     <body>
         {% block header %}
-            <header class="header">
-                <button id="tools">Accessibilité</button>
-                <div id="accessibility-tools">
-                    <button id="increase_text_size">A+</button>
-                    <button id="decrease_text_size">A-</button>
-                    <button id="dark_mode">Mode Sombre</button>
-                </div>
+            <header class="header"> 
                 <div class="libelleLogo">
-                    <a href="{{ path('index') }}"><img alt="logo" class="logo" src="{{ asset('imgs/logo.png') }}"></a>
+                    <a href="{{ path('index') }}"><img alt="logo Zik Addict" class="logo" src="{{ asset('imgs/logo.png') }}" /></a>
                     <h1>Zik Addict</h1>
-                    <form class="search-form" action="" method="GET">
-                        <input class="search-input" type="text" name="query" placeholder="Rechercher...">
-                        <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    </form>
+                    <div class="bloc">
+                        <div id="tools-accessibility">
+                            <button id="tools">Accessibilité</button>
+                            <div id="accessibility-tools">
+                                <button id="increase_text_size">A+</button>
+                                <button id="decrease_text_size">A-</button>
+                                <button id="dark_mode">Mode Sombre</button>
+                            </div>
+                        </div>
+                        <form class="search-form" action="{{ path('search') }}" method="GET">
+                            <input class="search-input" type="text" name="query" placeholder="Rechercher...">
+                            <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+                    </div>          
                 </div>
                 <span id="icons"></span>
                 <nav id="nav">

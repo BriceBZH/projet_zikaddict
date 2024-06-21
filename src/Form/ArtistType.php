@@ -17,13 +17,20 @@ class ArtistType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
+            ->add('name', null, [
+                'label' => "Nom de l'artiste"
+            ])
             ->add('description')
-            ->add('birthDate')
-            ->add('deathDate')
+            ->add('birthDate', null, [
+                'label' => 'Date de naissance'
+            ])
+            ->add('deathDate', null, [
+                'label' => 'Date de mort'
+            ])
             ->add('country', EntityType::class, [
                 'class' => Country::class,
                 'choice_label' => 'name',
+                'label' => "Pays d'origine"
             ])
             ->add('media', EntityType::class, [
                 'class' => Media::class,

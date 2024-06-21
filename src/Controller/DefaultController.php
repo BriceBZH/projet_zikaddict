@@ -29,22 +29,6 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    #[Route('/test', name: 'test')]
-    public function test(DeezerService $deezerService): Response
-    {
-        $api_albums_url = $this->deezerService->getAlbumsUrl();
-        $data = json_decode($api_albums_url, true);
-        return new JsonResponse($data);
-    }
-
-    #[Route('/test2/{idAlbum}', name: 'test2')]
-    public function test2(DeezerService $deezerService, int $idAlbum): Response
-    {
-        $api_album_url = $this->deezerService->getAlbumUrl($idAlbum);
-        $data = json_decode($api_album_url, true);
-        return new JsonResponse($data);
-    }
-
     #[Route('/credits', name: 'credits')]
     public function credits(MediaRepository $mediaRepository): Response
     {

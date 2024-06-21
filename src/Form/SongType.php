@@ -16,14 +16,19 @@ class SongType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
+            ->add('title', null, [
+                'label' => "Titre de la chanson"
+            ])
             ->add('description')
-            ->add('duration')
+            ->add('duration', null, [
+                'label' => "Durée de la chanson"
+            ])
             ->add('artists', EntityType::class, [
                 'class' => Artist::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => false,
+                'label' => "Artistes",
             ])
             ->add('albums', EntityType::class, [
                 'class' => Album::class,

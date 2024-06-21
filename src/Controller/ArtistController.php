@@ -48,13 +48,18 @@ class ArtistController extends AbstractController
             //if user is admin, valid is true, else valid is false
             $artist->setValid($valid);
 
-            $media =  $form->get('mediabis')->getData();
-            $artistName =  $artist->getName();
+            $media =  htmlspecialchars($form->get('mediabis')->getData(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $artistName =  htmlspecialchars($artist->getName(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $artistDescription =  htmlspecialchars($artist->getDescription(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $artist->setName($artistName);
+            $artist->setDescription($artistDescription);
             if(!empty($media)) { // if album media is not empty
                 $img = '../assets/imgs/'.$artistName;
                 $content = @file_get_contents($media);
                 if ($content === false) {
-                    echo "Erreur lors du téléchargement de l'image depuis l'URL.";
+                    $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
+
+                    return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
                 } else {
                     $extension = pathinfo($media, PATHINFO_EXTENSION);
                     $img .= '.'.$extension;
@@ -73,6 +78,8 @@ class ArtistController extends AbstractController
             $entityManager->persist($mediaArtist);         
             $entityManager->persist($artist);
             $entityManager->flush();
+
+            $this->addFlash('notice', "L'artiste est bien ajouté");
 
             return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
         }

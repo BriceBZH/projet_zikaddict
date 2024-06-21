@@ -22,7 +22,7 @@ class UserType extends AbstractType
                     'Admin' => 'ROLE_ADMIN',
                 ],
                 'multiple' => true,
-                'expanded' => true,
+                'expanded' => false,
             ])
             ->add('createdAt')
         ;

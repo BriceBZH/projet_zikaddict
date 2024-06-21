@@ -61,13 +61,16 @@ class AlbumController extends AbstractController
                 $album->addFormat($format);
             }
 
-            $media =  $form->get('mediabis')->getData();
-            $albumTitle =  $album->getTitle();
+            $media =  htmlspecialchars($form->get('mediabis')->getData(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $albumTitle =  htmlspecialchars($album->getTitle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $album->setTitle($albumTitle);
             if(!empty($media)) { // if album media is not empty
                 $img = '../assets/imgs/'.$albumTitle;
                 $content = @file_get_contents($media);
                 if ($content === false) {
-                    echo "Erreur lors du téléchargement de l'image depuis l'URL.";
+                    $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
+
+                    return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
                 } else {
                     $extension = pathinfo($media, PATHINFO_EXTENSION);
                     $img .= '.'.$extension;
@@ -86,6 +89,8 @@ class AlbumController extends AbstractController
             $entityManager->persist($mediaAlbum);         
             $entityManager->persist($album);
             $entityManager->flush();
+
+            $this->addFlash('notice', "L'album est bien ajouté");
 
             return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
         }

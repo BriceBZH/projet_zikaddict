@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Song{% endblock %}
+{% block title %}Modifier la chanson{% endblock %}
 
 {% block body %}
-    <h1>Edit Song</h1>
+    <main class="forms_bis">
+        <h2>Modifier la chanson</h2>
 
-    {{ include('songs/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('songs/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('admin') }}">back to list</a>
+        <a href="{{ path('admin') }}">Retour au profil</a>
+    </main>
 {% endblock %}

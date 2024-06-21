@@ -29,13 +29,15 @@ class GenreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $escapedName = htmlspecialchars($genre->getLibelle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $genre->setLibelle($escapedName);
             $entityManager->persist($genre);
             $entityManager->flush();
 
+            $this->addFlash('notice', 'Le genre musical est bien ajouté');
+
             return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
         }
-
-        $this->addFlash('notice', 'Le genre musical est bien ajouté');
 
         return $this->render('genre/new.html.twig', [
             'genre' => $genre,

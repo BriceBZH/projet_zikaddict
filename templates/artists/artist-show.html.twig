@@ -1,5 +1,7 @@
 {% extends "base.html.twig" %}
 
+{% block title %}{{artist.name}}{% endblock %}
+
 {% block body %}
     <main class="cards">
         <h2>
@@ -17,7 +19,6 @@
                     <article>
                         <h3>{{album.getTitle()}}</h3>
                         <p>{{album.year}}</p>
-                        <p>{{album.songs|length }} Chansons</p>
                         {% if app.user.userIdentifier is defined %}
                             {% set currentRoute = app.request.attributes.get('_route') %}
                             {% set param = app.request.attributes.get('idArtist') %}
