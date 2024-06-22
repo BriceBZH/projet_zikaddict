@@ -78,7 +78,7 @@ class SongController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            $this->addFlash('notice', 'La chanson à bien été modifiée');
+            $this->addFlash('notice', 'La chanson a bien été modifiée');
 
             return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
         }

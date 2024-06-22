@@ -10,6 +10,7 @@ use App\Repository\AlbumRepository;
 use App\Repository\SongRepository;
 use App\Repository\GenreRepository;
 use App\Repository\UserAlbumFormatRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Repository\FormatRepository;
 use App\Repository\CountryRepository;
 use App\Repository\MediaRepository;
@@ -56,12 +57,25 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $password_regex = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\w\d\s])(?=.*[a-zA-Z\d\W\S]).{8,}$/"; //@Test123456
+            $pass = $user->getPassword();
+            if(!preg_match($password_regex, $pass)) {
+                $this->addFlash('notice', "Le mot de passe n'est pas assez fort, Il faut 8 caractères, au moins 1 lettre capitale, 1 lettre minuscule, 1 chiffre et 1 caractère spécial");
+
+                return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+            }
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $pass
+                )
+            );
             $entityManager->flush();
 
             return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);

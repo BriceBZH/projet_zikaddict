@@ -192,7 +192,7 @@
                                 <td>{{user.username}}</td>
                                 {# <td>{{user.roles}}</td> #}
                                 <td>{{user.email}}</td>
-                                <td>{{user.createdAt.format('Y-m-d H:i:s')}}</td>
+                                <td>{{user.createdAt.format('d/m/Y H:i:s')}}</td>
                                 <td>{{user.isVerified}}</td>
                                 <td class="action">
                                     <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-success">
@@ -242,6 +242,8 @@
                         <tr>
                             <th>Alt</th>
                             <th>Url</th>
+                            <th>Source</th>
+                            <th>Image</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -250,6 +252,8 @@
                             <tr>
                                 <td>{{media.alt}}</td>
                                 <td>{{media.url}}</td>
+                                <td>{{media.urlSource}}</td>
+                                <td><img src="{{ asset('imgs/' ~ media.url) }}" alt="{{ media.alt }}" class="medias_admin" /></td>
                                 <td class="action">
                                     <a href="{{ path('media_edit', {'id': media.id}) }}" class="btn btn-success">
                                         <span class="bi bi-pencil-fill"></span>

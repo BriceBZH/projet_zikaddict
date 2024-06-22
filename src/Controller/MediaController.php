@@ -21,7 +21,34 @@ class MediaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            //new media is not empty so we modify old media
+            $media =  $form->get('mediabis')->getData();
+            $mediaName =  $medium->getAlt();
+            $oldMedia = $medium->getUrl();
+            if(!empty($media)) { // if album media is not empty
+                $img = '../assets/imgs/'.$mediaName;
+                $content = @file_get_contents($media);
+                if ($content === false) {
+                    $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
+
+                    return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
+                } else {
+                    $extension = pathinfo($media, PATHINFO_EXTENSION);
+                    $img .= '.'.$extension;
+                    $mediaNameImg = $mediaName.'.'.$extension;
+                    file_put_contents($img, $content);
+                }
+                //remove old picture form assets
+                unlink('../assets/imgs/'.$oldMedia);
+                //update media for artist
+                $medium->setUrl($mediaNameImg);
+                $medium->setUrlSource($media);
+            } 
+
             $entityManager->flush();
+
+            $this->addFlash('notice', "Le média a bien été modifié");
 
             return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
         }

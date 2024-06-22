@@ -8,6 +8,6 @@
 
         {{ include('artists/_form.html.twig') }}
 
-        <a href="{{ path('index') }}">Retour au profil</a>
+        <a href="{{ path('profile', {'idUser': app.request.query.get('idUser')}) }}">Retour au profil</a>
     </main>
 {% endblock %}

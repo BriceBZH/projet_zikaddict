@@ -44,7 +44,9 @@ class AlbumController extends AbstractController
         } 
 
         $album = new Album();
-        $form = $this->createForm(AlbumType::class, $album);
+        $form = $this->createForm(AlbumType::class, $album, [
+            'is_edit' => true,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -63,7 +65,6 @@ class AlbumController extends AbstractController
 
             $media =  $form->get('mediabis')->getData();
             $albumTitle =  $album->getTitle();
-            $album->setTitle($albumTitle);
             if(!empty($media)) { // if album media is not empty
                 $img = '../assets/imgs/'.$albumTitle;
                 $content = @file_get_contents($media);
@@ -116,11 +117,41 @@ class AlbumController extends AbstractController
     #[Route('/{id}/edit', name: 'album_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Album $album, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(AlbumType::class, $album);
+        $form = $this->createForm(AlbumType::class, $album, [
+            'is_edit' => true,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            //new media is not empty so we modify old media
+            $media =  $form->get('mediabis')->getData();
+            $albumTitle =  $album->getTitle();
+            $oldMedia = $album->getMedia();
+            if(!empty($media)) { // if album media is not empty
+                $img = '../assets/imgs/'.$albumTitle;
+                $content = @file_get_contents($media);
+                if ($content === false) {
+                    $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
+
+                    return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
+                } else {
+                    $extension = pathinfo($media, PATHINFO_EXTENSION);
+                    $img .= '.'.$extension;
+                    $albumTitleImg = $albumTitle.'.'.$extension;
+                    file_put_contents($img, $content);
+                }
+                //remove old picture form assets
+                unlink('../assets/imgs/'.$oldMedia->getUrl());
+                //update media for artist
+                $oldMedia->setUrl($albumTitleImg);
+                $oldMedia->setAlt($albumTitle);
+                $oldMedia->setUrlSource($media);
+            } 
+
             $entityManager->flush();
+
+            $this->addFlash('notice', "L'album a bien été modifié");
 
             return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
         }

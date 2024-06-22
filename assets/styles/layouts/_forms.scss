@@ -4,6 +4,17 @@
     max-width: 1100px;
     margin: 0 auto;
     padding-bottom: 5em;
+    .flash_notice {
+        text-align: center;
+        background-color: $orange;
+        color: $black;
+        border: 1px solid $black;
+        width: 50%;
+        border-radius: 10px;
+        display: block; /* Utiliser display: block pour que chaque message soit sur une nouvelle ligne */
+        padding: 1em; /* Pour espacer les messages entre eux */
+        margin: 0 auto;
+    }
     form {
         fieldset, div {
             display: flex;

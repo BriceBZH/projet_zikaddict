@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class RegistrationFormType extends AbstractType
 {
@@ -29,7 +30,7 @@ class RegistrationFormType extends AbstractType
                                 'label' => "Accepter les conditions",
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter les termes',
                     ]),
                 ],
             ])
@@ -39,14 +40,18 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
+                    new Assert\NotBlank([
+                        'message' => 'Veuillez entrer un mot de passe',
                     ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                    new Assert\Length([
+                        'min' => 8,
+                        'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
+                    ]),
+                    new Assert\Regex([
+                        'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\w\d\s])(?=.*[a-zA-Z\d\W\S]).{8,}$/',
+                        'message' => "Le mot de passe n'est pas assez fort, Il faut 8 caractères, au moins 1 lettre capitale, 1 lettre minuscule, 1 chiffre et 1 caractère spécial",
                     ]),
                 ],
             ])

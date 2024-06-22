@@ -58,7 +58,7 @@ class FormatController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            $this->addFlash('notice', 'Le format à bien été modifié');
+            $this->addFlash('notice', 'Le format a bien été modifié');
 
             return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
         }

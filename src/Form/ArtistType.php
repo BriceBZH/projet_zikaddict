@@ -31,28 +31,40 @@ class ArtistType extends AbstractType
                 'class' => Country::class,
                 'choice_label' => 'name',
                 'label' => "Pays d'origine"
-            ])
-            ->add('media', EntityType::class, [
-                'class' => Media::class,
-                'choice_label' => 'alt',
-                'attr' => [
-                    'style' => 'display: none;',
-                ],
-                'label_attr' => [
-                    'style' => 'display: none;',
-                ],
-            ])
-            ->add('mediabis', TextType::class, [
-                'label' => "Url du média",
-                'mapped' => false,
-            ])
-        ;
+            ]);
+            if ($options['is_edit']) { //if edit
+                $builder->add('media', EntityType::class, [
+                    'class' => Media::class,
+                    'choice_label' => 'alt',             
+                ])
+                ->add('mediabis', TextType::class, [
+                    'label' => "Url du nouveau média",
+                    'mapped' => false,
+                    'required' => false,
+                ]);
+            } else { //if add
+                $builder->add('media', EntityType::class, [
+                    'class' => Media::class,
+                    'choice_label' => 'alt',
+                    'attr' => [
+                        'style' => 'display: none;',
+                    ],
+                    'label_attr' => [
+                        'style' => 'display: none;',
+                    ],
+                ])
+                ->add('mediabis', TextType::class, [
+                    'label' => "Url du média",
+                    'mapped' => false,                 
+                ]);
+            }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Artist::class,
+            'is_edit' => false,
         ]);
     }
 }

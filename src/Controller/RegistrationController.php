@@ -33,6 +33,14 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $password_regex = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\w\d\s])(?=.*[a-zA-Z\d\W\S]).{8,}$/"; //@Test123456
+            $pass = $form->get('plainPassword')->getData();
+            // $pass = $user->getPassword();
+            if(!preg_match($password_regex, $pass)) {
+                $this->addFlash('notice', "Le mot de passe n'est pas assez fort, Il faut 8 caractères, au moins 1 lettre capitale, 1 lettre minuscule, 1 chiffre et 1 caractère spécial");
+
+                return $this->redirectToRoute('register', [], Response::HTTP_SEE_OTHER);
+            }
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -70,13 +78,13 @@ class RegistrationController extends AbstractController
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+            $this->addFlash('notice', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
             return $this->redirectToRoute('register');
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('notice', 'Your email address has been verified.');
 
         return $this->redirectToRoute('index');
     }

@@ -434,6 +434,7 @@ class FileController extends AbstractController
                 $content = @file_get_contents($item['artistMedia']);
                 if ($content === false) {
                     echo "Erreur lors du téléchargement de l'image depuis l'URL.";
+                    $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
                 } else {
                     $extension = pathinfo($item['artistMedia'], PATHINFO_EXTENSION);
                     $img .= '.' . $extension;
@@ -451,7 +452,7 @@ class FileController extends AbstractController
                 $albumMediaName = $item['albumTitle'];
                 $content = @file_get_contents($item['albumMedia']);
                 if ($content === false) {
-                    echo "Erreur lors du téléchargement de l'image depuis l'URL.";
+                    $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
                 } else {
                     $extension = pathinfo($item['albumMedia'], PATHINFO_EXTENSION);
                     $img .= '.' . $extension;
@@ -556,6 +557,8 @@ class FileController extends AbstractController
                 $entityManager->flush();
             }
         }
+        $this->addFlash('notice', "Le fichier a bien été importé");
+
         return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
     }
 
