@@ -36,12 +36,6 @@ class SongController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) { //if user is admin, valid is true, else valid is false
-            $songTitle =  htmlspecialchars($song->getTitle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $songDescription =  htmlspecialchars($song->getDescription(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $songDuration =  htmlspecialchars($song->getDuration(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $song->setTitle($songTitle);
-            $song->setDescription($songDescription);
-            $song->setDuration($songDuration);
             $song->setValid($valid);
 
             foreach ($song->getArtists() as $artist) { //add song in artist's collection
@@ -83,6 +77,8 @@ class SongController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $this->addFlash('notice', 'La chanson à bien été modifiée');
 
             return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
         }

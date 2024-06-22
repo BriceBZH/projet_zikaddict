@@ -32,8 +32,6 @@ class FormatController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $escapedName = htmlspecialchars($format->getLibelle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $format->setLibelle($escapedName);
             foreach ($format->getAlbums() as $album) {
                 $album->addFormat($format);
             }
@@ -58,8 +56,6 @@ class FormatController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $escapedName = htmlspecialchars($format->getLibelle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $format->setLibelle($escapedName);
             $entityManager->flush();
 
             $this->addFlash('notice', 'Le format à bien été modifié');

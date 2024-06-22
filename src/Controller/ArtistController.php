@@ -48,11 +48,8 @@ class ArtistController extends AbstractController
             //if user is admin, valid is true, else valid is false
             $artist->setValid($valid);
 
-            $media =  htmlspecialchars($form->get('mediabis')->getData(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $artistName =  htmlspecialchars($artist->getName(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $artistDescription =  htmlspecialchars($artist->getDescription(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $artist->setName($artistName);
-            $artist->setDescription($artistDescription);
+            $media =  $form->get('mediabis')->getData();
+            $artistName =  $artist->getName();
             if(!empty($media)) { // if album media is not empty
                 $img = '../assets/imgs/'.$artistName;
                 $content = @file_get_contents($media);

@@ -29,8 +29,6 @@ class GenreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $escaped = htmlspecialchars($genre->getLibelle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $genre->setLibelle($escaped);
             $entityManager->persist($genre);
             $entityManager->flush();
 
@@ -52,8 +50,6 @@ class GenreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $escaped = htmlspecialchars($genre->getLibelle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $genre->setLibelle($escaped);
             $entityManager->flush();
 
             $this->addFlash('notice', 'Le genre musical à bien été modifié');

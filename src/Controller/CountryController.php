@@ -30,8 +30,6 @@ class CountryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $escaped = htmlspecialchars($country->getName(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $country->setName($escaped);
             $entityManager->persist($country);
             $entityManager->flush();
 
@@ -53,8 +51,6 @@ class CountryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $escaped = htmlspecialchars($country->getName(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $country->setName($escaped);
             $entityManager->flush();
 
             $this->addFlash('notice', 'Le pays à bien été modifié');

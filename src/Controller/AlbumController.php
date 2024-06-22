@@ -61,8 +61,8 @@ class AlbumController extends AbstractController
                 $album->addFormat($format);
             }
 
-            $media =  htmlspecialchars($form->get('mediabis')->getData(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
-            $albumTitle =  htmlspecialchars($album->getTitle(), ENT_QUOTES, 'UTF-8'); // Escape the form data to prevent XSS
+            $media =  $form->get('mediabis')->getData();
+            $albumTitle =  $album->getTitle();
             $album->setTitle($albumTitle);
             if(!empty($media)) { // if album media is not empty
                 $img = '../assets/imgs/'.$albumTitle;
