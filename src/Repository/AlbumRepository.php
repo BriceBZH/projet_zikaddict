@@ -66,6 +66,26 @@ class AlbumRepository extends ServiceEntityRepository
 
         return $result ?: [];
     }
+
+    public function countByFormat($formatId): int
+    {
+        return $this->createQueryBuilder('a')
+            ->select('count(a.id)')
+            ->andWhere(':formats MEMBER OF a.formats')
+            ->setParameter('formats', $formatId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countByMedia($mediaId): int
+    {
+        return $this->createQueryBuilder('a')
+            ->select('count(a.id)')
+            ->where('a.media = :mediaId')
+            ->setParameter('mediaId', $mediaId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     //    /**
     //     * @return Album[] Returns an array of Album objects
     //     */

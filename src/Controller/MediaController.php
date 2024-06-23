@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\ArtistRepository;
+use App\Repository\AlbumRepository;
 
 #[Route('/media')]
 class MediaController extends AbstractController
@@ -60,9 +62,16 @@ class MediaController extends AbstractController
     }
 
     #[Route('/{id}', name: 'media_delete', methods: ['POST'])]
-    public function delete(Request $request, Media $medium, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Media $medium, EntityManagerInterface $entityManager, AlbumRepository $albumRepository, ArtistRepository $artistRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$medium->getId(), $request->request->get('_token'))) {
+
+            if (($albumRepository->countByMedia($medium->getId()) > 0) || ($artistRepository->countByMedia($medium->getId()) > 0) ) {
+                $this->addFlash('notice', 'Vous ne pouvez pas supprimer ce média car il est associé à un ou plusieurs albums ou artistes.');
+                return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+            }
+
+            $this->addFlash('notice', 'Le média a bien été supprimé');
             $entityManager->remove($medium);
             $entityManager->flush();
         }

@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\ArtistRepository;
 
 #[Route('/country')]
 class CountryController extends AbstractController
@@ -65,9 +66,17 @@ class CountryController extends AbstractController
     }
 
     #[Route('/{id}', name: 'country_delete', methods: ['POST'])]
-    public function delete(Request $request, Country $country, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Country $country, EntityManagerInterface $entityManager, ArtistRepository $artistRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$country->getId(), $request->request->get('_token'))) {
+
+            if ($artistRepository->countByCountry($country->getId()) > 0) {
+                $this->addFlash('notice', 'Vous ne pouvez pas supprimer ce pays car il est associé à un ou plusieurs artistes.');
+                return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+            }
+
+            $this->addFlash('notice', 'Le pays a bien été supprimé');
+
             $entityManager->remove($country);
             $entityManager->flush();
         }

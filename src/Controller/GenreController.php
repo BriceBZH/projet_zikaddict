@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\SongRepository;
 
 #[Route('/genre')]
 class GenreController extends AbstractController
@@ -64,13 +65,21 @@ class GenreController extends AbstractController
     }
 
     #[Route('/{id}', name: 'genre_delete', methods: ['POST'])]
-    public function delete(Request $request, Genre $genre, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Genre $genre, EntityManagerInterface $entityManager, SongRepository $songRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$genre->getId(), $request->request->get('_token'))) {
+
+            if ($songRepository->countByGenre($genre->getId()) > 0) {
+                $this->addFlash('notice', 'Vous ne pouvez pas supprimer ce genre car il est associé à une ou plusieurs chansons.');
+                return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+            }
+
+            $this->addFlash('notice', 'Le genre musical a bien été supprimé');
+
             $entityManager->remove($genre);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_genre_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
     }
 }

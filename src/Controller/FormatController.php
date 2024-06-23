@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\AlbumRepository;
 
 #[Route('/format')]
 class FormatController extends AbstractController
@@ -70,13 +71,21 @@ class FormatController extends AbstractController
     }
 
     #[Route('/{id}', name: 'format_delete', methods: ['POST'])]
-    public function delete(Request $request, Format $format, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Format $format, EntityManagerInterface $entityManager, AlbumRepository $albumRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$format->getId(), $request->request->get('_token'))) {
+
+            if ($albumRepository->countByFormat($format->getId()) > 0) {
+                $this->addFlash('notice', 'Vous ne pouvez pas supprimer ce format car il est associé à un ou plusieurs albums.');
+                return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+            }
+
+            $this->addFlash('notice', 'Le format a bien été supprimé');
+
             $entityManager->remove($format);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_format_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -93,6 +93,9 @@ class SongController extends AbstractController
     public function delete(Request $request, Song $song, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$song->getId(), $request->request->get('_token'))) {
+
+            
+
             $entityManager->remove($song);
             $entityManager->flush();
         }

@@ -36,7 +36,7 @@
                                     <td></td>
                                 {% endif %}
                                 <td>{{artist.country.name}}</td>
-                                <td><img src="{{ asset('imgs/' ~ artist.media.url) }}" alt="{{ artist.media.alt }}" class="medias_admin" /></td>
+                                <td><img src="{{ asset('imgs/' ~ artist.media.url) }}" alt="{{ artist.media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <a href="{{ path('artist_edit', {'id': artist.id}) }}" class="btn btn-success">
                                         <span class="bi bi-pencil-fill"></span>
@@ -71,7 +71,7 @@
                                 <td>{{album.year}}</td>
                                 <td>{{album.createdAt.format('d/m/Y H:i:s')}}</td>
                                 <td>{{album.updateAt.format('d/m/Y H:i:s')}}</td>
-                                <td><img src="{{ asset('imgs/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" /></td>
+                                <td><img src="{{ asset('imgs/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <a href="{{ path('album_edit', {'id': album.id}) }}" class="btn btn-success">
                                         <span class="bi bi-pencil-fill"></span>
@@ -104,7 +104,6 @@
                                 <td>{{song.title}}</td>
                                 <td>{{song.description}}</td>
                                 <td>{{song.duration}}</td>
-                                {# <td>{{song.album.title}}</td> #}
                                 <td>{{song.genre.libelle}}</td>
                                 <td class="action">
                                     <a href="{{ path('song_edit', {'id': song.id}) }}" class="btn btn-success">
@@ -253,7 +252,7 @@
                                 <td>{{media.alt}}</td>
                                 <td>{{media.url}}</td>
                                 <td>{{media.urlSource}}</td>
-                                <td><img src="{{ asset('imgs/' ~ media.url) }}" alt="{{ media.alt }}" class="medias_admin" /></td>
+                                <td><img src="{{ asset('imgs/' ~ media.url) }}" alt="{{ media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <a href="{{ path('media_edit', {'id': media.id}) }}" class="btn btn-success">
                                         <span class="bi bi-pencil-fill"></span>
@@ -297,7 +296,7 @@
                                     <td></td>
                                 {% endif %}
                                 <td>{{artist.country.name}}</td>
-                                <td><img src="{{ asset('imgs/' ~ artist.media.url) }}" alt="{{ artist.media.alt }}" class="medias_admin" /></td>
+                                <td><img src="{{ asset('imgs/' ~ artist.media.url) }}" alt="{{ artist.media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <form method="post" action="{{ path('artist_valid', {'id': artist.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet artiste ?');">
                                         <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ artist.id) }}">
@@ -335,7 +334,7 @@
                                 <td>{{album.year}}</td>
                                 <td>{{album.createdAt.format('d/m/Y H:i:s')}}</td>
                                 <td>{{album.updateAt.format('d/m/Y H:i:s')}}</td>
-                                <td><img src="{{ asset('imgs/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" /></td>
+                                <td><img src="{{ asset('imgs/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <form method="post" action="{{ path('album_valid', {'id': album.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet album ?');">
                                         <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ album.id) }}">
@@ -371,8 +370,6 @@
                                 <td>{{song.title}}</td>
                                 <td>{{song.description}}</td>
                                 <td>{{song.duration}}</td>
-                                {# <td>{{song.updateAt.format('Y-m-d H:i:s')}}</td> #}
-                                {# <td>{{song.album.title}}</td> #}
                                 <td>{{song.genre.libelle}}</td>
                                 <td class="action">
                                     <form method="post" action="{{ path('song_valid', {'id': song.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cette chanson ?');">
@@ -394,23 +391,16 @@
                 </table>
             </article>
             <li class="menu-li" data-target="import-table">Import de fichier<div id="li_icons">⊻</div></li>
-            <table id="import-table" class="menu-table hidden">
-                <tbody>
-                    <tr>
-                        <td >
-                         Télécharger le modèle : <a href="{{ path('download_model', {filename: 'modele_csv.csv'}) }}">ICI</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <form method="post" action="{{ path('upload_csv', {route: 'admin'}) }}" enctype="multipart/form-data" accept-charset="UTF-8">
-                                <input type="file" name="csv_file" accept=".csv" />
-                                <button type="submit">Envoyer</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <article id="import-table" class="menu-table hidden">
+                <h3>Import de fichier</h3>
+                <p>
+                    Télécharger le modèle : <a href="{{ path('download_model', {filename: 'modele_csv.csv'}) }}">ICI</a>
+                </p>
+                <form method="post" action="{{ path('upload_csv', {route: 'profile', idUser: app.user.id}) }}" enctype="multipart/form-data" accept-charset="UTF-8">
+                    <input type="file" name="csv_file" accept=".csv" />
+                    <button type="submit">Envoyer</button>
+                </form>
+            </article>
             <li class="menu-li" data-target="add-informations">Ajout d'informations<div id="li_icons">⊻</div></li>
             <section id="add-informations" class="menu-table hidden">
                 <h3>Formulaires d'ajout d'informations</h3>

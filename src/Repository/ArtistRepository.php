@@ -55,6 +55,15 @@ class ArtistRepository extends ServiceEntityRepository
        ;
     }
 
+    /* Equals findByValid() with PDO
+    $query = $this->db->prepare('SELECT * FROM artists WHERE valid = :valid');
+    $parameters = [
+        'valid' => 1,
+    ];
+    $query->execute($parameters);
+    $artistDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function findByNotValid() : array {
         return $this->createQueryBuilder('a')
            ->where('a.valid = :valid')
@@ -72,6 +81,26 @@ class ArtistRepository extends ServiceEntityRepository
     $query->execute($parameters);
     $artistDB = $query->fetch(PDO::FETCH_ASSOC); 
     */
+
+    public function countByCountry($countryId): int
+    {
+        return $this->createQueryBuilder('a')
+            ->select('count(a.id)')
+            ->where('a.country = :countryId')
+            ->setParameter('countryId', $countryId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countByMedia($mediaId): int
+    {
+        return $this->createQueryBuilder('a')
+            ->select('count(a.id)')
+            ->where('a.media = :mediaId')
+            ->setParameter('mediaId', $mediaId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
     // public function deleteArtist(Artist $artist) : void {
     //     $idArtist = $artist->getId();

@@ -63,6 +63,16 @@ class SongRepository extends ServiceEntityRepository
            ->getResult()
        ;
     }
+
+    public function countByGenre($genreId): int
+    {
+        return $this->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.genre = :genreId')
+            ->setParameter('genreId', $genreId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     //    /**
     //     * @return Song[] Returns an array of Song objects
     //     */

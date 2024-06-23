@@ -88,23 +88,16 @@
                 </tfoot>
             </table>
             <li class="menu-li" data-target="import-table">Import de fichier<div id="li_icons">⊻</div></li>
-            <table id="import-table" class="menu-table hidden">
-                <tbody>
-                    <tr>
-                        <td >
-                         Télécharger le modèle : <a href="{{ path('download_model', {filename: 'modele_csv.csv'}) }}">ICI</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <form method="post" action="{{ path('upload_csv', {route: 'profile', idUser: app.user.id}) }}" enctype="multipart/form-data" accept-charset="UTF-8">
-                                <input type="file" name="csv_file" accept=".csv" />
-                                <button type="submit">Envoyer</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <article id="import-table" class="menu-table hidden">
+                <h3>Import de fichier</h3>
+                <p>
+                    Télécharger le modèle : <a href="{{ path('download_model', {filename: 'modele_csv.csv'}) }}">ICI</a>
+                </p>
+                <form method="post" action="{{ path('upload_csv', {route: 'profile', idUser: app.user.id}) }}" enctype="multipart/form-data" accept-charset="UTF-8">
+                    <input type="file" name="csv_file" accept=".csv" />
+                    <button type="submit">Envoyer</button>
+                </form>
+            </article>
             <li class="menu-li" data-target="add-informations">Ajout d'informations<div id="li_icons">⊻</div></li>
             <section id="add-informations" class="menu-table hidden">
                 <h3>Formulaires d'ajout d'informations</h3>

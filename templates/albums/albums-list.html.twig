@@ -18,7 +18,7 @@
                         <p>{{album.year}}</p>
                         {% if app.user.userIdentifier is defined %}
                             {% set currentRoute = app.request.attributes.get('_route') %}
-                            <img src="{{ asset('imgs/img_formats.png')}}" class="image_collection modal-trigger" alt="collection" data-target="album{{loop.index}}" />
+                            <img src="{{ asset('imgs/img_formats.png')}}" class="image_collection modal-trigger" alt="collection" data-target="album{{loop.index}}" >
                             <p class="formats album{{loop.index}}">
                                 Liste des formats pour l'album {{album.getTitle()}}
                                 {% for format in album.formats %}
