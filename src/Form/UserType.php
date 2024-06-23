@@ -15,16 +15,17 @@ class UserType extends AbstractType
         $builder
             ->add('username')
             ->add('email')
-            ->add('password')
-            ->add('roles', ChoiceType::class, [
-                'choices' => [
-                    'User' => 'ROLE_USER',
-                    'Admin' => 'ROLE_ADMIN',
-                ],
-                'multiple' => true,
-                'expanded' => false,
-            ])
-            ->add('createdAt')
+            ->add('password');
+            if ($options['is_admin']) { //if edit
+                    $builder->add('roles', ChoiceType::class, [
+                    'choices' => [
+                        'User' => 'ROLE_USER',
+                        'Admin' => 'ROLE_ADMIN',
+                    ],
+                    'multiple' => true,
+                    'expanded' => false,
+                ]);
+            }
         ;
     }
 
@@ -32,6 +33,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'is_admin' => false,
         ]);
     }
 }

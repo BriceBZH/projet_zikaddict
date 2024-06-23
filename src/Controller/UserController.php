@@ -16,6 +16,7 @@ use App\Repository\CountryRepository;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -57,15 +58,22 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function edit(AuthorizationCheckerInterface $authorization, Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $route = $request->query->get('route');
         $idUser = $request->query->get('idUser');
+        if ($authorization->isGranted('ROLE_ADMIN')) {
+            $admin = true;
+        } else {
+            $admin = false;
+        }
         $param = [];
         if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
             $param = ['idUser' => $idUser];
         }
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user, [
+            'is_admin' => $admin,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
