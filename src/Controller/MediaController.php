@@ -41,7 +41,7 @@ class MediaController extends AbstractController
                     $mediaNameImg = $mediaName.'.'.$extension;
                     file_put_contents($img, $content);
                 }
-                //remove old picture form assets
+                //remove old picture from assets
                 unlink('../assets/imgs/'.$oldMedia);
                 //update media for artist
                 $medium->setUrl($mediaNameImg);

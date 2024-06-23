@@ -127,7 +127,7 @@ class ArtistController extends AbstractController
                     $artistNameImg = $artistName.'.'.$extension;
                     file_put_contents($img, $content);
                 }
-                //remove old picture form assets
+                //remove old picture from assets
                 unlink('../assets/imgs/'.$oldMedia->getUrl());
                 //update media for artist
                 $oldMedia->setUrl($artistNameImg);
@@ -152,11 +152,36 @@ class ArtistController extends AbstractController
     public function delete(Request $request, Artist $artist, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$artist->getId(), $request->request->get('_token'))) {
-            $artist->getAlbums()->initialize();
-            dd($artist->getAlbums());
-            //méthode normale symfony
-            // $entityManager->remove($artist);
-            // $entityManager->flush();
+            foreach ($artist->getAlbums() as $album) { // Remove relations with albums
+                $artist->removeAlbum($album);
+
+                foreach ($album->getSongs() as $albumSong) { // Remove relations between album and song
+                    $album->removeSong($albumSong);
+                    $entityManager->remove($albumSong); 
+                }
+
+                foreach ($album->getFormats() as $albumFormat) { // Remove relations between album and format
+                    $album->removeFormat($albumFormat);
+                }
+
+                //remove picture from assets
+                unlink('../assets/imgs/'.$album->getMedia()->getUrl());
+                $entityManager->remove($album->getMedia()); //remove media
+                $entityManager->remove($album); // Remove the album
+            }
+
+            foreach ($artist->getSongs() as $song) { // Remove relations with songs
+                $artist->removeSong($song);
+            }
+            //remove picture from assets
+            unlink('../assets/imgs/'.$artist->getMedia()->getUrl());
+            $entityManager->remove($artist->getMedia()); //remove media
+            // $artist->setCountry(null);
+
+            $entityManager->remove($artist);
+            $entityManager->flush();
+
+            $this->addFlash('notice', "L'artiste a bien été supprimé");
         }
 
         return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);

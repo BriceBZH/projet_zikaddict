@@ -3,7 +3,7 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-<main class="forms">
+<main class="forms" id="container">
     <h2>Inscription</h2>
     {% for notice in app.flashes('notice') %}
         <span class="flash_notice">{{ notice }}</span>

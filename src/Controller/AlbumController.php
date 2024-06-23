@@ -45,7 +45,7 @@ class AlbumController extends AbstractController
 
         $album = new Album();
         $form = $this->createForm(AlbumType::class, $album, [
-            'is_edit' => true,
+            'is_edit' => false,
         ]);
         $form->handleRequest($request);
 
@@ -141,7 +141,7 @@ class AlbumController extends AbstractController
                     $albumTitleImg = $albumTitle.'.'.$extension;
                     file_put_contents($img, $content);
                 }
-                //remove old picture form assets
+                //remove old picture from assets
                 unlink('../assets/imgs/'.$oldMedia->getUrl());
                 //update media for artist
                 $oldMedia->setUrl($albumTitleImg);
@@ -166,8 +166,22 @@ class AlbumController extends AbstractController
     public function delete(Request $request, Album $album, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$album->getId(), $request->request->get('_token'))) {
+            foreach ($album->getSongs() as $song) { // Remove relations with songs
+                $album->removeSong($song);
+            }
+
+            foreach ($album->getFormats() as $format) { // Remove relations between album and format
+                $album->removeFormat($format);
+            }
+
+            //remove picture from assets
+            unlink('../assets/imgs/'.$album->getMedia()->getUrl());
+            $entityManager->remove($album->getMedia()); //remove media
+
             $entityManager->remove($album);
             $entityManager->flush();
+
+            $this->addFlash('notice', "L'album a bien été supprimé");
         }
 
         return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);

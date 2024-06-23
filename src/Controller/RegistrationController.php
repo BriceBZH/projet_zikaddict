@@ -35,7 +35,6 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $password_regex = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\w\d\s])(?=.*[a-zA-Z\d\W\S]).{8,}$/"; //@Test123456
             $pass = $form->get('plainPassword')->getData();
-            // $pass = $user->getPassword();
             if(!preg_match($password_regex, $pass)) {
                 $this->addFlash('notice', "Le mot de passe n'est pas assez fort, Il faut 8 caractères, au moins 1 lettre capitale, 1 lettre minuscule, 1 chiffre et 1 caractère spécial");
 
@@ -84,7 +83,7 @@ class RegistrationController extends AbstractController
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('notice', 'Your email address has been verified.');
+        $this->addFlash('notice', 'Votre email à été vérifié');
 
         return $this->redirectToRoute('index');
     }

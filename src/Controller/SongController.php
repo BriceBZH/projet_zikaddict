@@ -94,10 +94,18 @@ class SongController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$song->getId(), $request->request->get('_token'))) {
 
+            foreach ($song->getArtists() as $artist) { // Remove relations with artists
+                $song->removeArtist($artist);
+            }  
             
+            foreach ($song->getAlbums() as $album) { // Remove relations with albums
+                $song->removeAlbum($album);
+            }
 
             $entityManager->remove($song);
             $entityManager->flush();
+
+            $this->addFlash('notice', "La chanson a bien été supprimée");
         }
 
         return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
