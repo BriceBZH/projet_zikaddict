@@ -179,6 +179,7 @@
                     <thead>
                         <tr>
                             <th>Nom d'utilisateur</th>
+                            <th>Rôle(s)</th>
                             <th>Email</th>
                             <th>Date de création</th>
                             <th>Vérifié</th>
@@ -189,12 +190,12 @@
                         {% for user in users %}
                             <tr>
                                 <td>{{user.username}}</td>
-                                {# <td>{{user.roles}}</td> #}
+                                <td>{{user.roles|join(', ') }}</td>
                                 <td>{{user.email}}</td>
                                 <td>{{user.createdAt.format('d/m/Y H:i:s')}}</td>
                                 <td>{{user.isVerified}}</td>
                                 <td class="action">
-                                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-success">
+                                    <a href="{{ path('user_edit', {route: 'admin', 'id': user.id}) }}" class="btn btn-success">
                                         <span class="bi bi-pencil-fill"></span>
                                     </a>
                                     <form method="post" action="{{ path('user_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cet utilisateur ?');">

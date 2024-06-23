@@ -9,6 +9,25 @@
             <span class="flash_notice">{{ notice }}</span>
         {% endfor %}
         <ul>
+            <li class="menu-li" data-target="profile">Profil<div id="li_icons">⊻</div></li>
+            <article id="profile" class="menu-table hidden">
+                <h3>Profil</h3>
+                <p>
+                    Modification du profile : 
+                    <a href="{{ path('user_edit', {route: 'profile', idUser: app.user.id, 'id': user.id}) }}" class="btn btn-success">
+                        <span class="bi bi-pencil-fill"></span>
+                    </a>
+                </p>
+                <p>
+                    Suppression du profile :
+                </p>
+                <form method="post" action="{{ path('user_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer votre profil ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                    <button type="submit" class="btn btn-danger">
+                        <span class="bi bi-trash-fill"></span>
+                    </button>
+                </form>
+            </article>
             <li class="menu-li" data-target="collection-table">Collection d'albums<div id="li_icons">⊻</div></li>
             <table id="collection-table" class="menu-table hidden table table-striped">
                 <thead>

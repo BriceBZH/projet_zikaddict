@@ -59,6 +59,12 @@ class UserController extends AbstractController
     #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        $route = $request->query->get('route');
+        $idUser = $request->query->get('idUser');
+        $param = [];
+        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+            $param = ['idUser' => $idUser];
+        }
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -68,7 +74,7 @@ class UserController extends AbstractController
             if(!preg_match($password_regex, $pass)) {
                 $this->addFlash('notice', "Le mot de passe n'est pas assez fort, Il faut 8 caractères, au moins 1 lettre capitale, 1 lettre minuscule, 1 chiffre et 1 caractère spécial");
 
-                return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
             }
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -78,7 +84,7 @@ class UserController extends AbstractController
             );
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit.html.twig', [

@@ -37,7 +37,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     const textContainer = document.createElement('p');
                     textContainer.classList.add('album-info');
                     li.appendChild(img);
-                    textContainer.textContent = "Artiste : " + albums.artist.name + " - Album : " + albums.title + " - Date de sortie : " +data.release_date;
+                    let releaseDate = data.release_date;
+                    let [year, month, day] = releaseDate.split('-');
+                    let formattedDaterelease = day+'/'+month+'/'+year;
+                    textContainer.textContent = "Artiste : " + albums.artist.name + " - Album : " + albums.title + " - Date de sortie : " +formattedDaterelease;
                     li.appendChild(textContainer);
                     albumsList.appendChild(li);
                 }).catch(error => {
