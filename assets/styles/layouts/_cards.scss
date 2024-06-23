@@ -51,6 +51,12 @@
                 background: #ff365e;
                 color: black;
             }
+            a {
+                .pictures {
+                    width: 10%;
+                    height: auto;
+                }
+            }
         }
     }
     .modal-container.active .modal-content {
