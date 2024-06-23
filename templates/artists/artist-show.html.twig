@@ -23,12 +23,20 @@
                             {% set currentRoute = app.request.attributes.get('_route') %}
                             {% set param = app.request.attributes.get('idArtist') %}
                             <img src="{{ asset('imgs/img_formats.png')}}" class="image_collection modal-trigger" alt="collection" data-target="album{{loop.index}}" >
-                            <p class="formats album{{loop.index}}">
-                                Liste des formats pour l'album {{album.getTitle()}}
+                            <article class="formats album{{loop.index}}">
+                                <h4>Liste des formats pour l'album {{album.getTitle()}}</h4>
                                 {% for format in album.formats %}
-                                    {{format.libelle}}<a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id, parametre: param}) }}" class="collec">Collection</a><a href="{{ path('add_search', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id, parametre: param}) }}" class="collec">Search</a>
+                                    <p>
+                                    {{format.libelle}}
+                                    <a href="{{ path('add_collection', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id}) }}">
+                                        <img src="{{ asset('imgs/collection.gif')}}" alt="Ajouter à la collection" title="Ajouter à la collection" class="pictures" >
+                                    </a>
+                                    <a href="{{ path('add_search', {idAlbum: album.id, idUser: app.user.id, returnUrl: currentRoute, idFormat: format.id}) }}">
+                                        <img src="{{ asset('imgs/search.gif')}}" alt="Ajouter aux recherches" class="pictures" title="Ajouter aux recherches"  >
+                                    </a>
+                                    </p>
                                 {% endfor %}
-                            </p>
+                            </article>
                         {% endif %}
                         <p><a href="{{ path('album', {idAlbum: album.id}) }}" class="link">Plus</a>
                     </article>
