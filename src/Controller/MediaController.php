@@ -25,29 +25,48 @@ class MediaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             //new media is not empty so we modify old media
-            $media =  $form->get('mediabis')->getData();
+            $urlMedia =  $form->get('mediaUrl')->getData();
+            $uploadMedia =  $form->get('mediaUpload')->getData();
             $mediaName =  $medium->getAlt();
             $oldMedia = $medium->getUrl();
-            if(!empty($media)) { // if album media is not empty
+            if(!empty($urlMedia)) { // if album media is not empty
                 $img = '../assets/imgs/'.$mediaName;
-                $content = @file_get_contents($media);
+                $content = @file_get_contents($urlMedia);
+                //remove old picture from assets
+                unlink('../assets/imgs/'.$oldMedia);
                 if ($content === false) {
                     $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
 
                     return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
                 } else {
-                    $extension = pathinfo($media, PATHINFO_EXTENSION);
+                    $extension = pathinfo($urlMedia, PATHINFO_EXTENSION);
                     $img .= '.'.$extension;
                     $mediaNameImg = $mediaName.'.'.$extension;
                     file_put_contents($img, $content);
                 }
+                $media = $urlMedia;
+            } else if(!empty($uploadMedia)) { // if url media is not empty
+                $mediaNameImg = $mediaName.'.'.$uploadMedia->guessExtension();
                 //remove old picture from assets
-                unlink('../assets/imgs/'.$oldMedia);
+                unlink('../assets/imgs/'.$oldMedia); 
+                try {
+                    $uploadMedia->move(
+                        $this->getParameter('media_directory'),
+                        $mediaNameImg
+                    );      
+                } catch(FileException $e) {
+                    $this->addFlash('notice', "Erreur lors de l\'upload du fichier".e->getMessage());
+
+                    return $this->redirectToRoute($route, $param, Response::HTTP_SEE_OTHER);
+                }
+                $media = "Upload";
+            }
+            if(!empty($urlMedia) || !empty($uploadMedia)) {
                 //update media for artist
                 $medium->setUrl($mediaNameImg);
+                $medium->setAlt($mediaName);
                 $medium->setUrlSource($media);
-            } 
-
+            }
             $entityManager->flush();
 
             $this->addFlash('notice', "Le média a bien été modifié");

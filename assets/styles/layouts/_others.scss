@@ -28,9 +28,9 @@
     @media screen and (min-width: $min-width) {
         .two-columns {
             column-count: 2;
-            column-gap: 70%; /* Ajustez l'espace entre les colonnes si nécessaire */
+            column-gap: 70%; 
             .two-columns li {
-                break-inside: avoid; /* Empêche les éléments de se briser entre les colonnes */
+                break-inside: avoid; 
             }
         }
     }

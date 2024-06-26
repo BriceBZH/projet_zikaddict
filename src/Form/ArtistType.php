@@ -7,6 +7,7 @@ use App\Entity\Country;
 use App\Entity\Media;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,8 +38,13 @@ class ArtistType extends AbstractType
                     'class' => Media::class,
                     'choice_label' => 'alt',             
                 ])
-                ->add('mediabis', TextType::class, [
-                    'label' => "Url du nouveau média",
+                ->add('mediaUrl', TextType::class, [
+                    'label' => "Url du média",
+                    'mapped' => false,
+                    'required' => false,
+                ])
+                ->add('mediaUpload', FileType::class, [
+                    'label' => "Uploader un média",
                     'mapped' => false,
                     'required' => false,
                 ]);
@@ -53,9 +59,15 @@ class ArtistType extends AbstractType
                         'style' => 'display: none;',
                     ],
                 ])
-                ->add('mediabis', TextType::class, [
+                ->add('mediaUrl', TextType::class, [
                     'label' => "Url du média",
-                    'mapped' => false,                 
+                    'mapped' => false,
+                    'required' => false,                 
+                ])
+                ->add('mediaUpload', FileType::class, [
+                    'label' => "Uploader un média",
+                    'mapped' => false,
+                    'required' => false,
                 ]);
             }
     }

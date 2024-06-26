@@ -33,7 +33,7 @@ class DefaultController extends AbstractController
     public function credits(MediaRepository $mediaRepository): Response
     {
         return $this->render('default/credits.html.twig', [
-            'medias' => $mediaRepository->findAll(),
+            'medias' => $mediaRepository->findByNotUpload(),
         ]);
     }
 

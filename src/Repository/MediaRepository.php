@@ -21,6 +21,15 @@ class MediaRepository extends ServiceEntityRepository
         parent::__construct($registry, Media::class);
     }
 
+    public function findByNotUpload() : array {
+        $result = $this->createQueryBuilder('m')
+           ->where('m.urlSource != :upload')
+           ->setParameter('upload', "Upload")
+           ->getQuery()
+           ->getResult();
+
+        return $result ?: [];
+    }
     //    /**
     //     * @return Media[] Returns an array of Media objects
     //     */

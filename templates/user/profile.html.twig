@@ -8,6 +8,9 @@
         {% for notice in app.flashes('notice') %}
             <span class="flash_notice">{{ notice }}</span>
         {% endfor %}
+        {% if not app.user.isVerified %}
+            <span class="flash_error">Pour profiter pleinement du site, vous devez activer votre compte. Un e-mail a été envoyé à l'adresse que vous avez fournie lors de votre inscription</span>
+        {% endif %}
         <ul>
             <li class="menu-li" data-target="profile">Profil<div id="li_icons">⊻</div></li>
             <article id="profile" class="menu-table hidden">

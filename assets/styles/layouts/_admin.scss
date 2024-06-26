@@ -23,6 +23,18 @@
         margin: 0 auto;
     }
 
+    .flash_error {
+        text-align: center;
+        background-color: $red;
+        color: $black;
+        border: 1px solid $black;
+        width: 50%;
+        border-radius: 10px;
+        display: block; /* Utiliser display: block pour que chaque message soit sur une nouvelle ligne */
+        padding: 1em; /* Pour espacer les messages entre eux */
+        margin: 0 auto;
+    }
+
     ul {
         display: flex;
         align-items: center;

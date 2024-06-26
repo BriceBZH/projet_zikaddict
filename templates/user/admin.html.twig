@@ -397,7 +397,7 @@
                 <p>
                     Télécharger le modèle : <a href="{{ path('download_model', {filename: 'modele_csv.csv'}) }}">ICI</a>
                 </p>
-                <form method="post" action="{{ path('upload_csv', {route: 'profile', idUser: app.user.id}) }}" enctype="multipart/form-data" accept-charset="UTF-8">
+                <form method="post" action="{{ path('upload_csv', {route: 'admin', idUser: app.user.id}) }}" enctype="multipart/form-data" accept-charset="UTF-8">
                     <input type="file" name="csv_file" accept=".csv" />
                     <button type="submit">Envoyer</button>
                 </form>
@@ -406,12 +406,12 @@
             <section id="add-informations" class="menu-table hidden">
                 <h3>Formulaires d'ajout d'informations</h3>
                 <p class="text">Chaque information que vous allez ajouter sera soumises à vérification par un administrateur</p>
-                <a href="{{ path('artist_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvel artiste</a>
-                <a href="{{ path('album_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvel album</a>
-                <a href="{{ path('format_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouveau format</a>
-                <a href="{{ path('genre_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouveau genre</a>
-                <a href="{{ path('country_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouveau pays</a>
-                <a href="{{ path('song_new', {route: 'profile', idUser: app.user.id}) }}" class="form_button">Nouvelle chanson</a>
+                <a href="{{ path('artist_new', {route: 'admin', idUser: app.user.id}) }}" class="form_button">Nouvel artiste</a>
+                <a href="{{ path('album_new', {route: 'admin', idUser: app.user.id}) }}" class="form_button">Nouvel album</a>
+                <a href="{{ path('format_new', {route: 'admin', idUser: app.user.id}) }}" class="form_button">Nouveau format</a>
+                <a href="{{ path('genre_new', {route: 'admin', idUser: app.user.id}) }}" class="form_button">Nouveau genre</a>
+                <a href="{{ path('country_new', {route: 'admin', idUser: app.user.id}) }}" class="form_button">Nouveau pays</a>
+                <a href="{{ path('song_new', {route: 'admin', idUser: app.user.id}) }}" class="form_button">Nouvelle chanson</a>
             </section>
         </ul>
     </main>

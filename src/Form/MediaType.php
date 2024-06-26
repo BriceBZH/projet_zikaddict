@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Media;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -16,9 +17,15 @@ class MediaType extends AbstractType
             ->add('url')
             ->add('alt')
             ->add('urlSource')
-            ->add('mediabis', TextType::class, [
-                'label' => "Url du nouveau média",
-                'mapped' => false,                 
+            ->add('mediaUrl', TextType::class, [
+                'label' => "Url du média",
+                'mapped' => false,
+                'required' => false,                
+            ])
+            ->add('mediaUpload', FileType::class, [
+                'label' => "Uploader un média",
+                'mapped' => false,
+                'required' => false,
             ]);
         ;
     }
