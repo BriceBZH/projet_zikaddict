@@ -75,9 +75,39 @@ class SongController extends AbstractController
         $form = $this->createForm(SongType::class, $song);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+        //refresh artists of this song
+        $entityManager->refresh($song);
+        foreach ($song->getArtists() as $artist) {
+            $entityManager->refresh($artist);
+        }
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $selectedArtists = $form->get('artists')->getData();
+            $selectedAlbums = $form->get('albums')->getData();
+
+            foreach ($song->getArtists() as $artist) { //delete artists non selected
+                if (!$selectedArtists->contains($artist)) {
+                    $song->removeArtist($artist);
+                }
+            }          
+            foreach ($selectedArtists as $artist) { //add new artists
+                if (!$song->getArtists()->contains($artist)) {
+                    $song->addArtist($artist);
+                }
+            }
+
+            foreach ($song->getAlbums() as $album) { //delete albums non selected
+                if (!$selectedAlbums->contains($album)) {
+                    $song->removeAlbum($album);
+                }
+            }       
+            foreach ($selectedAlbums as $album) { //add new albums
+                if (!$song->getAlbums()->contains($album)) {
+                    $song->addAlbum($album);
+                }
+            }
+            
+            $entityManager->flush();
             $this->addFlash('notice', 'La chanson a bien été modifiée');
 
             return $this->redirectToRoute('admin', [], Response::HTTP_SEE_OTHER);

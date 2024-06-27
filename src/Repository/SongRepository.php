@@ -35,6 +35,16 @@ class SongRepository extends ServiceEntityRepository
         ;
     }
 
+    /* Equals findByAlbum() with PDO
+    $query = $this->db->prepare('SELECT songs.* FROM songs JOIN album_song ON songs.id = album_song.song_id WHERE album_song.album_id = :albums AND songs.valid = :valid ORDER BY songs.title ASC');
+    $parameters = [
+        'albums' => $album->getId(),
+        'valid' => 1
+    ];
+    $query->execute($parameters);
+    $songDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function findByPartialTitle(string $title) : array {
         return $this->createQueryBuilder('s')
            ->where('s.title LIKE :title')
@@ -46,6 +56,16 @@ class SongRepository extends ServiceEntityRepository
        ;
     }
 
+    /* Equals findByPartialName() with PDO
+    $query = $this->db->prepare('SELECT * FROM songs WHERE songs.title LIKE :title AND songs.valid = :valid');
+    $parameters = [
+        'valid' => 1,
+        'title' => '%'.$title.'%'
+    ];
+    $query->execute($parameters);
+    $songDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function findByNotValid() : array {
         return $this->createQueryBuilder('s')
            ->where('s.valid = :valid')
@@ -54,6 +74,15 @@ class SongRepository extends ServiceEntityRepository
            ->getResult()
        ;
     }
+
+    /* Equals findByNotValid() with PDO
+    $query = $this->db->prepare('SELECT * FROM songs WHERE songs.valid = :valid');
+    $parameters = [
+        'valid' => 0,
+    ];
+    $query->execute($parameters);
+    $songDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
 
     public function findByValid() : array {
         return $this->createQueryBuilder('s')
@@ -64,6 +93,15 @@ class SongRepository extends ServiceEntityRepository
        ;
     }
 
+    /* Equals findByValid() with PDO
+    $query = $this->db->prepare('SELECT * FROM songs WHERE songs.valid = :valid');
+    $parameters = [
+        'valid' => 1,
+    ];
+    $query->execute($parameters);
+    $songDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function countByGenre($genreId): int
     {
         return $this->createQueryBuilder('s')
@@ -73,28 +111,13 @@ class SongRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-    //    /**
-    //     * @return Song[] Returns an array of Song objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Song
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /* Equals countByGenre() with PDO
+    $query = $this->db->prepare('SELECT count(songs.id) FROM songs WHERE songs.genre_id = :genreId');
+    $parameters = [
+        'genreId' => $genreId,
+    ];
+    $query->execute($parameters);
+    $songDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
 }

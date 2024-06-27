@@ -34,6 +34,16 @@ class ArtistRepository extends ServiceEntityRepository
        ;
     }
 
+    /* Equals findBySong() with PDO
+    $query = $this->db->prepare('SELECT artists.* FROM artists JOIN artist_song ON artists.id = artist_song.artist_id WHERE artist_song.song_id = :songs AND artists.valid = :valid');
+    $parameters = [
+        'songs' => $song->getId(),
+        'valid' => 1
+    ];
+    $query->execute($parameters);
+    $artistDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function findByPartialName(string $name) : array {
         return $this->createQueryBuilder('a')
            ->where('a.name LIKE :name')
@@ -44,6 +54,16 @@ class ArtistRepository extends ServiceEntityRepository
            ->getResult()
        ;
     }
+
+    /* Equals findByPartialName() with PDO
+    $query = $this->db->prepare('SELECT * FROM artists WHERE artists.name LIKE :name AND artists.valid = :valid');
+    $parameters = [
+        'valid' => 1,
+        'name' => '%'.$name.'%'
+    ];
+    $query->execute($parameters);
+    $artistDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
 
     public function findByValid() : array {
         return $this->createQueryBuilder('a')
@@ -56,7 +76,7 @@ class ArtistRepository extends ServiceEntityRepository
     }
 
     /* Equals findByValid() with PDO
-    $query = $this->db->prepare('SELECT * FROM artists WHERE valid = :valid');
+    $query = $this->db->prepare('SELECT * FROM artists WHERE artists.valid = :valid');
     $parameters = [
         'valid' => 1,
     ];
@@ -74,7 +94,7 @@ class ArtistRepository extends ServiceEntityRepository
     }
 
     /* Equals findByNotValid() with PDO
-    $query = $this->db->prepare('SELECT * FROM artists WHERE valid = :valid');
+    $query = $this->db->prepare('SELECT * FROM artists WHERE artists.valid = :valid');
     $parameters = [
         'valid' => 0,
     ];
@@ -92,6 +112,15 @@ class ArtistRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /* Equals countByCountry() with PDO
+    $query = $this->db->prepare('SELECT count(artists.id) FROM artists WHERE artists.country_id = :countryId');
+    $parameters = [
+        'countryId' => $countryId,
+    ];
+    $query->execute($parameters);
+    $artistDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function countByMedia($mediaId): int
     {
         return $this->createQueryBuilder('a')
@@ -102,64 +131,12 @@ class ArtistRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    // public function deleteArtist(Artist $artist) : void {
-    //     $idArtist = $artist->getId();
-    //     $conn = $this->getEntityManager()->getConnection();
-    //     $query = $conn->prepare('SELECT * FROM your_table WHERE your_condition = :condition');
-    //     $parameters = [
-    //         'id' => $idUser
-    //         ];
-    //     $query->execute($parameters);
-    //     $user = $query->fetch(PDO::FETCH_ASSOC);
-    // }
-
-    // public function findAll() : array {
-    //     $entityManager = $this->getEntityManager();
-    //     $query = $entityManager->createQuery(
-    //         'SELECT a
-    //         FROM App\Entity\Artist a'
-    //     );
-    //     return $query->getResult();
-    // }
-
-    // public function findById(int $idArtist) : ?Artist {
-    //     $entityManager = $this->getEntityManager();
-    //     $query = $entityManager->createQuery(
-    //         'SELECT a
-    //         FROM App\Entity\Artist a
-    //         WHERE a.id = :idArtist'
-    //     )->setParameter('idArtist', $idArtist);
-    //     $result = $query->getResult();
-    //     if($result) {
-    //         $item = $result[0];
-    //         $artist = new Artist($item->getId(), $item->getName(), $item->getDescription(), $item->getBirthDate(), $item->getDeathDate(), $item->getIdCountry(), $item->getIdMedia(), $item->isDead());
-    //         // print_r($artist);
-    //         return $artist;
-    //     }
-    //     return null;
-    // }
-    //    /**
-    //     * @return Artist[] Returns an array of Artist objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Artist
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /* Equals countByMedia() with PDO
+    $query = $this->db->prepare('SELECT count(artists.id) FROM artists WHERE artists.media_id = :mediaId');
+    $parameters = [
+        'mediaId' => $mediaId,
+    ];
+    $query->execute($parameters);
+    $artistDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
 }

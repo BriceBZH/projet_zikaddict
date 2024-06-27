@@ -38,6 +38,20 @@ class UserAlbumFormatRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /* Equals findByUserAlbumFormatType() with PDO
+    $query = $this->db->prepare('SELECT * FROM user_album_format 
+        WHERE user_album_format.user_id = :user AND user_album_format.album_id = :album
+        AND user_album_format.format_id = :format AND user_album_format.type = :type');
+    $parameters = [
+        'user' => $user,
+        'type' => $type,
+        'album' => $album,
+        'format' => $format,
+    ];
+    $query->execute($parameters);
+    $UserAlbumFormatDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function findByUserCollectionType(User $user, string $type): array {
         return $this->createQueryBuilder('uaf')
             ->innerJoin("uaf.format", 'f')
@@ -54,28 +68,22 @@ class UserAlbumFormatRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    //    /**
-    //     * @return UserAlbumFormat[] Returns an array of UserAlbumFormat objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /* Equals findByUserCollectionType() with PDO
+    $query = $this->db->prepare('SELECT user_album_format.*
+        FROM user_album_format
+        INNER JOIN formats ON user_album_format.format_id = formats.id
+        INNER JOIN albums ON user_album_format .album_id = albums.id
+        INNER JOIN artist_album ON albums.id = artist_album.album_id
+        INNER JOIN artists ON artist_album.artist_id = artists.id
+        WHERE user_album_format.user_id = :user_id
+        AND user_album_format.type = :type
+        ORDER BY formats.libelle ASC, artists.name ASC, albums.title ASC');
+    $parameters = [
+        'user' => $user,
+        'type' => $type,
+    ];
+    $query->execute($parameters);
+    $UserAlbumFormatDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
 
-    //    public function findOneBySomeField($value): ?UserAlbumFormat
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

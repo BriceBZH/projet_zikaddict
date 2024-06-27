@@ -35,7 +35,7 @@ class ArtistController extends AbstractController
             $valid = false;
         }
         $param = [];
-        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+        if($idUser) { //If there is a parameter like an id (for the user's page)
             $param = ['idUser' => $idUser];
         } 
 
@@ -214,8 +214,6 @@ class ArtistController extends AbstractController
             //remove picture from assets
             unlink('../assets/imgs/'.$artist->getMedia()->getUrl());
             $entityManager->remove($artist->getMedia()); //remove media
-            // $artist->setCountry(null);
-
             $entityManager->remove($artist);
             $entityManager->flush();
 

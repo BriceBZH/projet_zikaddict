@@ -10,7 +10,7 @@
         {% endif %}
         <ul>
             {% for artist in results.artists %}
-                <li data-image-url="{{ asset('imgs/' ~ artist.media.url) }}" data-image-alt="{{ artist.media.alt }}">
+                <li data-image-url="{{ asset('build/images/' ~ artist.media.url) }}" data-image-alt="{{ artist.media.alt }}">
                     <article onclick="window.location='{{ path('artist', {idArtist: artist.id}) }}';">
                         <h3>{{artist.getName()}}</h3>
                         <p>{{artist.getBirthDate().format("d/m/Y")}}</p>
@@ -27,7 +27,7 @@
         {% endif %}
         <ul>  
             {% for album in results.albums %}
-                <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
+                <li data-image-url="{{ asset('build/images/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
                     <article>
                         <h3>{{album.getTitle()}}</h3>
                         <p>{{album.year}}</p>
@@ -48,7 +48,7 @@
                     {% set firstAlbum = album %}
                 {% endfor %}
                 {# {{dump(firstAlbum)}} #}
-                <li data-image-url="{{ asset('imgs/' ~ firstAlbum.media.url) }}" data-image-alt="{{ firstAlbum.media.alt }}">
+                <li data-image-url="{{ asset('build/images/' ~ firstAlbum.media.url) }}" data-image-alt="{{ firstAlbum.media.alt }}">
                     <article>
                         <h3>{{song.getTitle()}}</h3>
                         <p><a href="{{ path('song', {idSong: song.id}) }}" class="link">Plus</a>

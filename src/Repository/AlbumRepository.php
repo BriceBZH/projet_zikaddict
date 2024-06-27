@@ -34,6 +34,16 @@ class AlbumRepository extends ServiceEntityRepository
         return $result ?: [];
     }
 
+    /* Equals findByArtist() with PDO
+    $query = $this->db->prepare('SELECT albums.* FROM albums JOIN artist_album ON albums.id = artist_album.album_id WHERE artist_album.artist_id = :artists  AND albums.valid = :valid');
+    $parameters = [
+        'songs' => $song->getId(),
+        'valid' => 1
+    ];
+    $query->execute($parameters);
+    $albumDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function findByPartialTitle(string $title) : array {
         $result = $this->createQueryBuilder('a')
            ->where('a.title LIKE :title')
@@ -46,6 +56,16 @@ class AlbumRepository extends ServiceEntityRepository
         return $result ?: [];
     }
 
+    /* Equals findByPartialName() with PDO
+    $query = $this->db->prepare('SELECT * FROM albums WHERE albums.title LIKE :title AND albums.valid = :valid');
+    $parameters = [
+        'valid' => 1,
+        'title' => '%'.$title.'%'
+    ];
+    $query->execute($parameters);
+    $albumDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function findByValid() : array {
         $result = $this->createQueryBuilder('a')
            ->where('a.valid = :valid')
@@ -57,6 +77,15 @@ class AlbumRepository extends ServiceEntityRepository
         return $result ?: [];
     }
 
+    /* Equals findByValid() with PDO
+    $query = $this->db->prepare('SELECT * FROM albums WHERE albums.valid = :valid');
+    $parameters = [
+        'valid' => 1,
+    ];
+    $query->execute($parameters);
+    $albumDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
+
     public function findByNotValid() : array {
         $result = $this->createQueryBuilder('a')
            ->where('a.valid = :valid')
@@ -66,6 +95,15 @@ class AlbumRepository extends ServiceEntityRepository
 
         return $result ?: [];
     }
+
+    /* Equals findByNotValid() with PDO
+    $query = $this->db->prepare('SELECT * FROM albums WHERE albums.valid = :valid');
+    $parameters = [
+        'valid' => 0,
+    ];
+    $query->execute($parameters);
+    $albumDB = $query->fetch(PDO::FETCH_ASSOC);
+    */
 
     public function countByFormat($formatId): int
     {
@@ -77,6 +115,15 @@ class AlbumRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /* Equals countByFormat() with PDO
+    $query = $this->db->prepare('SELECT count(albums.id) FROM albums JOIN album_format ON albums.id = album_format.album_id WHERE album_format.format_id = :formats');
+    $parameters = [
+        'formats' => $formatId,
+    ];
+    $query->execute($parameters);
+    $albumDB = $query->fetch(PDO::FETCH_ASSOC);  
+    */
+
     public function countByMedia($mediaId): int
     {
         return $this->createQueryBuilder('a')
@@ -86,28 +133,13 @@ class AlbumRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-    //    /**
-    //     * @return Album[] Returns an array of Album objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Album
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /* Equals findBySong() with PDO
+    $query = $this->db->prepare('SELECT count(albums.id) FROM albums WHERE albums.media_id = :mediaId');
+    $parameters = [
+        'mediaId' => $mediaId,
+    ];
+    $query->execute($parameters);
+    $albumDB = $query->fetch(PDO::FETCH_ASSOC);  
+    */
 }

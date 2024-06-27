@@ -68,7 +68,7 @@ class UserController extends AbstractController
             $admin = false;
         }
         $param = [];
-        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+        if($idUser) { //If there is a parameter like an id (for the user's page)
             $param = ['idUser' => $idUser];
         }
         $form = $this->createForm(UserType::class, $user, [

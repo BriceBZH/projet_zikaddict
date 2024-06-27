@@ -7,7 +7,7 @@
         <h2>Liste des chansons</h2>
         <ul>
             {% for song in songs %}
-                <li data-image-url="{{ asset('imgs/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
+                <li data-image-url="{{ asset('build/images/' ~ album.media.url) }}" data-image-alt="{{ album.media.alt }}">
                     <article>
                         <h3>{{song.getTitle()}}</h3>
                         <p><a href="{{ path('song', {idSong: song.id}) }}" class="link">Plus</a>

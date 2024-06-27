@@ -30,28 +30,13 @@ class MediaRepository extends ServiceEntityRepository
 
         return $result ?: [];
     }
-    //    /**
-    //     * @return Media[] Returns an array of Media objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('m.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Media
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /* Equals findByNotUpload() with PDO
+    $query = $this->db->prepare('SELECT * FROM medias WHERE medias.url_source != :upload');
+    $parameters = [
+        'upload' => "Upload",
+    ];
+    $query->execute($parameters);
+    $mediaDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
 }

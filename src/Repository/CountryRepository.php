@@ -20,46 +20,4 @@ class CountryRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Country::class);
     }
-
-    // public function findById(int $id) : ?Country {
-    //     $query = $this->db->prepare('SELECT * FROM countries WHERE id = :id');
-    //     $parameters = [
-    //         'id' => $id,
-    //     ];
-    //     $query->execute($parameters);
-    //     $countryDB = $query->fetch(PDO::FETCH_ASSOC);
-        
-    //     if($countryDB) {
-    //         $country = new Country($countryDB['name']);
-    //         $country->setId($countryDB['id']);
-
-    //         return $country;
-    //     }
-
-    //     return null;
-    // }
-    //    /**
-    //     * @return Country[] Returns an array of Country objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Country
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

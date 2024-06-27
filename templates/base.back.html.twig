@@ -6,16 +6,16 @@
         <meta name="keywords" content="Référencement d'album par artiste musicaux">
         <meta property="og:title" content="Zik Addict">
         <meta property="og:description" content="Site pour collecteur d'albums de musique de tout type, ici référencez vos collections">
-        <meta property="og:image" content="{{ asset('imgs/logo.png') }}">
+        <meta property="og:image" content="{{ asset('build/images/logo.png') }}">
         <meta property="og:url" content="{{ app.request.uri }}">
         <meta property="og:type" content="website">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="Zik Addict">
         <meta name="twitter:description" content="Site pour collecteur d'albums de musique de tout type, ici référencez vos collections">
-        <meta name="twitter:image" content="{{ asset('imgs/logo.png') }}">
+        <meta name="twitter:image" content="{{ asset('build/images/logo.png') }}">
         <link rel="canonical" href="{{ app.request.uri }}">
         <title>{% block title %}{% endblock %} | ZikAddict</title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('imgs/favicon.ico') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('build/images/favicon.ico') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Sirin+Stencil&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@
         {% block header %}
             <header class="header"> 
                 <div class="libelleLogo">
-                    <a href="{{ path('index') }}"><img alt="logo Zik Addict" class="logo" src="{{ asset('imgs/logo.png') }}" ></a>
+                    <a href="{{ path('index') }}"><img alt="logo Zik Addict" class="logo" src="{{ asset('build/images/logo.png') }}" ></a>
                     <h1>Zik Addict</h1>
                     <div class="bloc">
                         <div id="tools-accessibility">
@@ -87,9 +87,9 @@
         {% endblock %}
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
-            <script src="{{ asset('scripts/menu.js') }}"></script>
-            <script src="{{ asset('/scripts/script.js') }}"></script>
-            <script src="{{ asset('scripts/accessibility.js') }}"></script>
+            {{ encore_entry_script_tags('script') }}
+            {{ encore_entry_script_tags('accessibility') }}
+            {{ encore_entry_script_tags('menu') }}
         {% endblock %}
     </body>
 </html>

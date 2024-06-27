@@ -31,38 +31,15 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    /* Equals getPasswordById() with PDO
+    $query = $this->db->prepare('SELECT users.password FROM users WHERE users.id = :id');
+    $parameters = [
+        'id' => $id,
+    ];
+    $query->execute($parameters);
+    $songDB = $query->fetch(PDO::FETCH_ASSOC); 
+    */
     
-    // public function findByAlbum(Album $album) : array {
-    //     return $this->createQueryBuilder('u')
-    //        ->andWhere(':albums MEMBER OF u.albums')
-    //        ->setParameter('albums', $album)
-    //        ->getQuery()
-    //        ->getResult()
-    //    ;
-    // }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

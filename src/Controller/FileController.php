@@ -92,7 +92,7 @@ class FileController extends AbstractController
         $type = "Collection";
         $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
 
-        // Organiser les données par format, artiste et albums
+        //Organize the data by format, artist, and albums
         $albumsByFormat = [];
 
         foreach ($userAlbumFormats as $userAlbumFormat) {
@@ -124,15 +124,15 @@ class FileController extends AbstractController
             }
         }
 
-        // Générer le fichier DOCX
+        //Generate the DOCX file
         $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save($tempFile);
 
-        // Créer la réponse streamée pour le téléchargement
+        //Create the streamed response for download
         $response = new StreamedResponse(function () use ($tempFile) {
             readfile($tempFile);
-            unlink($tempFile); // Supprimer le fichier temporaire après lecture
+            unlink($tempFile); //Delete the temporary file after reading
         });
 
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
@@ -290,7 +290,7 @@ class FileController extends AbstractController
         $type = "Search";
         $userAlbumFormats = $userAlbumFormatRepository->findByUserCollectionType($user, $type);
 
-        // Organiser les données par format, artiste et albums
+        //Organize the data by format, artist, and albums
         $albumsByFormat = [];
 
         foreach ($userAlbumFormats as $userAlbumFormat) {
@@ -322,15 +322,15 @@ class FileController extends AbstractController
             }
         }
 
-        // Générer le fichier DOCX
+        //Generate the DOCX file
         $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save($tempFile);
 
-        // Créer la réponse streamée pour le téléchargement
+        //Create the streamed response for download
         $response = new StreamedResponse(function () use ($tempFile) {
             readfile($tempFile);
-            unlink($tempFile); // Supprimer le fichier temporaire après lecture
+            unlink($tempFile); //Delete the temporary file after reading
         });
 
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
@@ -353,14 +353,14 @@ class FileController extends AbstractController
             $valid = false;
         }
         $param = [];
-        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+        if($idUser) { //If there is a parameter like an id (for the user page)
             $param = ['idUser' => $idUser];
         }  
 
-        // Récupérer le fichier uploadé
+        //Retrieve the uploaded file
         $csvFile = $request->files->get('csv_file');
 
-        // Vérifier si un fichier a été effectivement uploadé
+        //Verify if it is indeed a CSV file
         if (!$csvFile) {
             throw $this->createNotFoundException('Aucun fichier uploadé.');
         }
@@ -370,7 +370,7 @@ class FileController extends AbstractController
             throw $this->createNotFoundException('Le fichier n\'est pas un fichier CSV.');
         }
 
-        // Parcourir les lignes du fichier CSV
+        //Iterate through the rows of the CSV file
         $csv = [];
         if (($handle = fopen($csvFile->getPathname(), "r")) !== FALSE) {
             fgetcsv($handle, 1000, ";");
@@ -461,7 +461,7 @@ class FileController extends AbstractController
                 }
             }
 
-            if(!$mediaArtist) { //le media pour cet artiste n'existe pas donc on l'ajoute
+            if(!$mediaArtist) { //The media for this artist does not exist, so we add it
                 $mediaArtist = new Media();
                 $mediaArtist->setUrl($artistMediaName);
                 $mediaArtist->setAlt($item['artistName']);
@@ -469,7 +469,7 @@ class FileController extends AbstractController
                 $entityManager->persist($mediaArtist);
                 $entityManager->flush();
             }
-            if(!$mediaAlbum) { //le media pour cet artiste n'existe pas donc on l'ajoute
+            if(!$mediaAlbum) { //The media for this album does not exist, so we add it
                 $mediaAlbum = new Media();
                 $mediaAlbum->setUrl($albumMediaName);
                 $mediaAlbum->setAlt($item['albumTitle']);
@@ -477,13 +477,13 @@ class FileController extends AbstractController
                 $entityManager->persist($mediaAlbum);
                 $entityManager->flush();
             }
-            if(!$country) { //le pays n'existe pas donc on l'ajoute
+            if(!$country) { //The country does not exist, so we add it
                 $country = new Country();
                 $country->setName($item['artistCountry']);
                 $entityManager->persist($country);
                 $entityManager->flush();
             }
-            if(!$album && $item['albumTitle']) { //l'album n'existe pas donc on l'ajoute
+            if(!$album && $item['albumTitle']) { //The album does not exist, so we add it
                 $album = new Album();
                 $album->setTitle($item['albumTitle']);
                 $album->setYear($item['albumYear']);
@@ -494,13 +494,13 @@ class FileController extends AbstractController
                 $entityManager->persist($album);
                 $entityManager->flush();
             }
-            if(!$genre) { //le genre n'existe pas donc on l'ajoute
+            if(!$genre) { //The genre does not exist, so we add it
                 $genre = new Genre();
                 $genre->setLibelle($item['songGenre']);
                 $entityManager->persist($genre);
                 $entityManager->flush();
             }
-            if(!$song) { //la chanson n'existe pas donc on l'ajoute
+            if(!$song) { //The song does not exist, so we add it
                 $song = new Song();
                 $song->setTitle($item['songTitle']);
                 $song->setDescription($item['songDescription']);
@@ -510,7 +510,7 @@ class FileController extends AbstractController
                 $entityManager->persist($song);
                 $entityManager->flush();
             }
-            if(!$artist) { //si l'artiste n'existe pas on le créer
+            if(!$artist) { //If the artist does not exist, we create it
                 $artist = new Artist();
                 $artist->setName($item['artistName']);
                 $artist->setDescription($item['artistDescription']);
@@ -527,31 +527,31 @@ class FileController extends AbstractController
                 $entityManager->persist($artist);
                 $entityManager->flush();
             }
-            foreach($formatExp as $formatItem) { //on parcours la liste des formats
+            foreach($formatExp as $formatItem) { //We iterate through the list of formats
                 $format = $formatRepository->findOneBy(['libelle' => $formatItem]);
-                if(!$format) { //le format n'existe pas donc on l'ajoute
+                if(!$format) { //The format does not exist, so we add it
                     $format = new Format();
                     $format->setLibelle($formatItem);
                     $entityManager->persist($format);
                     $entityManager->flush();
                 }
-                if ($album && $format) { //on remplit la table intermédiaire album_format
+                if ($album && $format) { //We populate the intermediate table album_format
                     $album->addFormat($format);
                     $entityManager->persist($album);
                     $entityManager->flush();
                 }
             }
-            if ($artist && $album) { //on remplit la table intermédiaire artist_album
+            if ($artist && $album) { //We populate the intermediate table artist_album
                 $artist->addAlbum($album);
                 $entityManager->persist($artist);
                 $entityManager->flush();
             }
-            if ($artist && $song) { //on remplit la table intermédiaire artist_song
+            if ($artist && $song) { //We populate the intermediate table artist_song
                 $artist->addSong($song);
                 $entityManager->persist($artist);
                 $entityManager->flush();
             }
-            if ($album && $song) {  //on remplit la table intermédiaire album_song
+            if ($album && $song) {  //We populate the intermediate table album_song
                 $album->addSong($song);
                 $entityManager->persist($album);
                 $entityManager->flush();

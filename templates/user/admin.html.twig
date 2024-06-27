@@ -36,7 +36,7 @@
                                     <td></td>
                                 {% endif %}
                                 <td>{{artist.country.name}}</td>
-                                <td><img src="{{ asset('imgs/' ~ artist.media.url) }}" alt="{{ artist.media.alt }}" class="medias_admin" ></td>
+                                <td><img src="{{ asset('build/images/' ~ artist.media.url) }}" alt="{{ artist.media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <a href="{{ path('artist_edit', {'id': artist.id}) }}" class="btn btn-success">
                                         <span class="bi bi-pencil-fill"></span>
@@ -71,7 +71,7 @@
                                 <td>{{album.year}}</td>
                                 <td>{{album.createdAt.format('d/m/Y H:i:s')}}</td>
                                 <td>{{album.updateAt.format('d/m/Y H:i:s')}}</td>
-                                <td><img src="{{ asset('imgs/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" ></td>
+                                <td><img src="{{ asset('build/images/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <a href="{{ path('album_edit', {'id': album.id}) }}" class="btn btn-success">
                                         <span class="bi bi-pencil-fill"></span>
@@ -253,7 +253,7 @@
                                 <td>{{media.alt}}</td>
                                 <td>{{media.url}}</td>
                                 <td>{{media.urlSource}}</td>
-                                <td><img src="{{ asset('imgs/' ~ media.url) }}" alt="{{ media.alt }}" class="medias_admin" ></td>
+                                <td><img src="{{ asset('build/images/' ~ media.url) }}" alt="{{ media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <a href="{{ path('media_edit', {'id': media.id}) }}" class="btn btn-success">
                                         <span class="bi bi-pencil-fill"></span>
@@ -297,7 +297,7 @@
                                     <td></td>
                                 {% endif %}
                                 <td>{{artist.country.name}}</td>
-                                <td><img src="{{ asset('imgs/' ~ artist.media.url) }}" alt="{{ artist.media.alt }}" class="medias_admin" ></td>
+                                <td><img src="{{ asset('build/images/' ~ artist.media.url) }}" alt="{{ artist.media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <form method="post" action="{{ path('artist_valid', {'id': artist.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet artiste ?');">
                                         <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ artist.id) }}">
@@ -335,7 +335,7 @@
                                 <td>{{album.year}}</td>
                                 <td>{{album.createdAt.format('d/m/Y H:i:s')}}</td>
                                 <td>{{album.updateAt.format('d/m/Y H:i:s')}}</td>
-                                <td><img src="{{ asset('imgs/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" ></td>
+                                <td><img src="{{ asset('build/images/' ~ album.media.url) }}" alt="{{ album.media.alt }}" class="medias_admin" ></td>
                                 <td class="action">
                                     <form method="post" action="{{ path('album_valid', {'id': album.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir valider cet album ?');">
                                         <input type="hidden" name="_token" value="{{ csrf_token('valid' ~ album.id) }}">

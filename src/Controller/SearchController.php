@@ -20,7 +20,6 @@ class SearchController extends AbstractController
         $results['artists'] = $artistRepository->findByPartialName($query);
         $results['albums'] = $albumRepository->findByPartialTitle($query);
         $results['songs'] = $songRepository->findByPartialTitle($query);
-        // dd($results);
         return $this->render('search/results.html.twig', [
             'results' => $results,
         ]);

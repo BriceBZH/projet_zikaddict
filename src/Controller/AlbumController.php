@@ -39,7 +39,7 @@ class AlbumController extends AbstractController
             $valid = false;
         }
         $param = [];
-        if($idUser) { //s'il y a un paramètre comme un id (pour la page du user)
+        if($idUser) { //If there is a parameter like an id (for the user's page)
             $param = ['idUser' => $idUser];
         } 
 
@@ -142,6 +142,12 @@ class AlbumController extends AbstractController
         ]);
         $form->handleRequest($request);
 
+        //refresh artists of this album
+        $entityManager->refresh($album);
+        foreach ($album->getArtists() as $artist) {
+            $entityManager->refresh($artist);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             //new media is not empty so we modify old media
@@ -187,6 +193,19 @@ class AlbumController extends AbstractController
                 $oldMedia->setAlt($albumTitle);
                 $oldMedia->setUrlSource($media);
             }
+
+            $selectedArtists = $form->get('artists')->getData();
+            foreach ($album->getArtists() as $artist) { //delete artists non selected
+                if (!$selectedArtists->contains($artist)) {
+                    $album->removeArtist($artist);
+                }
+            }         
+            foreach ($selectedArtists as $artist) { //add new artists
+                if (!$album->getArtists()->contains($artist)) {
+                    $album->addArtist($artist);
+                }
+            }
+
             $entityManager->flush();
 
             $this->addFlash('notice', "L'album a bien été modifié");
@@ -245,14 +264,14 @@ class AlbumController extends AbstractController
         $parametre = $request->query->get('parametre');
         $type = "Collection";
         $param = [];
-        if($parametre) { //s'il y a un paramètre comme un id (pour la page de l'artiste)
+        if($parametre) { //If there is a parameter like an id (for the artist's page)
             $param = ['idArtist' => $parametre];
         }
         $format = $formatRepository->find($idFormat);
         $album = $albumRepository->find($idAlbum);
         $user = $userRepository->find($idUser);
         $userAlbumFormatsRepo = $userAlbumFormatRepository->findByUserAlbumFormatType($user, $album, $format, $type);
-        if($userAlbumFormatsRepo) { //l'utilisateur à déjà référencé cet album
+        if($userAlbumFormatsRepo) { //the user as already this album
             foreach ($userAlbumFormatsRepo as $userAlbumFormat) {
                 $entityManager->remove($userAlbumFormat);
                 $entityManager->flush();
@@ -277,14 +296,14 @@ class AlbumController extends AbstractController
         $parametre = $request->query->get('parametre');
         $type = "Search";
         $param = [];
-        if($parametre) { //s'il y a un paramètre comme un id (pour la page de l'artiste)
+        if($parametre) { //If there is a parameter like an id (for the artist's page)
             $param = ['idArtist' => $parametre];
         }
         $format = $formatRepository->find($idFormat);
         $album = $albumRepository->find($idAlbum);
         $user = $userRepository->find($idUser);
         $userAlbumFormatsRepo = $userAlbumFormatRepository->findByUserAlbumFormatType($user, $album, $format, $type);
-        if($userAlbumFormatsRepo) { //l'utilisateur à déjà référencé cet album
+        if($userAlbumFormatsRepo) { //the user as already this album
             foreach ($userAlbumFormatsRepo as $userAlbumFormat) {
                 $entityManager->remove($userAlbumFormat);
                 $entityManager->flush();
