@@ -67,7 +67,7 @@ class AlbumController extends AbstractController
             $uploadMedia =  $form->get('mediaUpload')->getData();
             $albumTitle =  $album->getTitle();
             if(!empty($urlMedia)) { // if album media is not empty
-                $img = '../assets/imgs/'.$albumTitle;
+                $img = '../public/build/images/'.$albumTitle;
                 $content = @file_get_contents($urlMedia);
                 if ($content === false) {
                     $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
@@ -156,10 +156,10 @@ class AlbumController extends AbstractController
             $albumTitle =  $album->getTitle();
             $oldMedia = $album->getMedia();
             if(!empty($urlMedia)) { // if album media is not empty
-                $img = '../assets/imgs/'.$albumTitle;
+                $img = '../public/build/images/'.$albumTitle;
                 $content = @file_get_contents($urlMedia);
                 //remove old picture from assets
-                unlink('../assets/imgs/'.$oldMedia->getUrl()); 
+                unlink('../public/build/images/'.$oldMedia->getUrl()); 
                 if ($content === false) {
                     $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
 
@@ -174,7 +174,7 @@ class AlbumController extends AbstractController
             } else if(!empty($uploadMedia)) { // if url media is not empty
                 $albumTitleImg = $albumTitle.'.'.$uploadMedia->guessExtension();
                 //remove old picture from assets
-                unlink('../assets/imgs/'.$oldMedia->getUrl()); 
+                unlink('../public/build/images/'.$oldMedia->getUrl()); 
                 try {
                     $uploadMedia->move(
                         $this->getParameter('media_directory'),

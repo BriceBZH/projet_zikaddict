@@ -30,10 +30,10 @@ class MediaController extends AbstractController
             $mediaName =  $medium->getAlt();
             $oldMedia = $medium->getUrl();
             if(!empty($urlMedia)) { // if album media is not empty
-                $img = '../assets/imgs/'.$mediaName;
+                $img = '../public/build/images/'.$mediaName;
                 $content = @file_get_contents($urlMedia);
                 //remove old picture from assets
-                unlink('../assets/imgs/'.$oldMedia);
+                unlink('../public/build/images/'.$oldMedia);
                 if ($content === false) {
                     $this->addFlash('notice', "Erreur lors du téléchargement de l'image depuis l'URL.");
 
@@ -48,7 +48,7 @@ class MediaController extends AbstractController
             } else if(!empty($uploadMedia)) { // if url media is not empty
                 $mediaNameImg = $mediaName.'.'.$uploadMedia->guessExtension();
                 //remove old picture from assets
-                unlink('../assets/imgs/'.$oldMedia); 
+                unlink('../public/build/images/'.$oldMedia); 
                 try {
                     $uploadMedia->move(
                         $this->getParameter('media_directory'),

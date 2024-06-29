@@ -429,7 +429,7 @@ class FileController extends AbstractController
             $formatExp = explode(",", $item['albumFormat']);
             
             if(!empty($item['artistMedia'])) { // if artist media is not empty
-                $img = '../assets/imgs/'.$item['artistName'];
+                $img = '../public/build/images/'.$item['artistName'];
                 $artistMediaName = $item['artistName'];
                 $content = @file_get_contents($item['artistMedia']);
                 if ($content === false) {
@@ -448,7 +448,7 @@ class FileController extends AbstractController
             }
 
             if(!empty($item['albumMedia'])) { // if album media is not empty
-                $img = '../assets/imgs/'.$item['albumTitle'];
+                $img = '../public/build/images/'.$item['albumTitle'];
                 $albumMediaName = $item['albumTitle'];
                 $content = @file_get_contents($item['albumMedia']);
                 if ($content === false) {
