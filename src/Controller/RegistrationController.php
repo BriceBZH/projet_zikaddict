@@ -50,15 +50,20 @@ class RegistrationController extends AbstractController
             $user->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($user);
             $entityManager->flush();
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('mailer@your-domain.com', 'Administrator'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
+            try {
+                // generate a signed url and email it to the user
+                $this->emailVerifier->sendEmailConfirmation('verify_email', $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('mailer@your-domain.com', 'Administrator'))
+                        ->to($user->getEmail())
+                        ->subject('Confirmez votre email')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+            } catch (TransportExceptionInterface $e) {
+				dump($e->getMessage());
+				$this->addFlash('notice', 'Unable to send email: ' . $e->getMessage());
+				return $this->redirectToRoute('register', [], Response::HTTP_SEE_OTHER);
+			}
 
             return $this->redirectToRoute('index');
         }
